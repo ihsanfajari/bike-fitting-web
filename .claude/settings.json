@@ -8,7 +8,9 @@
       "Bash(npx tsc *)",
       "Bash(netstat -ano)",
       "Bash(findstr \":3000\")",
-      "WebFetch(domain:media.licdn.com)"
+      "WebFetch(domain:media.licdn.com)",
+      "Bash(taskkill /PID 14936 /F)",
+      "PowerShell(Stop-Process -Id 14936 -Force)"
     ]
   }
 }
