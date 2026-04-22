@@ -10,7 +10,14 @@
       "Bash(findstr \":3000\")",
       "WebFetch(domain:media.licdn.com)",
       "Bash(taskkill /PID 14936 /F)",
-      "PowerShell(Stop-Process -Id 14936 -Force)"
+      "PowerShell(Stop-Process -Id 14936 -Force)",
+      "Bash(git add *)",
+      "Bash(git rm *)",
+      "Bash(rm -rf app/.git)",
+      "Bash(git commit -m ' *)"
+    ],
+    "additionalDirectories": [
+      "d:\\Project\\bike-fitting-web\\app\\.git"
     ]
   }
 }
