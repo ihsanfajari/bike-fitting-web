@@ -14,11 +14,10 @@ const POSE_CONNECTIONS = PoseLandmarker.POSE_CONNECTIONS;
 const SAMPLE_DURATION_MS = 5000;
 
 interface LiveAngles {
-  kneeLeft: number | null;
-  kneeRight: number | null;
-  elbowLeft: number | null;
-  elbowRight: number | null;
+  knee: number | null;
   torso: number | null;
+  elbow: number | null;
+  side: "kiri" | "kanan" | null;
 }
 
 function calcAngle(a: NormalizedLandmark, b: NormalizedLandmark, c: NormalizedLandmark): number {
@@ -28,6 +27,18 @@ function calcAngle(a: NormalizedLandmark, b: NormalizedLandmark, c: NormalizedLa
   const mag = Math.sqrt(ax * ax + ay * ay) * Math.sqrt(cx * cx + cy * cy);
   if (mag === 0) return 0;
   return Math.round(Math.acos(Math.min(1, Math.max(-1, dot / mag))) * (180 / Math.PI));
+}
+
+// Picks the side whose key pose landmarks have higher average visibility.
+// Returns null only if neither side is detectable (avg visibility < 0.2).
+function selectBestSide(lm: NormalizedLandmark[]): "left" | "right" | null {
+  if (lm.length < 29) return null;
+  const leftLm  = [lm[11], lm[13], lm[23], lm[25], lm[27]];
+  const rightLm = [lm[12], lm[14], lm[24], lm[26], lm[28]];
+  const avgL = leftLm.reduce( (s, l) => s + (l.visibility ?? 0), 0) / leftLm.length;
+  const avgR = rightLm.reduce((s, r) => s + (r.visibility ?? 0), 0) / rightLm.length;
+  if (avgL < 0.2 && avgR < 0.2) return null;
+  return avgL >= avgR ? "left" : "right";
 }
 
 function drawAngleLabel(
@@ -90,7 +101,7 @@ export default function PoseLandmarkerComponent() {
   const [ready, setReady] = useState(false);
   const [bikeType, setBikeType] = useState<BikeType>("road");
   const [liveAngles, setLiveAngles] = useState<LiveAngles>({
-    kneeLeft: null, kneeRight: null, elbowLeft: null, elbowRight: null, torso: null,
+    knee: null, torso: null, elbow: null, side: null,
   });
   const [analyzing, setAnalyzing] = useState(false);
   const [countdown, setCountdown] = useState(0);
@@ -166,33 +177,35 @@ export default function PoseLandmarkerComponent() {
           drawingUtils.drawConnectors(lm, POSE_CONNECTIONS, { color: "#00FF00", lineWidth: 2 });
           drawingUtils.drawLandmarks(lm, { color: "#FF0000", lineWidth: 1, radius: 4 });
 
-          const kneeL  = calcAngle(lm[23], lm[25], lm[27]);
-          const kneeR  = calcAngle(lm[24], lm[26], lm[28]);
-          const elbowL = calcAngle(lm[11], lm[13], lm[15]);
-          const elbowR = calcAngle(lm[12], lm[14], lm[16]);
-          const torso  = calcAngle(lm[11], lm[23], lm[25]);
+          const side = selectBestSide(lm);
 
-          drawAngleLabel(ctx, lm[25], "Lutut L", kneeL,  canvas.width, canvas.height);
-          drawAngleLabel(ctx, lm[26], "Lutut R", kneeR,  canvas.width, canvas.height);
-          drawAngleLabel(ctx, lm[13], "Siku L",  elbowL, canvas.width, canvas.height);
-          drawAngleLabel(ctx, lm[14], "Siku R",  elbowR, canvas.width, canvas.height);
-          drawAngleLabel(ctx, lm[23], "Torso",   torso,  canvas.width, canvas.height);
+          if (side !== null) {
+            const kneeAngle  = side === "left" ? calcAngle(lm[23], lm[25], lm[27]) : calcAngle(lm[24], lm[26], lm[28]);
+            const elbowAngle = side === "left" ? calcAngle(lm[11], lm[13], lm[15]) : calcAngle(lm[12], lm[14], lm[16]);
+            const torsoAngle = side === "left" ? calcAngle(lm[11], lm[23], lm[25]) : calcAngle(lm[12], lm[24], lm[26]);
 
-          setLiveAngles({ kneeLeft: kneeL, kneeRight: kneeR, elbowLeft: elbowL, elbowRight: elbowR, torso });
+            drawAngleLabel(ctx, side === "left" ? lm[25] : lm[26], "Lutut", kneeAngle,  canvas.width, canvas.height);
+            drawAngleLabel(ctx, side === "left" ? lm[13] : lm[14], "Siku",  elbowAngle, canvas.width, canvas.height);
+            drawAngleLabel(ctx, side === "left" ? lm[23] : lm[24], "Torso", torsoAngle, canvas.width, canvas.height);
 
-          // Collect samples during analysis window
+            setLiveAngles({ knee: kneeAngle, torso: torsoAngle, elbow: elbowAngle, side: side === "left" ? "kiri" : "kanan" });
+
+            if (samplingRef.current) {
+              samplesRef.current.push({ knee: kneeAngle, torso: torsoAngle, elbow: elbowAngle });
+            }
+          }
+
+          // Always check elapsed time so sampling period always ends on schedule
           if (samplingRef.current) {
             const elapsed = performance.now() - samplingStartRef.current;
-            const knee = Math.min(kneeL, kneeR);
-            const elbow = Math.round((elbowL + elbowR) / 2);
-            samplesRef.current.push({ knee, torso, elbow });
-
             if (elapsed >= SAMPLE_DURATION_MS) {
               samplingRef.current = false;
-              const standard = BIKE_STANDARDS[bikeType];
-              const result = calculateFitResult(samplesRef.current, standard);
-              setFitResult(result);
               setAnalyzing(false);
+              if (samplesRef.current.length > 0) {
+                const standard = BIKE_STANDARDS[bikeType];
+                const fitRes = calculateFitResult(samplesRef.current, standard);
+                setFitResult(fitRes);
+              }
             }
           }
         }
@@ -205,12 +218,11 @@ export default function PoseLandmarkerComponent() {
     return () => cancelAnimationFrame(animFrameRef.current);
   }, [ready, bikeType]);
 
+  const sideLabel = liveAngles.side ? ` (${liveAngles.side})` : "";
   const angleCards = [
-    { label: "Lutut Kiri",  value: liveAngles.kneeLeft },
-    { label: "Lutut Kanan", value: liveAngles.kneeRight },
-    { label: "Siku Kiri",   value: liveAngles.elbowLeft },
-    { label: "Siku Kanan",  value: liveAngles.elbowRight },
-    { label: "Torso",       value: liveAngles.torso },
+    { label: `Lutut${sideLabel}`, value: liveAngles.knee },
+    { label: `Siku${sideLabel}`,  value: liveAngles.elbow },
+    { label: "Torso",             value: liveAngles.torso },
   ];
 
   return (
@@ -251,7 +263,7 @@ export default function PoseLandmarkerComponent() {
       </div>
 
       {/* Live angle cards */}
-      <div className="grid grid-cols-5 gap-3 w-full">
+      <div className="grid grid-cols-3 gap-3 w-full">
         {angleCards.map(({ label, value }) => (
           <div key={label} className="bg-zinc-800 border border-zinc-600 rounded-lg p-3 text-center">
             <p className="text-xs text-zinc-400">{label}</p>

@@ -3,6 +3,8 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-barlow-condensed);
+  --font-body: var(--font-barlow);
 
   /* Brand */
   --color-brand:         #E84C3D;
@@ -11,6 +13,26 @@
   --color-brand-green:   #1E9E5A;
   --color-brand-amber:   #C47F00;
   --color-brand-blue:    #1878D4;
+
+  /* SEPEDAIN Marketplace tokens */
+  --color-sp-red:        #E84C2C;
+  --color-sp-red-dark:   #C43A1F;
+  --color-sp-red-light:  #F0714F;
+  --color-sp-red-tint:   #FDF0ED;
+  --color-sp-black:      #1a1a1a;
+  --color-sp-black-700:  #2d2d2d;
+  --color-sp-black-600:  #444444;
+  --color-sp-black-400:  #777777;
+  --color-sp-black-200:  #b0b0b0;
+  --color-sp-black-100:  #e2e2e2;
+  --color-sp-black-50:   #f3f3f1;
+  --color-sp-white:      #fdfcfb;
+  --color-sp-green:      #2a8a4a;
+  --color-sp-green-tint: #edf7f1;
+  --color-sp-blue:       #2a6aa0;
+  --color-sp-blue-tint:  #edf3f9;
+  --color-sp-amber:      #d08c10;
+  --color-sp-amber-tint: #fdf7e6;
 
   /* Surface (light theme) */
   --color-surface:       #FAFAF8;
@@ -27,4 +49,17 @@
 body {
   background: #0F0F0F;
   color: #1A1A1A;
+}
+
+/* ── SEPEDAIN typography helpers ── */
+.sp-display { font-family: var(--font-display), 'Barlow Condensed', 'Arial Narrow', sans-serif; }
+.sp-body { font-family: var(--font-body), 'Barlow', system-ui, sans-serif; }
+
+/* Hide scrollbar for horizontally scrolling chips */
+.sp-no-scrollbar::-webkit-scrollbar { display: none; }
+.sp-no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Diagonal-stripe photo placeholder */
+.sp-photo-placeholder {
+  background: repeating-linear-gradient(45deg, #e0e0e0 0, #e0e0e0 1px, #f4f4f4 0, #f4f4f4 9px);
 }

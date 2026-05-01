@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alt 2 — Spec Sheet · GowesFit Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  /* ── COLOR TOKENS ── */
+  --ink-1000: #050507;
+  --ink-950:  #0A0A0B;  /* primary surface dark */
+  --ink-900:  #111114;
+  --ink-800:  #1C1C20;
+  --ink-700:  #2A2A2F;
+  --ink-600:  #404045;
+  --ink-500:  #6B6B72;
+  --ink-400:  #9A9AA0;
+  --ink-300:  #BFBFC4;
+  --ink-200:  #D9D9DC;
+  --ink-100:  #ECECEE;
+  --ink-50:   #F5F5F6;
+
+  --paper:    #FAFAF7;  /* off-white, slightly warm — not sterile */
+  --paper-2:  #FFFFFF;
+
+  --accent:        #1B3CFF;  /* electric cobalt — single accent */
+  --accent-hover:  #0A2BD9;
+  --accent-tint:   #E8ECFF;
+  --accent-text:   #0A1F8F;
+
+  --success: #047857;
+  --success-tint: #E0F2EC;
+  --warning: #B45309;
+  --warning-tint: #FDF2DC;
+  --danger:  #B91C1C;
+  --danger-tint: #FCE7E7;
+
+  --radius-none: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink-900);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv11";
+}
+.mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-feature-settings: "ss01"; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ── PAGE ── */
+.ds-page { max-width: 1200px; margin: 0 auto; padding: 0 32px 96px; }
+.ds-section { margin-bottom: 80px; padding-top: 24px; border-top: 1px solid var(--ink-100); }
+.ds-section:first-of-type { border-top: none; padding-top: 0; }
+.ds-section-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 32px; gap: 32px; flex-wrap: wrap;
+}
+.ds-section-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-400); letter-spacing: 0.5px; margin-bottom: 8px; }
+.ds-section h2 { font-size: 32px; font-weight: 700; color: var(--ink-1000); letter-spacing: -0.5px; line-height: 1.1; }
+.ds-section .ds-intro { color: var(--ink-500); font-size: 14px; max-width: 460px; line-height: 1.65; }
+.ds-row { display: flex; gap: 1px; flex-wrap: wrap; align-items: stretch; background: var(--ink-100); }
+.ds-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: var(--ink-400); letter-spacing: 0.5px; margin-bottom: 12px; }
+.ds-token { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-500); margin-top: 6px; line-height: 1.5; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--ink-950);
+  color: var(--paper);
+  padding: 72px 32px 80px;
+  margin-bottom: 64px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(var(--ink-800) 1px, transparent 1px), linear-gradient(90deg, var(--ink-800) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: -1px -1px;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse at 70% 50%, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 70% 50%, black 30%, transparent 70%);
+}
+.hero-inner { max-width: 1200px; margin: 0 auto; padding: 0 0; position: relative; z-index: 1; }
+.hero-meta-line {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--ink-400); letter-spacing: 1px; text-transform: uppercase;
+  display: flex; gap: 24px; margin-bottom: 24px; flex-wrap: wrap;
+}
+.hero-meta-line span::before { content: '— '; color: var(--accent); }
+.hero h1 {
+  font-size: 56px; font-weight: 700; line-height: 1.0; letter-spacing: -2px;
+  max-width: 780px; margin-bottom: 24px;
+}
+.hero h1 em { font-style: normal; color: var(--accent); position: relative; }
+.hero h1 em::after { content: '_'; color: var(--accent); animation: blink 1s infinite; margin-left: 4px; }
+@keyframes blink { 50% { opacity: 0; } }
+.hero p { color: var(--ink-300); font-size: 16px; max-width: 560px; line-height: 1.6; }
+.hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--ink-800); margin-top: 56px; max-width: 720px; }
+.hero-stat { background: var(--ink-950); padding: 20px 24px; }
+.hero-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.hero-stat-value { font-size: 28px; font-weight: 700; color: var(--paper); letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+
+/* ── SWATCHES ── */
+.swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1px; background: var(--ink-100); border: 1px solid var(--ink-100); }
+.swatch-card { background: var(--paper-2); }
+.swatch-block { height: 80px; }
+.swatch-meta { padding: 12px 14px; }
+.swatch-meta .name { font-size: 12px; font-weight: 600; color: var(--ink-1000); }
+.swatch-meta .hex { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-400); margin-top: 4px; }
+.swatch-meta .role { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-500); margin-top: 2px; }
+
+/* ── TYPOGRAPHY ── */
+.type-card { background: var(--paper-2); padding: 28px; flex: 1; min-width: 320px; border: 1px solid var(--ink-100); }
+.type-row { padding: 18px 0; border-bottom: 1px solid var(--ink-100); }
+.type-row:last-child { border: none; }
+.type-spec { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-400); margin-top: 6px; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: inherit; font-weight: 600; cursor: pointer;
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  transition: all 0.1s; white-space: nowrap; line-height: 1;
+}
+.btn-lg { font-size: 14px; padding: 13px 20px; }
+.btn-md { font-size: 13px; padding: 10px 16px; }
+.btn-sm { font-size: 12px; padding: 7px 12px; }
+.btn-xs { font-size: 11px; padding: 5px 10px; }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn-dark { background: var(--ink-1000); color: #fff; border-color: var(--ink-1000); }
+.btn-dark:hover { background: var(--ink-800); }
+.btn-outline { background: transparent; color: var(--ink-1000); border-color: var(--ink-300); }
+.btn-outline:hover { border-color: var(--ink-1000); }
+.btn-ghost { background: transparent; color: var(--ink-700); border-color: transparent; }
+.btn-ghost:hover { background: var(--ink-50); }
+.btn-danger { background: transparent; color: var(--danger); border-color: var(--danger); }
+.btn-danger:hover { background: var(--danger); color: #fff; }
+.btn-full { width: 100%; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── INPUTS ── */
+.inp-group { margin-bottom: 18px; }
+.inp-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 500; color: var(--ink-500);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 6px; display: block;
+}
+.inp { width: 100%; border: 1px solid var(--ink-200); padding: 11px 14px; font-size: 14px; font-family: inherit; color: var(--ink-1000); background: var(--paper-2); outline: none; border-radius: var(--radius-sm); transition: border 0.1s; }
+.inp::placeholder { color: var(--ink-400); }
+.inp:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.inp-error { border-color: var(--danger); }
+.inp-success { border-color: var(--success); }
+.inp-helper { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-400); margin-top: 6px; }
+.inp-error-msg { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--danger); margin-top: 6px; }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: var(--radius-xs);
+  text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.5;
+}
+.badge-accent { background: var(--accent); color: #fff; }
+.badge-accent-soft { background: var(--accent-tint); color: var(--accent-text); }
+.badge-dark { background: var(--ink-1000); color: #fff; }
+.badge-outline { background: transparent; border: 1px solid var(--ink-300); color: var(--ink-700); }
+.badge-success { background: var(--success-tint); color: var(--success); }
+.badge-warning { background: var(--warning-tint); color: var(--warning); }
+.badge-danger { background: var(--danger-tint); color: var(--danger); }
+.badge-ghost { background: var(--ink-100); color: var(--ink-600); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: var(--radius-sm);
+  font-size: 12px; font-weight: 500;
+  background: var(--paper-2); border: 1px solid var(--ink-200);
+  color: var(--ink-700); cursor: pointer; transition: all 0.1s;
+}
+.chip:hover { border-color: var(--ink-500); }
+.chip-active { background: var(--ink-1000); border-color: var(--ink-1000); color: #fff; }
+.chip-active:hover { border-color: var(--ink-1000); }
+
+/* ── TABLE / SPEC SHEET ── */
+.spec-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.spec-table tr { border-bottom: 1px solid var(--ink-100); }
+.spec-table td { padding: 10px 0; }
+.spec-table td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ink-500); width: 130px; }
+.spec-table td:last-child { color: var(--ink-1000); font-weight: 500; }
+
+/* ── LISTING CARD ── */
+.listing {
+  background: var(--paper-2); border: 1px solid var(--ink-100);
+  border-radius: var(--radius-sm); overflow: hidden; transition: all 0.1s;
+}
+.listing:hover { border-color: var(--ink-1000); }
+.listing-img {
+  height: 200px; background: var(--ink-50); position: relative;
+  display: flex; align-items: center; justify-content: center; color: var(--ink-300);
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  background-image:
+    linear-gradient(45deg, var(--ink-100) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--ink-100) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--ink-100) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--ink-100) 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+.listing-img-tags { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; }
+.listing-body { padding: 16px; }
+.listing-spec-line { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-500); margin-bottom: 8px; letter-spacing: 0.3px; }
+.listing-title { font-size: 15px; font-weight: 600; color: var(--ink-1000); line-height: 1.3; margin-bottom: 12px; }
+.listing-divider { height: 1px; background: var(--ink-100); margin: 12px 0; }
+.listing-price { font-size: 22px; font-weight: 700; color: var(--ink-1000); letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+.listing-meta {
+  display: flex; gap: 12px; align-items: center; margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-500);
+}
+
+/* ── ORDER STATUS — terminal-style log ── */
+.order-log { background: var(--ink-1000); color: var(--ink-200); padding: 20px 24px; border-radius: var(--radius-sm); font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.8; }
+.order-log .ts { color: var(--ink-500); }
+.order-log .ok { color: #5EFFA1; }
+.order-log .pending { color: #FFD56E; }
+.order-log .info { color: #6E9EFF; }
+.order-log .future { color: var(--ink-600); }
+
+.steps-bar { display: flex; align-items: stretch; border: 1px solid var(--ink-200); border-radius: var(--radius-sm); overflow: hidden; }
+.step-cell { flex: 1; padding: 14px 18px; border-right: 1px solid var(--ink-200); position: relative; }
+.step-cell:last-child { border-right: none; }
+.step-cell.done { background: var(--success-tint); }
+.step-cell.active { background: var(--accent-tint); }
+.step-cell.todo { background: var(--paper-2); }
+.step-cell-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-500); margin-bottom: 4px; letter-spacing: 0.5px; }
+.step-cell-label { font-size: 13px; font-weight: 600; color: var(--ink-1000); }
+.step-cell.todo .step-cell-label { color: var(--ink-400); }
+
+/* ── BOTTOM NAV ── */
+.bnav { display: flex; background: var(--ink-1000); max-width: 380px; }
+.bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 500; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.8px; border-top: 2px solid transparent; }
+.bnav-item.active { color: #fff; border-top-color: var(--accent); }
+.bnav-icon { font-size: 18px; }
+
+/* ── PAGE PREVIEW ── */
+.preview { background: var(--paper-2); border: 1px solid var(--ink-200); max-width: 400px; }
+.preview-bar { background: var(--ink-1000); padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; }
+.preview-logo { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+.preview-logo em { font-style: normal; color: var(--accent); }
+.preview-body { padding: 0; }
+.preview-search { padding: 14px 18px; border-bottom: 1px solid var(--ink-100); display: flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-400); }
+.preview-section { padding: 18px; border-bottom: 1px solid var(--ink-100); }
+.preview-section .ds-label { margin-bottom: 8px; }
+.preview-table { width: 100%; font-size: 12px; }
+.preview-table tr { border-bottom: 1px dashed var(--ink-100); }
+.preview-table tr:last-child { border: none; }
+.preview-table td { padding: 8px 0; }
+.preview-table td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.4px; width: 90px; }
+.preview-table td:last-child { color: var(--ink-1000); font-weight: 500; }
+
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-meta-line">
+      <span>ALT 02 SPEC SHEET</span>
+      <span>PREMIUM TECHNICAL CATALOG</span>
+      <span>FOR SPEC-DRIVEN BUYERS</span>
+    </div>
+    <h1>Sepeda di-treat seperti<br/><em>instrumen presisi</em></h1>
+    <p>Marketplace yang tampil seperti katalog Cervélo + brosur Specialized + Linear app. Setiap angka punya tempat. Setiap spec dapat dignity. Tidak loud, tidak generic — tegas dan elegan.</p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-label">Display Font</div>
+        <div class="hero-stat-value">Inter</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Spec Font</div>
+        <div class="hero-stat-value mono">JBMono</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Accent</div>
+        <div class="hero-stat-value" style="color: var(--accent);">#1B3CFF</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Radius</div>
+        <div class="hero-stat-value">2–8px</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ds-page">
+
+  <!-- ── COLOR ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div>
+        <div class="ds-section-num">01 / COLOR TOKENS</div>
+        <h2>Monochrome + One Electric Accent</h2>
+      </div>
+      <p class="ds-intro">Skala grayscale 9-step rapi untuk hierarchy yang precise. Cobalt electric (#1B3CFF) sebagai single accent — tidak bisa di-disregard, tidak menumpuk dengan warna lain. Status pakai tone soft yang professional.</p>
+    </div>
+
+    <div class="ds-label">Ink Scale (Grayscale Foundation)</div>
+    <div class="swatch-grid" style="margin-bottom: 24px;">
+      <div class="swatch-card"><div class="swatch-block" style="background:#050507"></div><div class="swatch-meta"><div class="name">ink-1000</div><div class="hex">#050507</div><div class="role">Pure black</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#0A0A0B"></div><div class="swatch-meta"><div class="name">ink-950</div><div class="hex">#0A0A0B</div><div class="role">Dark surface</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#1C1C20"></div><div class="swatch-meta"><div class="name">ink-800</div><div class="hex">#1C1C20</div><div class="role">Headline</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#404045"></div><div class="swatch-meta"><div class="name">ink-600</div><div class="hex">#404045</div><div class="role">Body</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#6B6B72"></div><div class="swatch-meta"><div class="name">ink-500</div><div class="hex">#6B6B72</div><div class="role">Secondary</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#9A9AA0"></div><div class="swatch-meta"><div class="name">ink-400</div><div class="hex">#9A9AA0</div><div class="role">Muted</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#D9D9DC"></div><div class="swatch-meta"><div class="name">ink-200</div><div class="hex">#D9D9DC</div><div class="role">Border</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#ECECEE"></div><div class="swatch-meta"><div class="name">ink-100</div><div class="hex">#ECECEE</div><div class="role">Divider</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#FAFAF7"></div><div class="swatch-meta"><div class="name">paper</div><div class="hex">#FAFAF7</div><div class="role">Page bg</div></div></div>
+    </div>
+
+    <div class="ds-label">Single Accent — Electric Cobalt</div>
+    <div class="swatch-grid" style="margin-bottom: 24px;">
+      <div class="swatch-card"><div class="swatch-block" style="background:#0A2BD9"></div><div class="swatch-meta"><div class="name">accent-hover</div><div class="hex">#0A2BD9</div><div class="role">Pressed</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#1B3CFF"><span style="color:#fff; padding:8px; font-family:'JetBrains Mono',monospace; font-size:10px;">PRIMARY</span></div><div class="swatch-meta"><div class="name">accent</div><div class="hex">#1B3CFF</div><div class="role">CTA + link</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#E8ECFF"></div><div class="swatch-meta"><div class="name">accent-tint</div><div class="hex">#E8ECFF</div><div class="role">Selected bg</div></div></div>
+    </div>
+
+    <div class="ds-label">Status</div>
+    <div class="swatch-grid">
+      <div class="swatch-card"><div class="swatch-block" style="background:#047857; color:#fff; font-family:'JetBrains Mono',monospace; padding:8px; font-size:10px;">SUCCESS</div><div class="swatch-meta"><div class="name">success</div><div class="hex">#047857</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#B45309; color:#fff; font-family:'JetBrains Mono',monospace; padding:8px; font-size:10px;">WARNING</div><div class="swatch-meta"><div class="name">warning</div><div class="hex">#B45309</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#B91C1C; color:#fff; font-family:'JetBrains Mono',monospace; padding:8px; font-size:10px;">DANGER</div><div class="swatch-meta"><div class="name">danger</div><div class="hex">#B91C1C</div></div></div>
+    </div>
+  </div>
+
+  <!-- ── TYPOGRAPHY ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div>
+        <div class="ds-section-num">02 / TYPOGRAPHY</div>
+        <h2>Inter + JetBrains Mono</h2>
+      </div>
+      <p class="ds-intro">Inter handle headline & body. <span class="mono">JetBrains Mono</span> handle <i>angka & spec</i> — itulah signature: setiap measurement, kode, ID, harga, ukuran tampil dalam mono. Hasilnya feel "engineering catalog".</p>
+    </div>
+
+    <div class="ds-row" style="background: var(--ink-100);">
+      <div class="type-card">
+        <div class="ds-label">Display & Body — Inter</div>
+        <div class="type-row">
+          <div style="font-size:48px; font-weight:700; line-height:1.0; letter-spacing:-1.5px; color:var(--ink-1000);">Cervélo R5 2022</div>
+          <div class="type-spec">48px · 700 · -1.5px · Hero / Detail page</div>
+        </div>
+        <div class="type-row">
+          <div style="font-size:32px; font-weight:700; letter-spacing:-0.5px; color:var(--ink-1000);">Sepeda yang masuk akal.</div>
+          <div class="type-spec">32px · 700 · Section title</div>
+        </div>
+        <div class="type-row">
+          <div style="font-size:18px; font-weight:600; color:var(--ink-1000);">Trek Domane SL5 2022</div>
+          <div class="type-spec">18px · 600 · Card title</div>
+        </div>
+        <div class="type-row">
+          <div style="font-size:14px; line-height:1.6; color:var(--ink-700); max-width: 320px;">Frame 700C Carbon, 54cm. Groupset Shimano Ultegra Di2 R8170 11-speed. Wheelset Bontrager Aeolus Pro 37 carbon clincher.</div>
+          <div class="type-spec">14px · 400 · 1.6 line-height · Body</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="ds-label">Numerals & Spec — JetBrains Mono</div>
+        <div class="type-row">
+          <div class="mono tnum" style="font-size:36px; font-weight:600; letter-spacing:-1px; color:var(--ink-1000);">Rp22.000.000</div>
+          <div class="type-spec mono">36px · 600 · tnum · Price hero</div>
+        </div>
+        <div class="type-row">
+          <div class="mono" style="font-size:13px; color:var(--ink-700); line-height:1.7;">52cm · 2x11s · 7.8kg<br/>BB86 · Tapered 1-1/8" → 1-1/2"<br/>HEAD ANGLE 73° · STACK 555mm</div>
+          <div class="type-spec mono">13px · spec line · code-style</div>
+        </div>
+        <div class="type-row">
+          <div class="mono" style="font-size:11px; color:var(--ink-500); text-transform:uppercase; letter-spacing:1px;">FRAME · GROUPSET · WHEELSET</div>
+          <div class="type-spec mono">11px · upper · label / eyebrow</div>
+        </div>
+        <div class="type-row">
+          <div class="mono tnum" style="font-size:13px; color:var(--accent);">ORD-2024-0042</div>
+          <div class="type-spec mono">13px · accent · ID / reference</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SPACING & RADIUS ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div>
+        <div class="ds-section-num">03 / SPACING + RADIUS</div>
+        <h2>Tight Grid, Minimal Radius</h2>
+      </div>
+      <p class="ds-intro">Sharp corners (2–8px max) dan grid tabular padat. Tidak ada shadow lebay — separation lewat 1px hairline borders saja.</p>
+    </div>
+
+    <div class="ds-label">Border Radius</div>
+    <div style="display:flex; gap:32px; flex-wrap:wrap; margin-bottom: 32px;">
+      <div style="text-align:center;"><div style="width:64px; height:64px; background:var(--ink-1000); border-radius:0;"></div><div class="ds-token">none · 0px · default</div></div>
+      <div style="text-align:center;"><div style="width:64px; height:64px; background:var(--ink-1000); border-radius:2px;"></div><div class="ds-token">xs · 2px · badges</div></div>
+      <div style="text-align:center;"><div style="width:64px; height:64px; background:var(--ink-1000); border-radius:4px;"></div><div class="ds-token">sm · 4px · buttons, inputs</div></div>
+      <div style="text-align:center;"><div style="width:64px; height:64px; background:var(--ink-1000); border-radius:6px;"></div><div class="ds-token">md · 6px · modals</div></div>
+      <div style="text-align:center;"><div style="width:64px; height:64px; background:var(--ink-1000); border-radius:8px;"></div><div class="ds-token">lg · 8px · max (rarely)</div></div>
+    </div>
+
+    <div class="ds-label">Density Comparison</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 720px;">
+      <div style="border: 1px solid var(--ink-200); padding: 16px;">
+        <div class="mono" style="font-size: 11px; color: var(--ink-500); margin-bottom: 12px; text-transform: uppercase;">Standard density · 16px</div>
+        <table class="spec-table">
+          <tr><td>FRAME</td><td>Carbon Domane</td></tr>
+          <tr><td>SIZE</td><td class="mono">54cm</td></tr>
+          <tr><td>GROUPSET</td><td>Shimano 105</td></tr>
+        </table>
+      </div>
+      <div style="border: 1px solid var(--ink-200); padding: 12px;">
+        <div class="mono" style="font-size: 11px; color: var(--ink-500); margin-bottom: 8px; text-transform: uppercase;">Compact density · 12px</div>
+        <table class="spec-table" style="font-size: 12px;">
+          <tr><td style="padding: 6px 0;">FRAME</td><td style="padding: 6px 0;">Carbon Domane</td></tr>
+          <tr><td style="padding: 6px 0;">SIZE</td><td class="mono" style="padding: 6px 0;">54cm</td></tr>
+          <tr><td style="padding: 6px 0;">GROUPSET</td><td style="padding: 6px 0;">Shimano 105</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BUTTONS ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div>
+        <div class="ds-section-num">04 / BUTTONS</div>
+        <h2>Sharp & Direct</h2>
+      </div>
+      <p class="ds-intro">No gradient, no shadow, no animation lebay. Hover state cuma color shift. Visual weight diatur lewat fill density, bukan size.</p>
+    </div>
+
+    <div class="ds-row" style="background: var(--ink-100);">
+      <div class="type-card">
+        <div class="ds-label">Variants</div>
+        <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+          <button class="btn btn-primary btn-lg">Buy → Rp22.000.000</button>
+          <button class="btn btn-dark btn-lg">Contact Seller</button>
+          <button class="btn btn-outline btn-lg">Make Offer</button>
+          <button class="btn btn-ghost btn-lg">⊕ Save to Wishlist</button>
+          <button class="btn btn-danger btn-lg">Cancel Order</button>
+          <button class="btn btn-primary btn-lg" disabled>Sold Out</button>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="ds-label">Sizes</div>
+        <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+          <button class="btn btn-primary btn-lg">Large · 14px / 13×20</button>
+          <button class="btn btn-primary btn-md">Medium · 13px / 10×16</button>
+          <button class="btn btn-primary btn-sm">Small · 12px / 7×12</button>
+          <button class="btn btn-primary btn-xs">XSmall · 11px</button>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="ds-label">Stack</div>
+        <div style="display:flex; flex-direction:column; gap:8px; max-width:240px;">
+          <button class="btn btn-primary btn-md btn-full">Confirm payment</button>
+          <button class="btn btn-outline btn-md btn-full">Save & exit</button>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-ghost btn-md" style="flex:1;">Decline</button>
+            <button class="btn btn-dark btn-md" style="flex:1;">Accept</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FORMS ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div>
+        <div class="ds-section-num">05 / FORMS</div>
+        <h2>Mono Labels, Sharp Inputs</h2>
+      </div>
+      <p class="ds-intro">Labels uppercase mono — terasa seperti form di equipment registration. Focus state pakai 1px border accent + 1px outer ring.</p>
+    </div>
+
+    <div class="ds-row" style="background: var(--ink-100);">
+      <div class="type-card" style="max-width: 400px;">
+        <div class="ds-label">States</div>
+        <div class="inp-group">
+          <label class="inp-label">Frame Size</label>
+          <input class="inp" type="text" placeholder="e.g. 54cm" />
+          <div class="inp-helper">REQUIRED · CTC seat tube measurement</div>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Title (focused)</label>
+          <input class="inp" type="text" value="Trek Domane SL5 2022" style="border-color:var(--accent); box-shadow: 0 0 0 1px var(--accent);" />
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Year (error)</label>
+          <input class="inp inp-error" type="text" value="2030" />
+          <div class="inp-error-msg">ERR · YEAR_OUT_OF_RANGE (2010–2026)</div>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">VIN / Serial (success)</label>
+          <input class="inp inp-success mono" type="text" value="WTU422D1234" />
+          <div class="inp-helper" style="color:var(--success);">VERIFIED · Match Trek registry</div>
+        </div>
+      </div>
+      <div class="type-card" style="max-width: 400px;">
+        <div class="ds-label">Variants</div>
+        <div class="inp-group">
+          <label class="inp-label">Groupset (select)</label>
+          <select class="inp">
+            <option>SELECT…</option>
+            <option selected>Shimano Ultegra Di2 R8170</option>
+            <option>Shimano 105 R7000</option>
+            <option>SRAM Force AXS</option>
+          </select>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Price (IDR)</label>
+          <div style="display:flex;">
+            <div class="mono" style="padding:11px 14px; background:var(--ink-50); border:1px solid var(--ink-200); border-right:none; font-size:13px; color:var(--ink-500); border-radius: var(--radius-sm) 0 0 var(--radius-sm); letter-spacing: 0.5px;">Rp</div>
+            <input class="inp mono tnum" type="text" value="22.000.000" style="border-radius: 0 var(--radius-sm) var(--radius-sm) 0;" />
+          </div>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Description</label>
+          <textarea class="inp" rows="3">Complete bike. Original parts, no swap. Service history attached. NEGO: yes (within 5%).</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BADGES ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div>
+        <div class="ds-section-num">06 / BADGES + CHIPS</div>
+        <h2>Mono Caps, Tight Padding</h2>
+      </div>
+      <p class="ds-intro">Semua badge pakai font mono uppercase — feel "data tag". Chips sharp-edge dengan single-pixel border.</p>
+    </div>
+
+    <div class="ds-row" style="background: var(--ink-100);">
+      <div class="type-card">
+        <div class="ds-label">Status</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom: 16px;">
+          <span class="badge badge-warning">PENDING_PAYMENT</span>
+          <span class="badge badge-accent">SHIPPED</span>
+          <span class="badge badge-success">DELIVERED</span>
+          <span class="badge badge-danger">DISPUTED</span>
+          <span class="badge badge-ghost">CANCELLED</span>
+          <span class="badge badge-dark">SOLD</span>
+          <span class="badge badge-outline">DRAFT</span>
+        </div>
+        <div class="ds-label">Condition Tags</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="badge badge-success">NEW</span>
+          <span class="badge badge-accent-soft">LIKE_NEW</span>
+          <span class="badge badge-outline">USED_MINT</span>
+          <span class="badge badge-ghost">USED_NORMAL</span>
+          <span class="badge badge-warning">NEEDS_SERVICE</span>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="ds-label">Filter Chips</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom: 16px;">
+          <span class="chip chip-active">All</span>
+          <span class="chip">Roadbike</span>
+          <span class="chip">Gravel</span>
+          <span class="chip">MTB · XC</span>
+          <span class="chip">MTB · Trail</span>
+          <span class="chip">TT/Tri</span>
+        </div>
+        <div class="ds-label">Spec Filters</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="chip chip-active">Carbon</span>
+          <span class="chip">Aluminum</span>
+          <span class="chip">Steel</span>
+          <span class="chip">Titanium</span>
+          <span class="chip">Disc Brake</span>
+          <span class="chip">Electronic Shifting</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LISTING CARD ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div>
+        <div class="ds-section-num">07 / LISTING CARD</div>
+        <h2>Spec-First, Catalog Style</h2>
+      </div>
+      <p class="ds-intro">Spec line di atas judul — buyer langsung tahu yang penting (size, groupset, weight). Title sebagai sub-info. Harga di bawah dengan divider rapi.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; max-width: 1000px;">
+      <div>
+        <div class="ds-label">Standard</div>
+        <div class="listing">
+          <div class="listing-img">
+            [ frame photo · drive-side ]
+            <div class="listing-img-tags">
+              <span class="badge badge-accent">FEATURED</span>
+              <span class="badge badge-outline">★ VERIFIED</span>
+            </div>
+          </div>
+          <div class="listing-body">
+            <div class="listing-spec-line">52cm · ULTEGRA Di2 · 7.8KG</div>
+            <div class="listing-title">Trek Domane SL5 2022</div>
+            <div class="listing-divider"></div>
+            <div class="listing-price tnum">Rp22.000.000</div>
+            <div class="listing-meta">
+              <span>JKT-SEL</span>
+              <span>·</span>
+              <span>NEGO</span>
+              <span>·</span>
+              <span>2H AGO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="ds-label">Detailed (with spec table)</div>
+        <div class="listing">
+          <div class="listing-img" style="background-image: none; background: linear-gradient(135deg, var(--ink-800), var(--ink-1000)); color: var(--ink-500);">
+            [ frame photo ]
+            <div class="listing-img-tags">
+              <span class="badge badge-dark">PRO LISTING</span>
+            </div>
+          </div>
+          <div class="listing-body">
+            <div class="listing-spec-line">54cm · DURA-ACE Di2 · 6.9KG</div>
+            <div class="listing-title">Cervélo R5 Disc 2023</div>
+            <table class="spec-table" style="margin-top: 12px;">
+              <tr><td>FRAME</td><td>Carbon Squoval</td></tr>
+              <tr><td>WHEELSET</td><td>ENVE SES 4.5</td></tr>
+              <tr><td>SERVICE</td><td>Last 2024-12</td></tr>
+            </table>
+            <div class="listing-divider"></div>
+            <div class="listing-price tnum">Rp 78.500.000</div>
+            <div class="listing-meta">
+              <span class="mono">BDG</span>
+              <span>·</span>
+              <span class="mono">★4.9 / 23 TRX</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="ds-label">Sold</div>
+        <div class="listing" style="opacity: 0.55;">
+          <div class="listing-img" style="filter: grayscale(1);">
+            [ frame photo ]
+            <div class="listing-img-tags">
+              <span class="badge badge-dark">SOLD</span>
+            </div>
+          </div>
+          <div class="listing-body">
+            <div class="listing-spec-line">56cm · 105 · 8.2KG</div>
+            <div class="listing-title">Specialized Allez 2021</div>
+            <div class="listing-divider"></div>
+            <div class="listing-price tnum" style="color: var(--ink-400); text-decoration: line-through;">Rp14.000.000</div>
+            <div class="listing-meta">
+              <span>SOLD 2 DAYS AGO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ORDER STATUS ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div>
+        <div class="ds-section-num">08 / ORDER STATUS</div>
+        <h2>Process as Log</h2>
+      </div>
+      <p class="ds-intro">Step bar tabular — tiap step punya cell sendiri, status diwarnai. Optional: terminal-style log untuk power user yang ingin detail timestamp.</p>
+    </div>
+
+    <div style="margin-bottom: 32px;">
+      <div class="ds-label" style="margin-bottom: 14px;">Step Bar — Order Lifecycle</div>
+      <div class="steps-bar" style="max-width: 720px;">
+        <div class="step-cell done"><div class="step-cell-num">01 ✓</div><div class="step-cell-label">Paid</div></div>
+        <div class="step-cell done"><div class="step-cell-num">02 ✓</div><div class="step-cell-label">Packed</div></div>
+        <div class="step-cell active"><div class="step-cell-num">03 →</div><div class="step-cell-label">In Transit</div></div>
+        <div class="step-cell todo"><div class="step-cell-num">04</div><div class="step-cell-label">Delivered</div></div>
+        <div class="step-cell todo"><div class="step-cell-num">05</div><div class="step-cell-label">Released</div></div>
+      </div>
+    </div>
+
+    <div class="ds-label" style="margin-bottom: 14px;">Activity Log</div>
+    <div class="order-log" style="max-width: 720px;">
+      <div><span class="ts">2026-05-01 14:22:18</span>  <span class="ok">[OK]</span>  ESCROW_RELEASE_QUEUED          → buyer.confirmed_received=TRUE</div>
+      <div><span class="ts">2026-05-01 09:15:03</span>  <span class="info">[INFO]</span>  PACKAGE_DELIVERED              JNE.8801234567 → recipient.signed</div>
+      <div><span class="ts">2026-04-28 11:42:55</span>  <span class="info">[INFO]</span>  PACKAGE_IN_TRANSIT             cgk → bdg / dep cgk hub</div>
+      <div><span class="ts">2026-04-28 08:11:09</span>  <span class="ok">[OK]</span>  SELLER_HANDED_TO_COURIER       JNE / waybill 8801234567</div>
+      <div><span class="ts">2026-04-27 16:05:31</span>  <span class="ok">[OK]</span>  ESCROW_FUNDED                  amount=Rp22.000.000 fee=Rp220.000</div>
+      <div><span class="ts">2026-04-27 16:02:14</span>  <span class="pending">[PEND]</span> PAYMENT_VA_GENERATED          BCA 8810 1234 5678 9012</div>
+      <div><span class="ts">2026-04-27 15:58:42</span>  <span class="ok">[OK]</span>  ORDER_CREATED                  ORD-2024-0042 / item=trek-domane-sl5</div>
+      <div style="margin-top: 8px; color: var(--ink-500);">— scheduled —</div>
+      <div><span class="ts">est 2026-05-04 00:00:00</span>  <span class="future">[FUTR]</span> AUTO_RELEASE_DEADLINE         buyer 7-day window</div>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM NAV ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div>
+        <div class="ds-section-num">09 / NAVIGATION</div>
+        <h2>Mono Caps Bottom Nav</h2>
+      </div>
+      <p class="ds-intro">Dark surface, mono caps labels, accent bar di atas active item. Terasa professional tools, bukan consumer app.</p>
+    </div>
+
+    <div class="bnav">
+      <div class="bnav-item active"><span class="bnav-icon">⬢</span>HOME</div>
+      <div class="bnav-item"><span class="bnav-icon">⌕</span>SEARCH</div>
+      <div class="bnav-item"><span class="bnav-icon">⊕</span>SELL</div>
+      <div class="bnav-item"><span class="bnav-icon">◇</span>CHAT</div>
+      <div class="bnav-item"><span class="bnav-icon">◔</span>ME</div>
+    </div>
+  </div>
+
+  <!-- ── PAGE PREVIEW ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div>
+        <div class="ds-section-num">10 / LIVE PREVIEW</div>
+        <h2>Detail Page (Mobile)</h2>
+      </div>
+      <p class="ds-intro">Spec sheet sebagai dominant pattern di detail page. Buyer dapat semua data sebelum scroll deskripsi.</p>
+    </div>
+
+    <div class="preview">
+      <div class="preview-bar">
+        <div class="preview-logo">Gowes<em>Fit</em></div>
+        <div class="mono" style="font-size: 11px; color: var(--ink-500);">⌕  ⊕  ◇  ◔</div>
+      </div>
+      <div class="preview-search">
+        <span>⌕</span>
+        <span>SEARCH FRAME, GROUPSET, SIZE...</span>
+      </div>
+
+      <div class="preview-section" style="background: var(--ink-50); padding: 24px 18px;">
+        <div class="mono" style="font-size: 10px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;">2022 · USED · MINT</div>
+        <h3 style="font-size: 22px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: var(--ink-1000);">Trek Domane SL5</h3>
+        <div class="mono tnum" style="font-size: 24px; font-weight: 600; margin-top: 12px; letter-spacing: -0.5px;">Rp22.000.000</div>
+        <div class="mono" style="font-size: 11px; color: var(--ink-500); margin-top: 4px;">+ Rekber fee Rp220.000</div>
+      </div>
+
+      <div class="preview-section">
+        <div class="ds-label">SPECIFICATION</div>
+        <table class="preview-table">
+          <tr><td>FRAME</td><td>Carbon IsoSpeed</td></tr>
+          <tr><td>SIZE</td><td class="mono">54cm</td></tr>
+          <tr><td>GROUPSET</td><td>Shimano Ultegra Di2</td></tr>
+          <tr><td>WHEELSET</td><td>Bontrager Aeolus Pro 37</td></tr>
+          <tr><td>WEIGHT</td><td class="mono">7.8 kg</td></tr>
+          <tr><td>YEAR</td><td class="mono">2022</td></tr>
+        </table>
+      </div>
+
+      <div class="preview-section">
+        <div class="ds-label">SELLER</div>
+        <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
+          <div style="width:40px; height:40px; background:var(--ink-1000); border-radius:50%;"></div>
+          <div>
+            <div style="font-size:14px; font-weight:600;">Budi Santoso</div>
+            <div class="mono" style="font-size:11px; color:var(--ink-500);">★ 4.9 · 23 TRX · VERIFIED</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 16px 18px; display: flex; gap: 8px; border-top: 1px solid var(--ink-100);">
+        <button class="btn btn-outline btn-md" style="flex: 1;">Make Offer</button>
+        <button class="btn btn-primary btn-md" style="flex: 2;">Buy with Rekber</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER NOTE -->
+  <div style="margin-top: 80px; padding: 32px; background: var(--ink-1000); color: var(--ink-300); border-left: 4px solid var(--accent);">
+    <div class="ds-label" style="color: var(--accent);">EXECUTION NOTE</div>
+    <p style="font-size: 14px; line-height: 1.7; max-width: 720px;">
+      Karakter <b style="color:var(--paper);">Spec Sheet</b> bekerja paling kuat ketika listing memang punya spec lengkap. Untuk seller yang ogah isi 20 field, ini bisa terasa intimidating. Mitigation: <b style="color:var(--paper);">progressive disclosure di form listing</b> — minimum required fields dulu (5-6), spec detail opsional. Display tetap konsisten: kalau spec tidak diisi → tampil <span class="mono" style="color: var(--ink-500);">— NOT SPECIFIED —</span> dengan dignity, bukan kosong.
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>

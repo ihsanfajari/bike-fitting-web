@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Design System — Bike Marketplace</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  /* ── COLOR TOKENS ── */
+  --red-600:   #C43A1F;
+  --red-500:   #E84C2C;  /* brand primary */
+  --red-400:   #F0714F;
+  --red-100:   #FDF0ED;
+
+  --black-900: #0f0f0f;
+  --black-800: #1a1a1a;  /* brand black */
+  --black-700: #2d2d2d;
+  --black-600: #444;
+  --black-400: #777;
+  --black-200: #b0b0b0;
+  --black-100: #e2e2e2;
+  --black-50:  #f3f3f1;
+  --white:     #fdfcfb;
+
+  --green-500: #2a8a4a;
+  --green-100: #edf7f1;
+  --blue-500:  #2a6aa0;
+  --blue-100:  #edf3f9;
+  --amber-500: #d08c10;
+  --amber-100: #fdf7e6;
+
+  /* ── SPACING SCALE (4px base) ── */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* ── RADIUS ── */
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  /* ── SHADOW ── */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.10);
+  --shadow-md: 0 3px 10px rgba(0,0,0,0.12);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.14);
+
+  /* ── TYPE ── */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+  --font-body:    'Barlow', system-ui, sans-serif;
+
+  --text-2xs: 10px;
+  --text-xs:  11px;
+  --text-sm:  12px;
+  --text-base: 14px;
+  --text-md:  16px;
+  --text-lg:  20px;
+  --text-xl:  24px;
+  --text-2xl: 32px;
+  --text-3xl: 40px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--black-50); color: var(--black-800); line-height: 1.5; }
+
+/* ── PAGE LAYOUT ── */
+.ds-page { max-width: 1080px; margin: 0 auto; padding: 48px 32px 80px; }
+.ds-section { margin-bottom: 64px; }
+.ds-section-title {
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--black-400); margin-bottom: 24px;
+  padding-bottom: 10px; border-bottom: 2px solid var(--black-100);
+  display: flex; align-items: center; gap: 12px;
+}
+.ds-section-title::before { content: ''; display: block; width: 4px; height: 18px; background: var(--red-500); }
+.ds-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 24px; }
+.ds-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--black-400); margin-bottom: 6px; font-family: var(--font-display); }
+.ds-token { font-size: 10px; font-family: monospace; color: var(--black-400); margin-top: 4px; }
+
+/* ── HEADER ── */
+.ds-header { background: var(--black-800); padding: 40px 32px; margin-bottom: 0; }
+.ds-header h1 { font-family: var(--font-display); font-size: 40px; font-weight: 800; color: var(--white); letter-spacing: 1px; line-height: 1; }
+.ds-header h1 span { color: var(--red-500); }
+.ds-header p { font-size: 13px; color: var(--black-400); margin-top: 8px; }
+.ds-header-meta { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+.ds-header-meta span { font-size: 11px; color: var(--black-400); font-family: var(--font-display); text-transform: uppercase; letter-spacing: 1px; }
+.ds-header-meta b { color: var(--white); }
+
+/* ── COLOR SWATCHES ── */
+.swatch-group { display: flex; flex-direction: column; min-width: 80px; }
+.swatch { height: 52px; border: 1px solid rgba(0,0,0,0.08); }
+.swatch-sm { height: 32px; }
+
+/* ── TYPE SPECIMENS ── */
+.type-row { margin-bottom: 16px; }
+.type-spec { font-size: 10px; color: var(--black-400); font-family: monospace; margin-top: 2px; }
+
+/* ── COMPONENTS ── */
+.comp-card { background: var(--white); border: 1px solid var(--black-100); padding: 24px; flex: 1; min-width: 220px; }
+.comp-card-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--black-400); margin-bottom: 16px; font-family: var(--font-display); border-bottom: 1px solid var(--black-100); padding-bottom: 8px; }
+
+/* ── BUTTONS ── */
+.btn { display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; letter-spacing: 0.5px; cursor: pointer; border: 2px solid transparent; line-height: 1; white-space: nowrap; }
+.btn-lg   { font-size: 15px; padding: 14px 24px; }
+.btn-md   { font-size: 13px; padding: 11px 18px; }
+.btn-sm   { font-size: 11px; padding: 7px 14px; }
+.btn-xs   { font-size: 10px; padding: 5px 10px; }
+.btn-primary  { background: var(--red-500); color: #fff; border-color: var(--red-500); }
+.btn-primary:hover { background: var(--red-600); border-color: var(--red-600); }
+.btn-outline  { background: transparent; color: var(--red-500); border-color: var(--red-500); }
+.btn-ghost    { background: transparent; color: var(--black-800); border-color: var(--black-100); }
+.btn-dark     { background: var(--black-800); color: #fff; border-color: var(--black-800); }
+.btn-danger   { background: #fff; color: var(--red-500); border-color: var(--red-500); }
+.btn-full     { width: 100%; }
+.btn-icon     { gap: 6px; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── INPUTS ── */
+.inp-group { margin-bottom: 14px; }
+.inp-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--black-600); margin-bottom: 5px; display: block; font-family: var(--font-display); }
+.inp { width: 100%; border: 1.5px solid var(--black-100); padding: 10px 12px; font-size: 13px; font-family: var(--font-body); color: var(--black-800); background: var(--white); outline: none; transition: border-color 0.15s; }
+.inp:focus { border-color: var(--red-500); }
+.inp-error { border-color: var(--red-500); }
+.inp-success { border-color: var(--green-500); }
+.inp-helper { font-size: 10px; color: var(--black-400); margin-top: 4px; }
+.inp-error-msg { font-size: 10px; color: var(--red-500); margin-top: 4px; font-weight: 600; }
+.inp-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23777'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 8px; padding-right: 32px; cursor: pointer; }
+
+/* ── BADGES ── */
+.badge { display: inline-block; font-family: var(--font-display); font-weight: 800; font-size: 9px; letter-spacing: 0.6px; text-transform: uppercase; padding: 3px 8px; line-height: 1.4; }
+.badge-red    { background: var(--red-500);   color: #fff; }
+.badge-dark   { background: var(--black-800); color: #fff; }
+.badge-gray   { background: var(--black-100); color: var(--black-600); }
+.badge-green  { background: var(--green-500); color: #fff; }
+.badge-blue   { background: var(--blue-500);  color: #fff; }
+.badge-amber  { background: var(--amber-100); color: var(--amber-500); border: 1px solid #f0c040; }
+.badge-outline{ background: transparent; color: var(--red-500); border: 1.5px solid var(--red-500); }
+
+/* ── CHIPS / FILTERS ── */
+.chip { display: inline-block; font-family: var(--font-display); font-size: 11px; font-weight: 700; padding: 5px 12px; border: 1.5px solid var(--black-100); cursor: pointer; color: var(--black-800); background: var(--white); }
+.chip-active { background: var(--red-500); color: #fff; border-color: var(--red-500); }
+
+/* ── LISTING CARD ── */
+.listing-card { background: var(--white); border: 1px solid var(--black-100); overflow: hidden; width: 100%; }
+.listing-card-img { height: 160px; background: repeating-linear-gradient(45deg, #e0e0e0 0, #e0e0e0 1px, #f4f4f4 0, #f4f4f4 9px); display: flex; align-items: center; justify-content: center; color: #bbb; font-size: 11px; font-style: italic; }
+.listing-card-body { padding: 12px; }
+.listing-card-price { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--red-500); line-height: 1; margin-bottom: 4px; }
+.listing-card-title { font-size: 13px; font-weight: 700; line-height: 1.35; margin-bottom: 8px; color: var(--black-800); }
+.listing-card-meta  { font-size: 10px; color: var(--black-400); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* ── ORDER STATUS ── */
+.order-steps { display: flex; align-items: center; }
+.order-step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.order-step-dot { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.order-step-label { font-size: 9px; font-weight: 700; font-family: var(--font-display); text-transform: uppercase; white-space: nowrap; }
+.order-step-line { flex: 1; height: 2px; margin: 0 4px 16px; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav { display: flex; background: var(--white); border-top: 2px solid var(--black-800); height: 60px; }
+.bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 9px; font-weight: 600; color: var(--black-400); font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.5px; border-top: 3px solid transparent; }
+.bottom-nav-item.active { color: var(--red-500); border-top-color: var(--red-500); font-weight: 800; }
+
+/* ── ICON GUIDE ── */
+.icon-guide-item { text-align: center; }
+.icon-placeholder { width: 48px; height: 48px; background: var(--black-100); display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 4px; }
+.icon-guide-label { font-size: 9px; color: var(--black-400); font-family: var(--font-display); font-weight: 700; text-transform: uppercase; }
+
+/* ── DO / DON'T ── */
+.dont-card { border: 2px solid var(--red-500); padding: 16px; flex: 1; }
+.do-card   { border: 2px solid var(--green-500); padding: 16px; flex: 1; }
+.do-card .comp-card-title   { color: var(--green-500); }
+.dont-card .comp-card-title { color: var(--red-500); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="ds-header">
+  <div style="max-width:1080px; margin:0 auto; padding:0 32px;">
+    <h1>SEPEDAIN<span>.</span></h1>
+    <p>Design System v1.0 — Bike Marketplace MVP</p>
+    <div class="ds-header-meta">
+      <span>Versi <b>1.0</b></span>
+      <span>Status <b>Draft</b></span>
+      <span>Tanggal <b>April 2026</b></span>
+      <span>Platform <b>Web Responsive (Mobile-first)</b></span>
+      <span>Font <b>Barlow Condensed + Barlow</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="ds-page">
+
+  <!-- ── 1. COLOR TOKENS ── -->
+  <div class="ds-section">
+    <div class="ds-section-title">01 · Color Tokens</div>
+
+    <div class="ds-label">Brand Primary — Red</div>
+    <div class="ds-row">
+      <div class="swatch-group"><div class="swatch" style="background:#C43A1F"></div><div class="ds-token">--red-600<br>#C43A1F<br>Hover</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#E84C2C; outline: 3px solid #1a1a1a; outline-offset:2px;"></div><div class="ds-token">--red-500<br>#E84C2C<br>⬤ PRIMARY</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#F0714F"></div><div class="ds-token">--red-400<br>#F0714F<br>Light</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#FDF0ED; border:1px solid #e0d8d6;"></div><div class="ds-token">--red-100<br>#FDF0ED<br>Tint bg</div></div>
+    </div>
+
+    <div class="ds-label" style="margin-top:16px;">Neutral — Black Scale</div>
+    <div class="ds-row">
+      <div class="swatch-group"><div class="swatch" style="background:#0f0f0f"></div><div class="ds-token">--black-900<br>#0f0f0f</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#1a1a1a"></div><div class="ds-token">--black-800<br>#1a1a1a<br>⬤ Brand Black</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#2d2d2d"></div><div class="ds-token">--black-700<br>#2d2d2d</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#444"></div><div class="ds-token">--black-600<br>#444444</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#777"></div><div class="ds-token">--black-400<br>#777777<br>Body text</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#b0b0b0"></div><div class="ds-token">--black-200<br>#b0b0b0<br>Placeholder</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#e2e2e2; border:1px solid #ccc;"></div><div class="ds-token">--black-100<br>#e2e2e2<br>Border</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#f3f3f1; border:1px solid #ccc;"></div><div class="ds-token">--black-50<br>#f3f3f1<br>Page bg</div></div>
+      <div class="swatch-group"><div class="swatch" style="background:#fdfcfb; border:1px solid #ccc;"></div><div class="ds-token">--white<br>#fdfcfb<br>Surface</div></div>
+    </div>
+
+    <div class="ds-label" style="margin-top:16px;">Status &amp; Semantic Colors</div>
+    <div class="ds-row">
+      <div class="swatch-group"><div class="swatch swatch-sm" style="background:#2a8a4a"></div><div class="ds-token">--green-500<br>Sukses / Aktif</div></div>
+      <div class="swatch-group"><div class="swatch swatch-sm" style="background:#edf7f1; border:1px solid #ccc;"></div><div class="ds-token">--green-100<br>Success bg</div></div>
+      <div class="swatch-group"><div class="swatch swatch-sm" style="background:#2a6aa0"></div><div class="ds-token">--blue-500<br>Info / Dikirim</div></div>
+      <div class="swatch-group"><div class="swatch swatch-sm" style="background:#edf3f9; border:1px solid #ccc;"></div><div class="ds-token">--blue-100<br>Info bg</div></div>
+      <div class="swatch-group"><div class="swatch swatch-sm" style="background:#d08c10"></div><div class="ds-token">--amber-500<br>Warning / Peringatan</div></div>
+      <div class="swatch-group"><div class="swatch swatch-sm" style="background:#fdf7e6; border:1px solid #ccc;"></div><div class="ds-token">--amber-100<br>Warning bg</div></div>
+    </div>
+  </div>
+
+  <!-- ── 2. TYPOGRAPHY ── -->
+  <div class="ds-section">
+    <div class="ds-section-title">02 · Typography</div>
+
+    <div class="ds-row" style="gap:32px;">
+      <div style="flex:1; min-width:260px;">
+        <div class="ds-label">Display / Heading — Barlow Condensed</div>
+        <div class="type-row">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:40px; line-height:1; letter-spacing:0.5px;">SEPEDAIN<span style="color:var(--red-500)">.</span></div>
+          <div class="type-spec">--text-3xl · 40px · weight 800 · Condensed · Logo/Brand</div>
+        </div>
+        <div class="type-row">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:32px; line-height:1.1; color:var(--red-500)">Rp 22.000.000</div>
+          <div class="type-spec">--text-2xl · 32px · weight 800 · Harga utama</div>
+        </div>
+        <div class="type-row">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:24px; line-height:1.15;">Trek Domane SL5 2022</div>
+          <div class="type-spec">--text-xl · 24px · weight 800 · Judul listing</div>
+        </div>
+        <div class="type-row">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:20px; line-height:1.2;">Dashboard Penjual</div>
+          <div class="type-spec">--text-lg · 20px · weight 700 · Page title / Section header</div>
+        </div>
+        <div class="type-row">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:16px; line-height:1.3; text-transform:uppercase; letter-spacing:1px; color:var(--black-400)">KATEGORI PRODUK</div>
+          <div class="type-spec">--text-md · 16px · uppercase · label section</div>
+        </div>
+      </div>
+      <div style="flex:1; min-width:260px;">
+        <div class="ds-label">Body — Barlow</div>
+        <div class="type-row">
+          <div style="font-size:14px; line-height:1.6; max-width:360px;">Dijual sepeda roadbike Trek Domane SL5 tahun 2022. Kondisi mulus, jarang digunakan. Full Shimano 105 R7000 groupset. Frame carbon IsoSpeed dengan teknologi decoupler.</div>
+          <div class="type-spec">--text-base · 14px · weight 400 · Body text utama</div>
+        </div>
+        <div class="type-row">
+          <div style="font-size:12px; color:var(--black-400);">📍 Jakarta Selatan · Online 2 jam lalu · 142 dilihat</div>
+          <div class="type-spec">--text-sm · 12px · Meta / secondary info</div>
+        </div>
+        <div class="type-row">
+          <div style="font-size:11px; color:var(--black-600); font-weight:500;">Verifikasi nomor HP wajib untuk listing</div>
+          <div class="type-spec">--text-xs · 11px · Caption / helper text</div>
+        </div>
+        <div class="type-row">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:var(--black-400); font-family:'Barlow Condensed',sans-serif;">LISTING TERBARU</div>
+          <div class="type-spec">--text-2xs · 10px · Micro label / badge text</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. SPACING & RADIUS ── -->
+  <div class="ds-section">
+    <div class="ds-section-title">03 · Spacing Scale &amp; Radius</div>
+    <div class="ds-row" style="align-items:flex-end; gap:8px;">
+      <div class="ds-label" style="width:100%; margin-bottom:8px;">Spacing (base 4px)</div>
+      {[[4,'sp-1'],[8,'sp-2'],[12,'sp-3'],[16,'sp-4'],[20,'sp-5'],[24,'sp-6'],[32,'sp-8'],[40,'sp-10'],[48,'sp-12']].map = null}
+    </div>
+    <div class="ds-row" style="align-items:flex-end; gap:16px; flex-wrap:wrap;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;"><div style="width:4px; height:4px; background:var(--red-500);"></div><div class="ds-token">4px · sp-1</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;"><div style="width:8px; height:8px; background:var(--red-500);"></div><div class="ds-token">8px · sp-2</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;"><div style="width:12px; height:12px; background:var(--red-500);"></div><div class="ds-token">12px · sp-3</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;"><div style="width:16px; height:16px; background:var(--red-500);"></div><div class="ds-token">16px · sp-4</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;"><div style="width:20px; height:20px; background:var(--red-500);"></div><div class="ds-token">20px · sp-5</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;"><div style="width:24px; height:24px; background:var(--red-500);"></div><div class="ds-token">24px · sp-6</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;"><div style="width:32px; height:32px; background:var(--red-500);"></div><div class="ds-token">32px · sp-8</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;"><div style="width:40px; height:40px; background:var(--red-500);"></div><div class="ds-token">40px · sp-10</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;"><div style="width:48px; height:48px; background:var(--red-500);"></div><div class="ds-token">48px · sp-12</div></div>
+    </div>
+    <div class="ds-label" style="margin-top:24px;">Border Radius</div>
+    <div class="ds-row" style="align-items:center; gap:20px; flex-wrap:wrap;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:48px; height:48px; background:var(--black-200); border-radius:0;"></div><div class="ds-token">none · 0px<br>Buttons, Cards</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:48px; height:48px; background:var(--black-200); border-radius:2px;"></div><div class="ds-token">sm · 2px<br>Inputs, Tags</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:48px; height:48px; background:var(--black-200); border-radius:4px;"></div><div class="ds-token">md · 4px<br>Tooltips</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:48px; height:48px; background:var(--black-200); border-radius:8px;"></div><div class="ds-token">lg · 8px<br>Modals</div></div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:48px; height:24px; background:var(--black-200); border-radius:9999px;"></div><div class="ds-token">full · pill<br>Chips, Toggle</div></div>
+    </div>
+    <div class="ds-label" style="margin-top:24px;">Elevation / Shadow</div>
+    <div class="ds-row">
+      <div style="background:var(--white); width:80px; height:60px; box-shadow:var(--shadow-sm); display:flex; align-items:center; justify-content:center;"><div class="ds-token" style="text-align:center;">sm<br>Cards</div></div>
+      <div style="background:var(--white); width:80px; height:60px; box-shadow:var(--shadow-md); display:flex; align-items:center; justify-content:center;"><div class="ds-token" style="text-align:center;">md<br>Dropdowns</div></div>
+      <div style="background:var(--white); width:80px; height:60px; box-shadow:var(--shadow-lg); display:flex; align-items:center; justify-content:center;"><div class="ds-token" style="text-align:center;">lg<br>Modals</div></div>
+    </div>
+  </div>
+
+  <!-- ── 4. BUTTONS ── -->
+  <div class="ds-section">
+    <div class="ds-section-title">04 · Buttons</div>
+    <div class="ds-row">
+      <div class="comp-card">
+        <div class="comp-card-title">Variants</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div><button class="btn btn-primary btn-lg">Beli Sekarang</button></div>
+          <div><button class="btn btn-outline btn-lg">Tawar Harga</button></div>
+          <div><button class="btn btn-dark btn-lg">Chat Penjual</button></div>
+          <div><button class="btn btn-ghost btn-lg">Simpan Listing</button></div>
+          <div><button class="btn btn-primary btn-lg" disabled>Stok Habis</button></div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card-title">Sizes</div>
+        <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+          <button class="btn btn-primary btn-lg">Large — 15px / 14×24px</button>
+          <button class="btn btn-primary btn-md">Medium — 13px / 11×18px</button>
+          <button class="btn btn-primary btn-sm">Small — 11px / 7×14px</button>
+          <button class="btn btn-primary btn-xs">XSmall — 10px</button>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card-title">Full Width (Mobile)</div>
+        <div style="display:flex; flex-direction:column; gap:8px; width:220px;">
+          <button class="btn btn-primary btn-md btn-full">Bayar Sekarang</button>
+          <button class="btn btn-outline btn-md btn-full">Lihat Detail</button>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-outline btn-md" style="flex:1;">Tolak</button>
+            <button class="btn btn-primary btn-md" style="flex:1;">Terima</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. FORM INPUTS ── -->
+  <div class="ds-section">
+    <div class="ds-section-title">05 · Form Inputs</div>
+    <div class="ds-row">
+      <div class="comp-card" style="max-width:340px;">
+        <div class="comp-card-title">States</div>
+        <div class="inp-group">
+          <label class="inp-label">Default</label>
+          <input class="inp" type="text" placeholder="Masukkan judul listing..." />
+          <div class="inp-helper">Max 80 karakter</div>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Focused</label>
+          <input class="inp" type="text" value="Trek Domane SL5 2022" style="border-color:var(--red-500);" />
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Error</label>
+          <input class="inp inp-error" type="text" value="Trek Domane SL5 @2022#" />
+          <div class="inp-error-msg">⚠ Karakter tidak valid ditemukan</div>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Success</label>
+          <input class="inp inp-success" type="text" value="Trek Domane SL5 2022" />
+          <div class="inp-helper" style="color:var(--green-500);">✓ Format valid</div>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Disabled</label>
+          <input class="inp" type="text" value="Trek Domane SL5" disabled style="opacity:0.45; cursor:not-allowed;" />
+        </div>
+      </div>
+      <div class="comp-card" style="max-width:340px;">
+        <div class="comp-card-title">Variants</div>
+        <div class="inp-group">
+          <label class="inp-label">Select / Dropdown</label>
+          <select class="inp inp-select">
+            <option>Pilih kategori...</option>
+            <option selected>Sepeda Utuh — Roadbike</option>
+            <option>MTB</option>
+          </select>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Textarea</label>
+          <textarea class="inp" rows="4" placeholder="Jelaskan kondisi, riwayat penggunaan, aksesori..."></textarea>
+          <div class="inp-helper">0 / 2000 karakter</div>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Prefix / Suffix</label>
+          <div style="display:flex;">
+            <div style="padding:10px 12px; background:var(--black-50); border:1.5px solid var(--black-100); border-right:none; font-size:13px; color:var(--black-400); white-space:nowrap;">Rp</div>
+            <input class="inp" type="text" value="22.000.000" style="flex:1;" />
+          </div>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Toggle</label>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div style="width:44px; height:24px; background:var(--red-500); border-radius:9999px; position:relative; cursor:pointer; flex-shrink:0;"><div style="width:18px; height:18px; background:#fff; border-radius:50%; position:absolute; top:3px; right:3px;"></div></div>
+            <span style="font-size:13px;">Bisa COD — <b style="color:var(--red-500);">Aktif</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 6. BADGES & CHIPS ── -->
+  <div class="ds-section">
+    <div class="ds-section-title">06 · Badges &amp; Chips</div>
+    <div class="ds-row">
+      <div class="comp-card">
+        <div class="comp-card-title">Status Badges</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="badge badge-red">Belum Dikirim</span>
+          <span class="badge badge-blue">Dalam Pengiriman</span>
+          <span class="badge badge-green">Selesai</span>
+          <span class="badge badge-amber">Sengketa</span>
+          <span class="badge badge-gray">Draft</span>
+          <span class="badge badge-dark">Sold</span>
+          <span class="badge badge-outline">Nego</span>
+        </div>
+        <div style="margin-top:16px;">
+          <div class="comp-card-title">Kondisi Barang</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <span class="badge badge-green">Baru</span>
+            <span class="badge" style="background:#4a9a6a; color:#fff;">Seperti Baru</span>
+            <span class="badge badge-dark">Bekas — Mulus</span>
+            <span class="badge" style="background:#555; color:#fff;">Bekas — Normal</span>
+            <span class="badge badge-amber">Butuh Servis</span>
+          </div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card-title">Filter Chips</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+          <span class="chip chip-active">Semua</span>
+          <span class="chip">Roadbike</span>
+          <span class="chip">MTB</span>
+          <span class="chip">Gravel</span>
+          <span class="chip">Folding</span>
+          <span class="chip">BMX</span>
+          <span class="chip">Frame</span>
+          <span class="chip">Part</span>
+        </div>
+        <div class="comp-card-title">Kondisi Filter</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="chip chip-active">Seperti Baru</span>
+          <span class="chip">Bekas Mulus</span>
+          <span class="chip">Bekas Normal</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 7. LISTING CARD ── -->
+  <div class="ds-section">
+    <div class="ds-section-title">07 · Listing Card Pattern</div>
+    <div class="ds-row">
+      <!-- Grid card -->
+      <div style="flex:1; min-width:180px; max-width:220px;">
+        <div class="ds-label">Grid (2-col mobile)</div>
+        <div class="listing-card">
+          <div class="listing-card-img">[ foto sepeda ]</div>
+          <div class="listing-card-body">
+            <div class="listing-card-price">Rp 22.000.000</div>
+            <div class="listing-card-title">Trek Domane SL5 2022 Full Shimano 105</div>
+            <div class="listing-card-meta">
+              <span class="badge badge-dark" style="font-size:8px;">Bekas Mulus</span>
+              <span>📍 Jakarta</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- List card -->
+      <div style="flex:2; min-width:280px; max-width:480px;">
+        <div class="ds-label">List (1-col, full-width)</div>
+        <div class="listing-card" style="display:flex; gap:0;">
+          <div style="width:110px; height:110px; background:repeating-linear-gradient(45deg,#e0e0e0 0,#e0e0e0 1px,#f4f4f4 0,#f4f4f4 9px); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#bbb; font-size:9px;">[ foto ]</div>
+          <div class="listing-card-body" style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+              <span class="badge badge-dark">Bekas Mulus</span>
+              <span style="font-size:10px; color:var(--black-400);">2j lalu</span>
+            </div>
+            <div class="listing-card-title" style="font-size:13px; margin-bottom:4px;">Trek Domane SL5 2022 Full Shimano 105</div>
+            <div class="listing-card-price" style="font-size:18px; margin-bottom:4px;">Rp 22.000.000</div>
+            <div class="listing-card-meta">
+              <span>📍 Jakarta Sel.</span>
+              <span>⭐ 4.9 · 23 trx</span>
+              <span style="color:var(--red-500); font-weight:700;">Nego</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px; padding:10px 12px; background:var(--red-100); border:1px solid var(--red-500); font-size:10px; color:var(--red-500); font-weight:700;">
+          🔒 Rekber tersedia — Dana aman hingga barang diterima
+        </div>
+      </div>
+      <!-- Sold state -->
+      <div style="flex:1; min-width:180px; max-width:220px;">
+        <div class="ds-label">Sold / Inactive State</div>
+        <div class="listing-card" style="position:relative; opacity:0.65;">
+          <div class="listing-card-img" style="filter:grayscale(1);">[ foto sepeda ]</div>
+          <div style="position:absolute; top:12px; left:12px;"><span class="badge badge-dark">SOLD</span></div>
+          <div class="listing-card-body">
+            <div class="listing-card-price" style="color:var(--black-400);">Rp 22.000.000</div>
+            <div class="listing-card-title">Trek Domane SL5 2022</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 8. ORDER STATUS ── -->
+  <div class="ds-section">
+    <div class="ds-section-title">08 · Order Status Pattern</div>
+    <div class="ds-row">
+      <div class="comp-card" style="flex:2;">
+        <div class="comp-card-title">Horizontal Progress Steps</div>
+        <div style="margin-bottom:20px;">
+          <!-- Waiting payment -->
+          <div class="ds-label">Menunggu Pembayaran</div>
+          <div class="order-steps" style="margin-bottom:16px;">
+            {['Bayar','Kirim','Dikirim','Terima','Selesai'].map((s,i) => `
+            <div class="order-step"><div class="order-step-dot" style="background:${i===0?'var(--red-500)':'#ddd'};">${i===0?'1':i+1}</div><div class="order-step-label" style="color:${i===0?'var(--red-500)':'#bbb'}">${s}</div></div>
+            ${i<4?`<div class="order-step-line" style="background:#ddd;"></div>`:''}
+            `).join('')}
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="ds-label">States — semua</div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <span class="badge badge-amber">Menunggu Bayar</span>
+            <span class="badge badge-blue">Dibayar / Menunggu Kirim</span>
+            <span class="badge" style="background:#5b9ec9;color:#fff;">Dikirim</span>
+            <span class="badge badge-green">Diterima</span>
+            <span class="badge badge-dark">Selesai</span>
+            <span class="badge badge-gray">Dibatalkan</span>
+            <span class="badge badge-red">Sengketa</span>
+            <span class="badge" style="background:#999;color:#fff;">Refund</span>
+          </div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card-title">Bottom Navigation</div>
+        <div class="bottom-nav" style="max-width:375px;">
+          <div class="bottom-nav-item active"><span style="font-size:18px;">🏠</span>Home</div>
+          <div class="bottom-nav-item"><span style="font-size:18px;">🔍</span>Cari</div>
+          <div class="bottom-nav-item"><span style="font-size:18px;">➕</span>Jual</div>
+          <div class="bottom-nav-item"><span style="font-size:18px;">💬</span>Chat</div>
+          <div class="bottom-nav-item"><span style="font-size:18px;">👤</span>Saya</div>
+        </div>
+        <div class="comp-card-title" style="margin-top:20px;">Status Bar (Mobile)</div>
+        <div style="background:var(--black-800); padding:8px 16px; display:flex; justify-content:space-between; color:#fff; font-size:11px; font-family:'Barlow Condensed',sans-serif; max-width:375px;">
+          <b>9:41</b><span style="opacity:.7;">▐▐▐ WiFi  88%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 9. ICON GUIDE ── -->
+  <div class="ds-section">
+    <div class="ds-section-title">09 · Iconography Guide</div>
+    <div style="background:var(--white); border:1px solid var(--black-100); padding:24px; margin-bottom:16px;">
+      <p style="font-size:13px; line-height:1.7; margin-bottom:16px; color:var(--black-600);">
+        <strong>Prinsip:</strong> Gunakan ikon garis tipis (stroke, bukan fill) dengan berat konsisten 1.5–2px. Style: <strong>Phosphor Icons</strong> atau <strong>Lucide Icons</strong> (MIT License). Ukuran default <strong>20px</strong> untuk navigasi, <strong>16px</strong> untuk inline, <strong>24px</strong> untuk aksi utama. Jangan campur gaya ikon yang berbeda dalam satu halaman.
+      </p>
+      <div style="display:flex; flex-wrap:wrap; gap:24px; margin-top:8px;">
+        {[
+          ['🔍','Cari','search'],['🏠','Beranda','home'],['💬','Chat','chat'],['👤','Profil','user'],
+          ['➕','Buat Listing','plus'],['🔔','Notifikasi','bell'],['♥','Wishlist','heart'],
+          ['📍','Lokasi','map-pin'],['📦','Pengiriman','package'],['⭐','Rating','star'],
+          ['⚙️','Pengaturan','settings'],['🔒','Rekber','lock'],['📷','Kamera','camera'],['↩','Kembali','arrow-left']
+        ].map(([emoji, label, iconName]) => `
+          <div class="icon-guide-item">
+            <div class="icon-placeholder">${emoji}</div>
+            <div class="icon-guide-label">${label}</div>
+            <div style="font-size:8px; color:var(--black-200); margin-top:2px; font-family:monospace;">${iconName}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:16px; padding:10px 14px; background:var(--amber-100); border:1px solid #f0c040; font-size:11px; color:var(--amber-500); font-weight:600;">
+        ⚠ Di wireframe: ikon ditampilkan sebagai emoji placeholder. Implementasi final menggunakan library ikon SVG (bukan emoji).
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 10. DO / DON'T ── -->
+  <div class="ds-section">
+    <div class="ds-section-title">10 · Do &amp; Don't</div>
+    <div class="ds-row">
+      <div class="do-card">
+        <div class="comp-card-title">✓ Do — Lakukan</div>
+        <ul style="font-size:12px; line-height:2; color:var(--black-700); padding-left:16px;">
+          <li>Gunakan <strong>Barlow Condensed 800</strong> untuk harga dan judul listing</li>
+          <li>CTA utama selalu merah solid (<code>--red-500</code>), satu per halaman</li>
+          <li>Tampilkan harga dalam format <strong>Rp X.XXX.XXX</strong> (bukan singkatan)</li>
+          <li>Gunakan badge status dengan warna semantik yang konsisten</li>
+          <li>Tambah pesan rekber pada setiap flow pembelian</li>
+          <li>Minimum hit target 44×44px untuk semua elemen interaktif (mobile)</li>
+          <li>Sertakan foto placeholder bergaris untuk semua gambar belum diisi</li>
+        </ul>
+      </div>
+      <div class="dont-card">
+        <div class="comp-card-title">✗ Don't — Hindari</div>
+        <ul style="font-size:12px; line-height:2; color:var(--black-700); padding-left:16px;">
+          <li>Jangan gunakan sudut membulat besar (border-radius &gt; 8px) — brand ini tegas</li>
+          <li>Jangan tampilkan lebih dari 1 CTA merah per layar</li>
+          <li>Jangan singkat harga (mis. "22jt") di halaman transaksi — gunakan angka penuh</li>
+          <li>Jangan gunakan gradien agresif sebagai background utama</li>
+          <li>Jangan sembunyikan biaya rekber — tampilkan transparan di checkout</li>
+          <li>Jangan gunakan emoji sebagai pengganti ikon dalam implementasi final</li>
+          <li>Jangan campur font body non-brand (Arial, Inter, Roboto)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; padding:32px 0; font-size:11px; color:var(--black-200); font-family:'Barlow Condensed',sans-serif; text-transform:uppercase; letter-spacing:2px;">
+    SEPEDAIN Design System v1.0 · Draft · April 2026 · Ihsan Fajari
+  </div>
+
+</div>
+</body>
+</html>

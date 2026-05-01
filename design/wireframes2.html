@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wireframes — Bike Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="wf-shared.jsx"></script>
+  <script type="text/babel" src="wf-screens-a.jsx"></script>
+  <script type="text/babel" src="wf-screens-b.jsx"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #1a1a1a; font-family: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif; }
+    .wf-label {
+      font-family: 'Barlow Condensed', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 6px;
+      padding: 0 4px;
+    }
+    .artboard-wrap { display: flex; flex-direction: column; }
+  </style>
+</head>
+<body>
+<script type="text/babel">
+const { useState } = React;
+
+// Wrapper that adds a label below the artboard content
+const Screen = ({ label, children }) => (
+  <div className="artboard-wrap">
+    <div className="wf-label">{label}</div>
+    {children}
+  </div>
+);
+
+const App = () => (
+  <DesignCanvas>
+
+    <DCSection id="s1" title="01 · Homepage">
+      <DCArtboard id="s1a" label="V-A: Kategori Grid + Listing List" width={375} height={820}>
+        <Screen label="V-A · Search bar + kategori grid + listing list"><HomepageA /></Screen>
+      </DCArtboard>
+      <DCArtboard id="s1b" label="V-B: Hero Bold + 2-Col Grid" width={375} height={820}>
+        <Screen label="V-B · Dark header + hero + 2-col grid listing"><HomepageB /></Screen>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="s2" title="02 · Detail Listing">
+      <DCArtboard id="s2a" label="V-A: Foto Top + Sticky CTA Bar" width={375} height={900}>
+        <Screen label="V-A · Galeri foto besar + spesifikasi + sticky CTA bawah"><DetailA /></Screen>
+      </DCArtboard>
+      <DCArtboard id="s2b" label="V-B: Bold Price + Thumbnail Strip" width={375} height={900}>
+        <Screen label="V-B · Harga menonjol + thumbnail strip + inline CTA"><DetailB /></Screen>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="s3" title="03 · Checkout — Alamat &amp; Ekspedisi">
+      <DCArtboard id="s3a" label="V-A: Step Bar + Stacked Form" width={375} height={960}>
+        <Screen label="V-A · Indikator langkah + form bertumpuk"><CheckoutAddrA /></Screen>
+      </DCArtboard>
+      <DCArtboard id="s3b" label="V-B: Accordion Cards" width={375} height={900}>
+        <Screen label="V-B · Accordion per section + ringkasan kanan"><CheckoutAddrB /></Screen>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="s4" title="04 · Checkout — Metode Pembayaran">
+      <DCArtboard id="s4a" label="V-A: Grouped Radio List" width={375} height={820}>
+        <Screen label="V-A · List metode dikelompokkan (VA / E-wallet / QRIS)"><CheckoutPayA /></Screen>
+      </DCArtboard>
+      <DCArtboard id="s4b" label="V-B: Tab Pills per Kategori" width={375} height={820}>
+        <Screen label="V-B · Tab VA / E-wallet / QRIS + grid pilihan"><CheckoutPayB /></Screen>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="s5" title="05 · Buat Listing — Foto &amp; Kategori">
+      <DCArtboard id="s5a" label="V-A: Grid Upload 3×3" width={375} height={780}>
+        <Screen label="V-A · Grid upload foto 3×3 + dropdown kategori"><CreateListA /></Screen>
+      </DCArtboard>
+      <DCArtboard id="s5b" label="V-B: Camera-First Full Width" width={375} height={780}>
+        <Screen label="V-B · Kamera dominan + thumbnail strip + kategori chips"><CreateListB /></Screen>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="s6" title="06 · Buat Listing — Spesifikasi">
+      <DCArtboard id="s6a" label="V-A: Long Scroll Form" width={375} height={960}>
+        <Screen label="V-A · Form panjang per section + toggle COD/Nego"><CreateSpecA /></Screen>
+      </DCArtboard>
+      <DCArtboard id="s6b" label="V-B: Card Wizard per Kelompok" width={375} height={920}>
+        <Screen label="V-B · Card per kelompok field (hitam header)"><CreateSpecB /></Screen>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="s7" title="07 · Dashboard Penjual">
+      <DCArtboard id="s7a" label="V-A: Stats Grid + Recent Orders" width={375} height={1000}>
+        <Screen label="V-A · Saldo + 3 stat + pesanan tindakan + listing"><DashboardA /></Screen>
+      </DCArtboard>
+      <DCArtboard id="s7b" label="V-B: Big Revenue Card + Quick Actions" width={375} height={920}>
+        <Screen label="V-B · Revenue besar menonjol + shortcut + saldo"><DashboardB /></Screen>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="s8" title="08 · Pesanan Masuk (Penjual)">
+      <DCArtboard id="s8a" label="V-A: Status Tabs + Order Cards" width={375} height={840}>
+        <Screen label="V-A · Tab status + kartu pesanan + tombol input resi"><OrdersA /></Screen>
+      </DCArtboard>
+      <DCArtboard id="s8b" label="V-B: Filter Chips + Progress per Order" width={375} height={840}>
+        <Screen label="V-B · Chip filter status + progress mini per pesanan"><OrdersB /></Screen>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="s9" title="09 · Chat">
+      <DCArtboard id="s9a" label="V-A: Listing Card Pinned + Bubble Chat" width={375} height={860}>
+        <Screen label="V-A · Listing card pinned di atas thread chat"><ChatA /></Screen>
+      </DCArtboard>
+      <DCArtboard id="s9b" label="V-B: Dark Header + Quick Reply Chips" width={375} height={860}>
+        <Screen label="V-B · Header gelap + listing mini + quick reply chips"><ChatB /></Screen>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="s10" title="10 · Detail Pesanan (Pembeli)">
+      <DCArtboard id="s10a" label="V-A: Vertical Timeline Pengiriman" width={375} height={980}>
+        <Screen label="V-A · Status order + vertical timeline tracking + summary"><OrderDetailA /></Screen>
+      </DCArtboard>
+      <DCArtboard id="s10b" label="V-B: Horizontal Steps + Summary Card" width={375} height={960}>
+        <Screen label="V-B · Progress horizontal di header biru + card summary"><OrderDetailB /></Screen>
+      </DCArtboard>
+    </DCSection>
+
+  </DesignCanvas>
+);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+<div id="root"></div>
+</body>
+</html>

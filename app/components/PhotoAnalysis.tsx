@@ -25,6 +25,18 @@ function calcAngle(a: NormalizedLandmark, b: NormalizedLandmark, c: NormalizedLa
   return Math.round(Math.acos(Math.min(1, Math.max(-1, dot / mag))) * (180 / Math.PI));
 }
 
+// Picks the side whose key pose landmarks have higher average visibility.
+// Returns null only if neither side is detectable (avg visibility < 0.2).
+function selectBestSide(lm: NormalizedLandmark[]): "left" | "right" | null {
+  if (lm.length < 29) return null;
+  const leftLm  = [lm[11], lm[13], lm[23], lm[25], lm[27]];
+  const rightLm = [lm[12], lm[14], lm[24], lm[26], lm[28]];
+  const avgL = leftLm.reduce( (s, l) => s + (l.visibility ?? 0), 0) / leftLm.length;
+  const avgR = rightLm.reduce((s, r) => s + (r.visibility ?? 0), 0) / rightLm.length;
+  if (avgL < 0.2 && avgR < 0.2) return null;
+  return avgL >= avgR ? "left" : "right";
+}
+
 function drawAngleLabel(
   ctx: CanvasRenderingContext2D,
   lm: NormalizedLandmark,
@@ -83,6 +95,7 @@ export default function PhotoAnalysis() {
   const [fitResult, setFitResult] = useState<FitResult | null>(null);
   const [processing, setProcessing] = useState(false);
   const [noPersonFound, setNoPersonFound] = useState(false);
+  const [lowVisibility, setLowVisibility] = useState(false);
 
   useEffect(() => {
     async function init() {
@@ -113,6 +126,7 @@ export default function PhotoAnalysis() {
     setFitResult(null);
     setAngles(null);
     setNoPersonFound(false);
+    setLowVisibility(false);
 
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
@@ -123,6 +137,7 @@ export default function PhotoAnalysis() {
 
     setProcessing(true);
     setNoPersonFound(false);
+    setLowVisibility(false);
 
     const img = new Image();
     img.onload = () => {
@@ -154,27 +169,30 @@ export default function PhotoAnalysis() {
         radius: Math.max(4, canvas.width / 200),
       });
 
-      const kneeL  = calcAngle(lm[23], lm[25], lm[27]);
-      const kneeR  = calcAngle(lm[24], lm[26], lm[28]);
-      const elbowL = calcAngle(lm[11], lm[13], lm[15]);
-      const elbowR = calcAngle(lm[12], lm[14], lm[16]);
-      const torso  = calcAngle(lm[11], lm[23], lm[25]);
+      const side = selectBestSide(lm);
+      if (side === null) {
+        setLowVisibility(true);
+        setProcessing(false);
+        return;
+      }
 
-      // Use the side more visible (lower visibility score = more occluded)
-      const kneeAngle  = lm[25].visibility! >= lm[26].visibility! ? kneeL : kneeR;
-      const elbowAngle = lm[13].visibility! >= lm[14].visibility! ? elbowL : elbowR;
+      const kneeAngle  = side === "left" ? calcAngle(lm[23], lm[25], lm[27]) : calcAngle(lm[24], lm[26], lm[28]);
+      const elbowAngle = side === "left" ? calcAngle(lm[11], lm[13], lm[15]) : calcAngle(lm[12], lm[14], lm[16]);
+      const torsoAngle = side === "left" ? calcAngle(lm[11], lm[23], lm[25]) : calcAngle(lm[12], lm[24], lm[26]);
 
-      drawAngleLabel(ctx, lm[25], "Lutut L", kneeL,  canvas.width, canvas.height);
-      drawAngleLabel(ctx, lm[26], "Lutut R", kneeR,  canvas.width, canvas.height);
-      drawAngleLabel(ctx, lm[13], "Siku L",  elbowL, canvas.width, canvas.height);
-      drawAngleLabel(ctx, lm[14], "Siku R",  elbowR, canvas.width, canvas.height);
-      drawAngleLabel(ctx, lm[23], "Torso",   torso,  canvas.width, canvas.height);
+      const kneeLm  = side === "left" ? lm[25] : lm[26];
+      const elbowLm = side === "left" ? lm[13] : lm[14];
+      const torsoLm = side === "left" ? lm[23] : lm[24];
 
-      setAngles({ knee: kneeAngle, torso, elbow: elbowAngle });
+      drawAngleLabel(ctx, kneeLm,  "Lutut", kneeAngle,  canvas.width, canvas.height);
+      drawAngleLabel(ctx, elbowLm, "Siku",  elbowAngle, canvas.width, canvas.height);
+      drawAngleLabel(ctx, torsoLm, "Torso", torsoAngle, canvas.width, canvas.height);
+
+      setAngles({ knee: kneeAngle, torso: torsoAngle, elbow: elbowAngle });
 
       const standard = BIKE_STANDARDS[bikeType];
       const fitRes = calculateFitResult(
-        [{ knee: kneeAngle, torso, elbow: elbowAngle }],
+        [{ knee: kneeAngle, torso: torsoAngle, elbow: elbowAngle }],
         standard
       );
       setFitResult(fitRes);
@@ -208,19 +226,14 @@ export default function PhotoAnalysis() {
       {status && <p className="text-yellow-400 text-sm">{status}</p>}
 
       {/* Upload area */}
-      <label className={`w-full border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
-        modelReady ? "border-zinc-600 hover:border-zinc-400" : "border-zinc-800 cursor-not-allowed"
-      }`}>
+      <label className="w-full border-2 border-dashed border-zinc-600 hover:border-zinc-400 rounded-xl p-8 text-center cursor-pointer transition-colors">
         <input
           type="file"
           accept="image/*"
           className="hidden"
-          disabled={!modelReady}
           onChange={handleFileChange}
         />
-        <p className="text-zinc-400 text-sm">
-          {modelReady ? "Klik untuk upload foto, atau drag & drop" : "Menunggu model siap..."}
-        </p>
+        <p className="text-zinc-400 text-sm">Klik untuk upload foto, atau drag & drop</p>
         <p className="text-zinc-600 text-xs mt-1">JPG, PNG, WEBP · Rekomendasi: foto dari samping (lateral view)</p>
       </label>
 
@@ -241,6 +254,9 @@ export default function PhotoAnalysis() {
       {noPersonFound && (
         <p className="text-red-400 text-sm">Tidak ada orang terdeteksi. Coba foto yang lebih jelas dengan pencahayaan cukup.</p>
       )}
+      {lowVisibility && (
+        <p className="text-yellow-400 text-sm">Visibilitas sisi tubuh terlalu rendah. Pastikan seluruh tubuh terlihat jelas dari samping tanpa bagian yang terhalang.</p>
+      )}
 
       {/* Analyse button */}
       <button
@@ -248,7 +264,7 @@ export default function PhotoAnalysis() {
         disabled={!previewUrl || !modelReady || processing}
         className="px-8 py-3 rounded-full bg-white text-black font-semibold text-sm disabled:opacity-40 hover:bg-zinc-200 transition-colors"
       >
-        {processing ? "Memproses..." : "Analisis Foto"}
+        {processing ? "Memproses..." : !modelReady ? "Menunggu model AI..." : "Analisis Foto"}
       </button>
 
       {/* Angle summary */}

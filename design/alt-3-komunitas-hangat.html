@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alt 3 — Komunitas Hangat · GowesFit Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  /* ── COLOR TOKENS ── */
+  --green-900: #0F2D1B;
+  --green-800: #163E25;
+  --green-700: #1F5132;  /* PRIMARY */
+  --green-600: #2D6B45;
+  --green-500: #4A8E62;
+  --green-100: #E5EFE8;
+  --green-50:  #F0F6F2;
+
+  --clay-700: #8E4A29;
+  --clay-600: #A8593A;
+  --clay-500: #C46A3D;  /* secondary accent */
+  --clay-400: #D88B5E;
+  --clay-100: #F8E8DC;
+
+  --gold-500: #B58A3C;
+  --gold-100: #F4EAD0;
+
+  --ink-900: #1A1A1A;
+  --ink-700: #3D362D;
+  --ink-500: #6B5F50;
+  --ink-400: #8B7E6E;
+  --ink-200: #C8BFB1;
+  --ink-100: #E2D9C9;
+
+  --cream:    #F5EFE6;  /* paper */
+  --cream-2:  #FAF6ED;
+  --paper:    #FFFCF5;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(60,40,20,0.08);
+  --shadow-lg: 0 10px 30px rgba(60,40,20,0.10);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-full: 9999px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--cream);
+  background-image:
+    radial-gradient(rgba(0,0,0,0.018) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.012) 1px, transparent 1px);
+  background-size: 14px 14px, 22px 22px;
+  background-position: 0 0, 7px 11px;
+  color: var(--ink-900);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.serif { font-family: 'Source Serif 4', Georgia, serif; }
+.handwritten { font-family: 'Caveat', cursive; }
+
+/* ── PAGE ── */
+.ds-page { max-width: 1140px; margin: 0 auto; padding: 0 32px 96px; }
+.ds-section { margin-bottom: 80px; }
+.ds-section-num {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-style: italic; font-size: 13px; color: var(--clay-600);
+  margin-bottom: 6px; letter-spacing: 0.5px;
+}
+.ds-section h2 {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 32px; font-weight: 600; color: var(--green-800); letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+.ds-section .ds-intro { color: var(--ink-700); font-size: 15px; max-width: 600px; margin-top: 8px; line-height: 1.7; }
+.ds-section-head { margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--ink-100); }
+.ds-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+.ds-label {
+  font-family: 'Source Serif 4', Georgia, serif; font-style: italic;
+  font-size: 13px; color: var(--clay-600); margin-bottom: 10px;
+}
+.ds-token { font-family: 'Inter', monospace; font-size: 11px; color: var(--ink-400); margin-top: 4px; line-height: 1.4; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--green-700);
+  color: var(--cream);
+  padding: 80px 32px 88px;
+  margin-bottom: 64px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 18px 18px;
+  opacity: 0.7;
+}
+.hero-inner { max-width: 1140px; margin: 0 auto; position: relative; }
+.hero-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'Source Serif 4', Georgia, serif; font-style: italic;
+  font-size: 14px; color: var(--clay-400); margin-bottom: 24px;
+}
+.hero-line::before { content: ''; width: 32px; height: 1px; background: var(--clay-400); }
+.hero h1 {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 60px; font-weight: 600; line-height: 1.05; letter-spacing: -1.5px;
+  max-width: 800px;
+}
+.hero h1 em { font-style: italic; color: var(--clay-400); }
+.hero-quote {
+  margin-top: 28px; max-width: 540px; padding-left: 24px;
+  border-left: 3px solid var(--clay-500);
+  color: rgba(245,239,230,0.85); font-size: 16px; line-height: 1.7;
+}
+.hero-quote .handwritten { color: var(--clay-400); font-size: 22px; }
+.hero-meta { display: flex; gap: 28px; margin-top: 44px; flex-wrap: wrap; font-size: 12px; color: rgba(245,239,230,0.6); border-top: 1px solid rgba(245,239,230,0.15); padding-top: 24px; }
+.hero-meta b { color: var(--cream); font-weight: 600; }
+
+/* ── SWATCHES ── */
+.swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.swatch-card { background: var(--paper); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--ink-100); }
+.swatch-block { height: 80px; }
+.swatch-meta { padding: 12px 14px; }
+.swatch-meta .name { font-family: 'Source Serif 4', serif; font-size: 14px; font-weight: 600; color: var(--green-800); }
+.swatch-meta .hex { font-size: 11px; color: var(--ink-500); margin-top: 2px; font-family: 'Inter', monospace; }
+.swatch-meta .role { font-style: italic; font-family: 'Source Serif 4', serif; font-size: 11px; color: var(--clay-600); margin-top: 4px; }
+
+/* ── TYPE ── */
+.type-card { background: var(--paper); border-radius: var(--radius-lg); padding: 32px; flex: 1; min-width: 320px; box-shadow: var(--shadow-sm); border: 1px solid var(--ink-100); }
+.type-row { padding: 16px 0; border-bottom: 1px solid var(--ink-100); }
+.type-row:last-child { border: none; }
+.type-spec { font-size: 11px; color: var(--ink-400); margin-top: 6px; font-style: italic; font-family: 'Source Serif 4', serif; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: 'Inter', sans-serif; font-weight: 600; cursor: pointer;
+  border: 1.5px solid transparent; transition: all 0.15s; white-space: nowrap; line-height: 1;
+}
+.btn-lg { font-size: 14px; padding: 13px 22px; border-radius: var(--radius-md); }
+.btn-md { font-size: 13px; padding: 10px 18px; border-radius: var(--radius-md); }
+.btn-sm { font-size: 12px; padding: 7px 14px; border-radius: var(--radius-sm); }
+.btn-primary { background: var(--green-700); color: var(--cream); border-color: var(--green-700); }
+.btn-primary:hover { background: var(--green-800); border-color: var(--green-800); }
+.btn-clay { background: var(--clay-500); color: var(--paper); border-color: var(--clay-500); }
+.btn-clay:hover { background: var(--clay-600); border-color: var(--clay-600); }
+.btn-outline { background: transparent; color: var(--green-700); border-color: var(--green-700); }
+.btn-outline:hover { background: var(--green-50); }
+.btn-ghost { background: transparent; color: var(--ink-700); border-color: transparent; }
+.btn-ghost:hover { background: var(--cream-2); }
+.btn-link { background: transparent; color: var(--clay-600); border: none; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
+.btn-full { width: 100%; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── INPUTS ── */
+.inp-group { margin-bottom: 18px; }
+.inp-label { font-size: 13px; font-weight: 600; color: var(--green-800); margin-bottom: 6px; display: block; }
+.inp { width: 100%; border: 1.5px solid var(--ink-100); padding: 12px 14px; font-size: 14px; font-family: inherit; color: var(--ink-900); background: var(--paper); outline: none; border-radius: var(--radius-md); transition: all 0.15s; }
+.inp::placeholder { color: var(--ink-400); }
+.inp:focus { border-color: var(--green-700); box-shadow: 0 0 0 3px var(--green-100); }
+.inp-error { border-color: #B91C1C; }
+.inp-success { border-color: var(--green-500); }
+.inp-helper { font-size: 12px; color: var(--ink-500); margin-top: 6px; font-style: italic; font-family: 'Source Serif 4', serif; }
+.inp-error-msg { font-size: 12px; color: #B91C1C; margin-top: 6px; font-weight: 500; }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; padding: 4px 10px;
+  border-radius: var(--radius-full); line-height: 1.5;
+  letter-spacing: 0.2px;
+}
+.badge-green { background: var(--green-100); color: var(--green-800); }
+.badge-green-solid { background: var(--green-700); color: var(--cream); }
+.badge-clay { background: var(--clay-100); color: var(--clay-700); }
+.badge-clay-solid { background: var(--clay-500); color: var(--paper); }
+.badge-gold { background: var(--gold-100); color: var(--gold-500); border: 1px solid #d6c07a; }
+.badge-gray { background: var(--ink-100); color: var(--ink-700); }
+.badge-dark { background: var(--green-900); color: var(--cream); }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius-full); font-size: 13px; font-weight: 500; background: var(--paper); border: 1.5px solid var(--ink-100); cursor: pointer; transition: all 0.15s; color: var(--ink-700); }
+.chip:hover { border-color: var(--clay-500); }
+.chip-active { background: var(--green-700); color: var(--cream); border-color: var(--green-700); }
+.chip-active:hover { border-color: var(--green-700); }
+
+/* ── CARDS / SHARED ── */
+.card { background: var(--paper); border-radius: var(--radius-lg); padding: 24px; flex: 1; min-width: 240px; box-shadow: var(--shadow-sm); border: 1px solid var(--ink-100); }
+.card-title { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 13px; color: var(--clay-600); margin-bottom: 16px; }
+
+/* ── LISTING CARDS — MIXED ── */
+.listing {
+  background: var(--paper); border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: var(--shadow-sm); border: 1px solid var(--ink-100);
+  transition: all 0.2s; cursor: pointer;
+}
+.listing:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.listing-img {
+  height: 180px; position: relative;
+  background: linear-gradient(135deg, var(--green-100), var(--clay-100));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-400); font-style: italic; font-family: 'Source Serif 4', serif;
+}
+.listing-img-overlay { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; }
+.listing-fav {
+  position: absolute; top: 12px; right: 12px; width: 36px; height: 36px;
+  background: rgba(255,252,245,0.95); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--clay-500);
+}
+.listing-body { padding: 18px; }
+.listing-price {
+  font-family: 'Source Serif 4', serif;
+  font-size: 22px; font-weight: 600; color: var(--green-800); margin-bottom: 4px; letter-spacing: -0.3px;
+}
+.listing-title { font-size: 14px; font-weight: 600; color: var(--ink-900); margin-bottom: 8px; line-height: 1.4; }
+.listing-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 12px; color: var(--ink-500); }
+.listing-seller {
+  margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--ink-100);
+  display: flex; align-items: center; gap: 8px; font-size: 12px;
+}
+.listing-seller-avatar { width: 24px; height: 24px; background: var(--clay-500); border-radius: 50%; flex-shrink: 0; color: var(--paper); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 11px; }
+.listing-seller-name { color: var(--green-800); font-weight: 600; }
+
+/* ── STORY CARD (signature pattern) ── */
+.story {
+  background: var(--paper); border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: var(--shadow-sm); border: 1px solid var(--ink-100);
+  display: grid; grid-template-columns: 220px 1fr; gap: 0;
+}
+.story-img {
+  background: linear-gradient(135deg, var(--green-700), var(--green-900));
+  color: var(--clay-400); display: flex; align-items: center; justify-content: center;
+  font-family: 'Source Serif 4', serif; font-style: italic; font-size: 13px;
+}
+.story-body { padding: 28px 32px; }
+.story-eyebrow { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 13px; color: var(--clay-600); margin-bottom: 8px; }
+.story-title { font-family: 'Source Serif 4', serif; font-size: 24px; font-weight: 600; color: var(--green-800); line-height: 1.25; margin-bottom: 12px; letter-spacing: -0.3px; }
+.story-quote {
+  font-family: 'Source Serif 4', serif; font-style: italic; font-size: 15px;
+  color: var(--ink-700); line-height: 1.65; padding-left: 16px;
+  border-left: 3px solid var(--clay-500); margin-bottom: 16px;
+}
+.story-attr { display: flex; align-items: center; gap: 10px; padding-top: 12px; border-top: 1px dashed var(--ink-100); }
+.story-attr-avatar { width: 36px; height: 36px; background: var(--clay-500); border-radius: 50%; flex-shrink: 0; color: var(--paper); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+.story-attr-name { font-weight: 600; color: var(--green-800); font-size: 13px; }
+.story-attr-meta { font-size: 11px; color: var(--ink-500); font-style: italic; font-family: 'Source Serif 4', serif; }
+.story-cta { margin-top: 16px; }
+
+/* ── HANDWRITTEN NOTE ── */
+.note-postit {
+  background: var(--gold-100);
+  padding: 16px 20px; border-radius: var(--radius-sm);
+  transform: rotate(-1.5deg); display: inline-block;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.08);
+  font-family: 'Caveat', cursive;
+  font-size: 18px; color: var(--green-900);
+  max-width: 280px; line-height: 1.5;
+}
+
+/* ── ORDER STEPS ── */
+.steps { display: flex; align-items: center; padding: 8px 0; }
+.step { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.step-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px;
+  background: var(--paper); border: 2px solid var(--ink-100); color: var(--ink-400);
+}
+.step-line { flex: 1; height: 2px; margin: 0 8px 28px; background: var(--ink-100); }
+.step-label { font-size: 12px; color: var(--ink-500); white-space: nowrap; }
+.step.done .step-dot { background: var(--green-700); border-color: var(--green-700); color: var(--cream); }
+.step.active .step-dot { background: var(--clay-500); border-color: var(--clay-500); color: var(--paper); box-shadow: 0 0 0 4px var(--clay-100); }
+.step.done .step-label, .step.active .step-label { color: var(--green-800); font-weight: 600; }
+.line-done { background: var(--green-700) !important; }
+
+/* ── BOTTOM NAV ── */
+.bnav { display: flex; background: var(--green-800); max-width: 380px; padding: 8px; border-radius: var(--radius-lg); }
+.bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: var(--radius-md); font-size: 11px; color: rgba(245,239,230,0.6); }
+.bnav-item.active { background: var(--clay-500); color: var(--paper); font-weight: 600; }
+.bnav-icon { font-size: 18px; }
+
+/* ── PAGE PREVIEW ── */
+.preview {
+  background: var(--cream-2); border: 1px solid var(--ink-100);
+  border-radius: var(--radius-lg); overflow: hidden; max-width: 400px;
+  box-shadow: var(--shadow-lg);
+}
+.preview-bar { background: var(--paper); padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--ink-100); }
+.preview-logo { font-family: 'Source Serif 4', serif; font-size: 18px; font-weight: 700; color: var(--green-800); letter-spacing: -0.3px; }
+.preview-logo em { font-style: italic; color: var(--clay-500); }
+.preview-hero {
+  background: var(--green-700); color: var(--cream);
+  padding: 24px 20px;
+}
+.preview-hero-line {
+  font-family: 'Source Serif 4', serif; font-style: italic;
+  font-size: 13px; color: var(--clay-400); margin-bottom: 8px;
+}
+.preview-hero h3 {
+  font-family: 'Source Serif 4', serif; font-size: 26px; font-weight: 600;
+  letter-spacing: -0.3px; line-height: 1.15;
+}
+.preview-hero h3 em { font-style: italic; color: var(--clay-400); }
+.preview-hero p { color: rgba(245,239,230,0.8); font-size: 13px; margin-top: 8px; line-height: 1.6; }
+.preview-section { padding: 20px; }
+.preview-eyebrow { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 13px; color: var(--clay-600); margin-bottom: 12px; }
+
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-line">Alternatif 03 — Komunitas Hangat</div>
+    <h1>Marketplace yang terasa <em>seperti komunitas</em><br/>yang kebetulan jualan.</h1>
+
+    <div class="hero-quote">
+      <p>"Sepeda ini nemenin gua brevet 200K terakhir.<br/>Sekarang upgrade ke Di2, jadi siap pindah ke tangan baru."</p>
+      <p style="margin-top: 8px;"><span class="handwritten">— Budi, Jakarta Selatan</span></p>
+    </div>
+
+    <div class="hero-meta">
+      <span>Inspirasi: <b>Tabloid Sepeda · Mamikos · Reddit</b></span>
+      <span>Display: <b>Source Serif 4</b></span>
+      <span>Body: <b>Inter</b></span>
+      <span>Aksen tulisan tangan: <b>Caveat</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="ds-page">
+
+  <!-- ── COLOR ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-num">— bab satu</div>
+      <h2>Warna: Forest, Clay, Cream</h2>
+      <p class="ds-intro">Forest green sebagai primary mengganti merah — terasa lebih trustworthy, outdoor, dan jelas membedakan dari OLX. Clay sebagai aksen kedua memberi kehangatan organic. Cream paper sebagai background mengingatkan pada zine cetak.</p>
+    </div>
+
+    <div class="ds-label">Primary — Forest Green (kepercayaan, outdoor, komunitas)</div>
+    <div class="swatch-grid" style="margin-bottom: 28px;">
+      <div class="swatch-card"><div class="swatch-block" style="background:#0F2D1B"></div><div class="swatch-meta"><div class="name">green-900</div><div class="hex">#0F2D1B</div><div class="role">deepest</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#163E25"></div><div class="swatch-meta"><div class="name">green-800</div><div class="hex">#163E25</div><div class="role">heading</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#1F5132"><span style="color:#F5EFE6; padding:8px; font-family:'Source Serif 4', serif; font-style: italic; font-size: 12px;">PRIMARY</span></div><div class="swatch-meta"><div class="name">green-700</div><div class="hex">#1F5132</div><div class="role">CTA, brand</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#4A8E62"></div><div class="swatch-meta"><div class="name">green-500</div><div class="hex">#4A8E62</div><div class="role">success</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#E5EFE8"></div><div class="swatch-meta"><div class="name">green-100</div><div class="hex">#E5EFE8</div><div class="role">tint bg</div></div></div>
+    </div>
+
+    <div class="ds-label">Aksen — Clay Terracotta (kehangatan, organic)</div>
+    <div class="swatch-grid" style="margin-bottom: 28px;">
+      <div class="swatch-card"><div class="swatch-block" style="background:#A8593A"></div><div class="swatch-meta"><div class="name">clay-600</div><div class="hex">#A8593A</div><div class="role">hover</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#C46A3D"></div><div class="swatch-meta"><div class="name">clay-500</div><div class="hex">#C46A3D</div><div class="role">aksen, link</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#D88B5E"></div><div class="swatch-meta"><div class="name">clay-400</div><div class="hex">#D88B5E</div><div class="role">highlight</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#F8E8DC"></div><div class="swatch-meta"><div class="name">clay-100</div><div class="hex">#F8E8DC</div><div class="role">tint bg</div></div></div>
+    </div>
+
+    <div class="ds-label">Cream Paper & Ink (background & teks)</div>
+    <div class="swatch-grid" style="margin-bottom: 28px;">
+      <div class="swatch-card"><div class="swatch-block" style="background:#1A1A1A"></div><div class="swatch-meta"><div class="name">ink-900</div><div class="hex">#1A1A1A</div><div class="role">teks utama</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#3D362D"></div><div class="swatch-meta"><div class="name">ink-700</div><div class="hex">#3D362D</div><div class="role">body</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#6B5F50"></div><div class="swatch-meta"><div class="name">ink-500</div><div class="hex">#6B5F50</div><div class="role">secondary</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#E2D9C9"></div><div class="swatch-meta"><div class="name">ink-100</div><div class="hex">#E2D9C9</div><div class="role">border</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#F5EFE6"></div><div class="swatch-meta"><div class="name">cream</div><div class="hex">#F5EFE6</div><div class="role">page bg</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#FFFCF5; border:1px solid #E2D9C9;"></div><div class="swatch-meta"><div class="name">paper</div><div class="hex">#FFFCF5</div><div class="role">surface</div></div></div>
+    </div>
+
+    <div class="ds-label">Aksen Khusus — Gold (badge premium, verified)</div>
+    <div class="swatch-grid">
+      <div class="swatch-card"><div class="swatch-block" style="background:#B58A3C"></div><div class="swatch-meta"><div class="name">gold-500</div><div class="hex">#B58A3C</div><div class="role">verified</div></div></div>
+      <div class="swatch-card"><div class="swatch-block" style="background:#F4EAD0"></div><div class="swatch-meta"><div class="name">gold-100</div><div class="hex">#F4EAD0</div><div class="role">post-it</div></div></div>
+    </div>
+  </div>
+
+  <!-- ── TYPOGRAPHY ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-num">— bab dua</div>
+      <h2>Tipografi: Serif untuk Cerita, Sans untuk Aksi</h2>
+      <p class="ds-intro">Source Serif 4 untuk semua headline dan judul listing — feel zine dan editorial. Inter untuk body dan UI. Caveat (handwritten) dipakai sangat sparingly untuk quote seller dan note — bikin marketplace terasa "ada manusianya".</p>
+    </div>
+
+    <div class="ds-row">
+      <div class="type-card">
+        <div class="ds-label">Display — Source Serif 4</div>
+        <div class="type-row">
+          <div class="serif" style="font-size: 56px; font-weight: 600; line-height: 1.05; letter-spacing: -1.5px; color: var(--green-800);">Setiap sepeda<br/><em style="color:var(--clay-500);">punya cerita.</em></div>
+          <div class="type-spec">56px · 600 · -1.5px · Hero</div>
+        </div>
+        <div class="type-row">
+          <div class="serif" style="font-size: 32px; font-weight: 600; color: var(--green-800); letter-spacing: -0.3px;">Listing minggu ini</div>
+          <div class="type-spec">32px · 600 · Section</div>
+        </div>
+        <div class="type-row">
+          <div class="serif" style="font-size: 22px; font-weight: 600; color: var(--green-800); line-height: 1.3;">Trek Domane SL5 — pernah brevet 200K</div>
+          <div class="type-spec">22px · 600 · Story title</div>
+        </div>
+        <div class="type-row">
+          <div class="serif" style="font-style: italic; font-size: 14px; color: var(--clay-600);">— pengantar bagian satu</div>
+          <div class="type-spec">14px · italic · Eyebrow</div>
+        </div>
+      </div>
+
+      <div class="type-card">
+        <div class="ds-label">Body & UI — Inter</div>
+        <div class="type-row">
+          <div style="font-size:15px; line-height:1.7; color:var(--ink-700); max-width: 360px;">Sudah pakai dua tahun, mostly weekend ride sekitaran Jakarta. Service rutin, frame masih perfect. Dijual karena lagi pengen coba gravel.</div>
+          <div class="type-spec">15px · 1.7 line-height · Body</div>
+        </div>
+        <div class="type-row">
+          <div style="font-size: 14px; color: var(--ink-500);">Jakarta Selatan · 2 jam lalu</div>
+          <div class="type-spec">14px · Meta</div>
+        </div>
+        <div class="type-row">
+          <div style="font-size: 13px; font-weight: 600; color: var(--green-800);">Beli Sekarang</div>
+          <div class="type-spec">13px · 600 · Button</div>
+        </div>
+      </div>
+
+      <div class="type-card" style="background: var(--gold-100); transform: rotate(0.5deg);">
+        <div class="ds-label" style="color: var(--green-800);">Aksen — Caveat (sangat sparingly)</div>
+        <div style="font-family: 'Caveat', cursive; font-size: 28px; color: var(--green-900); line-height: 1.3;">— ditulis oleh Budi, sang pemilik</div>
+        <div class="type-spec" style="margin-top: 8px;">28px · Handwritten · seller quote attribution, post-it</div>
+        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--ink-200);">
+          <div style="font-family: 'Caveat', cursive; font-size: 22px; color: var(--green-900); line-height: 1.4;">"sepeda ini sayang banget kalo cuma diem di garasi, butuh pemilik yang aktif"</div>
+          <div class="type-spec" style="margin-top: 4px;">22px · seller quote in story card</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BUTTONS ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-num">— bab tiga</div>
+      <h2>Buttons: Calmer Confidence</h2>
+      <p class="ds-intro">Forest green untuk primary action — terasa serius tapi tidak agresif. Clay untuk secondary "story-driven" actions seperti "Baca cerita penjual". Tidak ada animasi lift — feel solid grounded.</p>
+    </div>
+
+    <div class="ds-row">
+      <div class="card">
+        <div class="card-title">Variants</div>
+        <div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start;">
+          <button class="btn btn-primary btn-lg">Beli dengan Rekber</button>
+          <button class="btn btn-clay btn-lg">Baca cerita Budi</button>
+          <button class="btn btn-outline btn-lg">Tawar harga</button>
+          <button class="btn btn-ghost btn-lg">Simpan untuk nanti</button>
+          <button class="btn btn-link">Lihat 12 listing serupa →</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Sizes</div>
+        <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+          <button class="btn btn-primary btn-lg">Large · 14px</button>
+          <button class="btn btn-primary btn-md">Medium · 13px</button>
+          <button class="btn btn-primary btn-sm">Small · 12px</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Mobile Stack</div>
+        <div style="display: flex; flex-direction: column; gap: 8px; max-width: 240px;">
+          <button class="btn btn-primary btn-md btn-full">Beli — Rp 22.000.000</button>
+          <button class="btn btn-outline btn-md btn-full">Chat Budi langsung</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FORMS ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-num">— bab empat</div>
+      <h2>Forms: Conversational Tone</h2>
+      <p class="ds-intro">Label pakai tone yang lebih hangat. Helper text dalam serif italic — terasa seperti pengantar di buku. Focus state pakai ring forest green soft.</p>
+    </div>
+
+    <div class="ds-row">
+      <div class="card" style="max-width: 380px;">
+        <div class="card-title">States</div>
+        <div class="inp-group">
+          <label class="inp-label">Cerita singkat tentang sepedamu</label>
+          <textarea class="inp" rows="3" placeholder="Misalnya: pernah dipakai brevet, atau weekend ride aja... apa pun yang bikin sepeda ini spesial."></textarea>
+          <div class="inp-helper">Cerita ini muncul di listing. Buyer lebih percaya kalau ada cerita.</div>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Judul listing</label>
+          <input class="inp" type="text" value="Trek Domane SL5 2022 — pernah brevet 200K" style="border-color:var(--green-700); box-shadow: 0 0 0 3px var(--green-100);" />
+          <div class="inp-helper" style="color: var(--green-500);">Judul yang bercerita lebih sering di-klik dari yang generic.</div>
+        </div>
+      </div>
+      <div class="card" style="max-width: 380px;">
+        <div class="card-title">Variants</div>
+        <div class="inp-group">
+          <label class="inp-label">Kategori</label>
+          <select class="inp">
+            <option>Pilih jenis sepedamu...</option>
+            <option selected>Roadbike</option>
+            <option>Gravel</option>
+            <option>MTB</option>
+          </select>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Harga</label>
+          <div style="display: flex;">
+            <div style="padding: 12px 14px; background: var(--cream-2); border: 1.5px solid var(--ink-100); border-right: none; font-size: 14px; color: var(--ink-500); border-radius: var(--radius-md) 0 0 var(--radius-md); font-weight: 600;">Rp</div>
+            <input class="inp" type="text" value="22.000.000" style="border-radius: 0 var(--radius-md) var(--radius-md) 0;" />
+          </div>
+          <div class="inp-helper">Harga net ke kamu. Buyer membayar Rp 220.000 fee rekber terpisah.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BADGES ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-num">— bab lima</div>
+      <h2>Badges & Chips: Editorial Tags</h2>
+      <p class="ds-intro">Pill-shaped, tone soft. Gold badge khusus untuk verified seller — feel "editorial seal of approval".</p>
+    </div>
+
+    <div class="ds-row">
+      <div class="card">
+        <div class="card-title">Status & Tag</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+          <span class="badge badge-clay">Menunggu Bayar</span>
+          <span class="badge badge-green">Selesai · Aman</span>
+          <span class="badge badge-gold">★ Verified Seller</span>
+          <span class="badge badge-green-solid">Cerita Ditampilkan</span>
+          <span class="badge badge-clay-solid">Hot Story</span>
+          <span class="badge badge-gray">Draft</span>
+          <span class="badge badge-dark">Sold</span>
+        </div>
+        <div class="card-title" style="margin-top: 16px;">Kondisi</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="badge badge-green">Baru</span>
+          <span class="badge badge-clay">Seperti Baru</span>
+          <span class="badge badge-clay">Bekas — Terawat</span>
+          <span class="badge badge-gray">Bekas — Normal</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Filter Chips</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+          <span class="chip chip-active">Semua</span>
+          <span class="chip">Roadbike</span>
+          <span class="chip">Gravel</span>
+          <span class="chip">MTB</span>
+          <span class="chip">Folding</span>
+        </div>
+        <div class="card-title" style="margin-top: 16px;">Story Filter</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="chip chip-active">Punya cerita</span>
+          <span class="chip">Pemilik pertama</span>
+          <span class="chip">Pernah race</span>
+          <span class="chip">Verified seller</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LISTING + STORY CARDS ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-num">— bab enam</div>
+      <h2>Cards: Standar + Cerita</h2>
+      <p class="ds-intro">Dua pattern: <b>standard listing card</b> untuk listing biasa, <b>story card</b> (lebar penuh) untuk listing yang punya cerita kuat. Featured pada homepage, dashboard seller, dan email digest.</p>
+    </div>
+
+    <!-- Story card (signature pattern) -->
+    <div class="ds-label">Story Card — Signature Pattern</div>
+    <div class="story" style="margin-bottom: 32px;">
+      <div class="story-img">[ foto sepeda ]</div>
+      <div class="story-body">
+        <div class="story-eyebrow">Diceritakan oleh penjual</div>
+        <div class="story-title">Trek Domane SL5 — pernah brevet 200K</div>
+        <div class="story-quote">
+          "Sepeda ini nemenin gua brevet 200K Jakarta–Bandung tahun lalu. Sekarang upgrade ke Di2, jadi siap pindah tangan. Tolong rawat ya, dia sayang sama yang merawatnya."
+        </div>
+        <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 16px;">
+          <span class="serif" style="font-size: 28px; font-weight: 600; color: var(--green-800);">Rp 22.000.000</span>
+          <span class="badge badge-clay">Bekas — Terawat</span>
+          <span class="badge badge-gold">★ Verified</span>
+        </div>
+        <div class="story-attr">
+          <div class="story-attr-avatar">B</div>
+          <div>
+            <div class="story-attr-name">Budi Santoso</div>
+            <div class="story-attr-meta">Jakarta Selatan · 23 transaksi · Bergabung 2024</div>
+          </div>
+        </div>
+        <div class="story-cta">
+          <button class="btn btn-primary btn-md">Beli dengan Rekber</button>
+          <button class="btn btn-ghost btn-md">Tanya Budi →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Standard cards -->
+    <div class="ds-label">Standard Listing Cards</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; max-width: 1080px;">
+      <div class="listing">
+        <div class="listing-img">[ foto sepeda ]
+          <div class="listing-img-overlay"><span class="badge badge-gold">★ Verified</span></div>
+          <div class="listing-fav">♡</div>
+        </div>
+        <div class="listing-body">
+          <div class="listing-price">Rp 22.000.000</div>
+          <div class="listing-title">Trek Domane SL5 2022</div>
+          <div class="listing-meta">
+            <span class="badge badge-clay" style="font-size: 10px;">Bekas Terawat</span>
+            <span>· Jakarta</span>
+          </div>
+          <div class="listing-seller">
+            <div class="listing-seller-avatar">B</div>
+            <div>
+              <div class="listing-seller-name">Budi · 23 trx</div>
+              <div style="font-size: 11px; color: var(--ink-500);">Punya cerita ↗</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="listing">
+        <div class="listing-img" style="background: linear-gradient(135deg, var(--clay-100), var(--gold-100));">[ foto sepeda ]
+          <div class="listing-fav">♡</div>
+        </div>
+        <div class="listing-body">
+          <div class="listing-price">Rp 8.500.000</div>
+          <div class="listing-title">Polygon Strattos S5 2023</div>
+          <div class="listing-meta">
+            <span class="badge badge-green" style="font-size: 10px;">Seperti Baru</span>
+            <span>· Bandung</span>
+          </div>
+          <div class="listing-seller">
+            <div class="listing-seller-avatar" style="background: var(--green-700);">R</div>
+            <div>
+              <div class="listing-seller-name">Rama · 4 trx</div>
+              <div style="font-size: 11px; color: var(--ink-500);">Anggota baru</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="listing" style="opacity: 0.6;">
+        <div class="listing-img" style="filter: grayscale(0.7);">[ foto sepeda ]
+          <div class="listing-img-overlay"><span class="badge badge-dark">SOLD</span></div>
+        </div>
+        <div class="listing-body">
+          <div class="listing-price" style="color: var(--ink-400); text-decoration: line-through;">Rp 14.000.000</div>
+          <div class="listing-title">Specialized Allez 2021</div>
+          <div class="listing-meta">
+            <span>Terjual 2 hari lalu</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post-it note as a listing variant -->
+      <div style="display: flex; align-items: center; justify-content: center; padding: 20px;">
+        <div class="note-postit">
+          Punya sepeda yang sudah lama nganggur?
+          <span style="display: block; margin-top: 8px; font-size: 14px; color: var(--clay-600);">Mulai listing dalam 5 menit ↗</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ORDER STEPS ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-num">— bab tujuh</div>
+      <h2>Order: Reassuring Progress</h2>
+      <p class="ds-intro">Active step pakai clay (hangat, "kamu di sini"), done step pakai forest (sukses). Status dilengkapi narasi singkat — bukan cuma label.</p>
+    </div>
+
+    <div class="card" style="max-width: 720px;">
+      <div class="card-title">Order #1024 — Trek Domane SL5</div>
+      <div class="steps" style="margin-bottom: 16px;">
+        <div class="step done"><div class="step-dot">✓</div><div class="step-label">Bayar</div></div>
+        <div class="step-line line-done"></div>
+        <div class="step done"><div class="step-dot">✓</div><div class="step-label">Dikemas Budi</div></div>
+        <div class="step-line line-done"></div>
+        <div class="step active"><div class="step-dot">3</div><div class="step-label">Perjalanan</div></div>
+        <div class="step-line"></div>
+        <div class="step"><div class="step-dot">4</div><div class="step-label">Diterima</div></div>
+        <div class="step-line"></div>
+        <div class="step"><div class="step-dot">5</div><div class="step-label">Dana cair</div></div>
+      </div>
+      <div style="padding: 16px; background: var(--clay-100); border-radius: var(--radius-md); display: flex; gap: 12px;">
+        <div style="font-size: 22px;">📦</div>
+        <div>
+          <div class="serif" style="font-size: 16px; font-weight: 600; color: var(--green-800); margin-bottom: 4px;">Sepedamu sedang dalam perjalanan dari Jakarta ke Bandung.</div>
+          <div style="font-size: 13px; color: var(--ink-700); line-height: 1.6;">Resi JNE <b>8801234567</b>. Diperkirakan tiba <b>Selasa, 5 Mei</b>. Kalau sudah sampai dan kondisinya sesuai, klik tombol "Aman, dananya cairkan" — Budi sudah menunggu.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM NAV + PREVIEW ── -->
+  <div class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-num">— bab delapan</div>
+      <h2>Halaman Hidup</h2>
+      <p class="ds-intro">Bagaimana komposisi ini terasa di mobile.</p>
+    </div>
+
+    <div class="ds-row" style="gap: 32px; align-items: flex-start;">
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-logo">Gowes<em>Fit</em></div>
+          <div style="font-size: 18px; color: var(--green-800);">⌕  ♡  ☰</div>
+        </div>
+        <div class="preview-hero">
+          <div class="preview-hero-line">— Marketplace komunitas goweser Indonesia</div>
+          <h3>Setiap sepeda<br/><em>punya cerita.</em></h3>
+          <p>Cari, jual, dan beli sepeda dari komunitas yang paham nilainya — dengan rekber yang menjaga.</p>
+        </div>
+        <div class="preview-section">
+          <div class="preview-eyebrow">— diceritakan minggu ini</div>
+          <div class="story" style="grid-template-columns: 100px 1fr; box-shadow: none; border-radius: var(--radius-md);">
+            <div class="story-img" style="font-size: 11px;">[ foto ]</div>
+            <div class="story-body" style="padding: 14px 16px;">
+              <div class="story-title" style="font-size: 16px; margin-bottom: 6px;">Trek Domane SL5 — brevet 200K</div>
+              <div class="serif" style="font-size: 18px; font-weight: 600; color: var(--green-800); margin-bottom: 4px;">Rp 22.000.000</div>
+              <div style="font-size: 11px; color: var(--ink-500);">Budi · Jakarta Sel.</div>
+            </div>
+          </div>
+        </div>
+        <div class="preview-section" style="border-top: 1px dashed var(--ink-100);">
+          <div class="preview-eyebrow">— jelajahi kategori</div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+            <div style="background: var(--paper); border-radius: var(--radius-md); padding: 14px 6px; text-align: center; font-size: 11px; font-weight: 600; color: var(--green-800);">🚴<div style="margin-top:4px;">Roadbike</div></div>
+            <div style="background: var(--paper); border-radius: var(--radius-md); padding: 14px 6px; text-align: center; font-size: 11px; font-weight: 600; color: var(--green-800);">⛰️<div style="margin-top:4px;">MTB</div></div>
+            <div style="background: var(--paper); border-radius: var(--radius-md); padding: 14px 6px; text-align: center; font-size: 11px; font-weight: 600; color: var(--green-800);">🌾<div style="margin-top:4px;">Gravel</div></div>
+            <div style="background: var(--paper); border-radius: var(--radius-md); padding: 14px 6px; text-align: center; font-size: 11px; font-weight: 600; color: var(--green-800);">🔁<div style="margin-top:4px;">Folding</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex: 1; min-width: 280px;">
+        <div class="ds-label">Bottom Nav (Mobile)</div>
+        <div class="bnav">
+          <div class="bnav-item active"><span class="bnav-icon">🏡</span>Beranda</div>
+          <div class="bnav-item"><span class="bnav-icon">⌕</span>Cari</div>
+          <div class="bnav-item"><span class="bnav-icon">✍</span>Cerita</div>
+          <div class="bnav-item"><span class="bnav-icon">💬</span>Chat</div>
+          <div class="bnav-item"><span class="bnav-icon">◔</span>Saya</div>
+        </div>
+        <p style="margin-top: 16px; font-style: italic; color: var(--ink-500); font-family: 'Source Serif 4', serif; font-size: 13px; line-height: 1.7;">
+          Catat: tab "✍ Cerita" mengganti slot "Jual" tradisional — diketik karena selling action di-treat sebagai story-telling, bukan mass posting.
+        </p>
+
+        <div style="margin-top: 32px;">
+          <div class="ds-label">Note Style — empty state</div>
+          <div class="note-postit">
+            Belum ada listing tersimpan
+            <span style="display: block; margin-top: 6px; font-size: 14px; color: var(--clay-600);">Mulai jelajahi cerita →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER NOTE -->
+  <div style="margin-top: 80px; padding: 36px; background: var(--paper); border-radius: var(--radius-lg); border: 1px solid var(--ink-100); border-left: 4px solid var(--clay-500); position: relative;">
+    <div class="ds-label" style="color: var(--clay-600);">— catatan eksekusi</div>
+    <h3 class="serif" style="font-size: 22px; font-weight: 600; color: var(--green-800); margin-bottom: 12px;">Resiko terbesar: cerita yang kosong.</h3>
+    <p style="font-size: 14px; color: var(--ink-700); line-height: 1.75; max-width: 720px;">
+      Karakter <b>Komunitas Hangat</b> butuh konten cerita untuk benar-benar hidup. Kalau seller cuma isi nama produk + harga (seperti di OLX), design ini akan terasa <i>kosong dan aneh</i>. Mitigation:
+    </p>
+    <ul style="font-size: 14px; color: var(--ink-700); line-height: 1.8; max-width: 720px; margin: 12px 0 0 24px;">
+      <li>Form listing punya field "<b>Cerita singkat</b>" yang opsional tapi di-prompt strong (placeholder cerita Budi sebagai contoh)</li>
+      <li>Onboarding seller pertama dipandu copywriter (atau template "Mad Libs": <i>Sepeda ini saya pakai untuk ____. Yang spesial dari sepeda ini ____. Saya jual karena ____.</i>)</li>
+      <li>Listing tanpa cerita tetap muncul di <b>standard card</b>; cuma yang punya cerita dipromosikan ke <b>story card</b> di homepage / digest email</li>
+      <li>Sebagai bonus: cerita yang bagus dijadikan <b>content marketing</b> (Instagram carousel "5 cerita sepeda minggu ini")</li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>

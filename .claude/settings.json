@@ -14,10 +14,22 @@
       "Bash(git add *)",
       "Bash(git rm *)",
       "Bash(rm -rf app/.git)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Read(//c/Users/bandu/AppData/Local/Temp/**)",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/next/package.json'\\).version\\)\")",
+      "Bash(taskkill /PID 20928 /F)",
+      "PowerShell(Stop-Process -Id 20928 -Force)",
+      "Bash(npx next *)",
+      "WebFetch(domain:github.com)",
+      "Read(//d/Project/Claude Skills/marketingskills-main/marketingskills-main/**)",
+      "Bash(claude auth *)",
+      "Bash(claude whoami *)",
+      "Bash(claude config *)",
+      "Read(//c/Users/bandu/.claude/**)"
     ],
     "additionalDirectories": [
-      "d:\\Project\\bike-fitting-web\\app\\.git"
+      "d:\\Project\\bike-fitting-web\\app\\.git",
+      "D:\\Project\\Claude Skills\\marketingskills-main\\marketingskills-main\\skills\\__TRACKED_VAR__"
     ]
   }
 }
