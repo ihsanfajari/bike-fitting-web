@@ -3,12 +3,12 @@
 ## Project Overview
 
 GowesFit adalah platform dua-in-satu:
-1. **GowesFit Fitting Tool** — Aplikasi web gratis untuk analisis posisi sepeda via kamera/foto (sudah live di `app/`)
+1. **GowesFit Fitting Tool** — Aplikasi web gratis untuk analisis posisi sepeda via kamera/foto (sudah live di `web/`)
 2. **GowesFit Marketplace** — Marketplace jual beli sepeda & aksesoris khusus komunitas Indonesia (dalam pengembangan, PRD & ERD ada di `notes/`)
 
 ## Tech Stack
 
-- **Framework**: Next.js 16 (App Router) — baca `app/AGENTS.md` sebelum menulis kode Next.js
+- **Framework**: Next.js 16 (App Router) — baca `web/AGENTS.md` sebelum menulis kode Next.js
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
 - **Pose Detection**: MediaPipe Tasks Vision (`@mediapipe/tasks-vision`)
@@ -20,7 +20,7 @@ GowesFit adalah platform dua-in-satu:
 
 ```
 bike-fitting-web/
-├── app/                          # Next.js app (fitting tool — sudah live)
+├── web/                          # Next.js app (fitting tool — sudah live)
 │   ├── app/
 │   │   ├── page.tsx              # Landing page GowesFit
 │   │   ├── fitting/page.tsx      # Fitting tool (kamera + foto)
