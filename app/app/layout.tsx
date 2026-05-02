@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Barlow, Barlow_Condensed } from "next/font/google";
+import { Geist, Geist_Mono, Barlow, Barlow_Condensed, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,6 +24,12 @@ const barlowCondensed = Barlow_Condensed({
   weight: ["400", "600", "700", "800"],
 });
 
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 export const metadata: Metadata = {
   title: "GowesFit — Bike Fitting Mandiri untuk Semua Goweser",
   description: "Fitting sepeda sendiri di rumah. Analisis posisi tubuh real-time via webcam — tanpa fitter, tanpa biaya.",
@@ -37,7 +43,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${geistSans.variable} ${geistMono.variable} ${barlow.variable} ${barlowCondensed.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${barlow.variable} ${barlowCondensed.variable} ${plusJakarta.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

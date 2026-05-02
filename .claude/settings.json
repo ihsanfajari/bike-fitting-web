@@ -25,7 +25,14 @@
       "Bash(claude auth *)",
       "Bash(claude whoami *)",
       "Bash(claude config *)",
-      "Read(//c/Users/bandu/.claude/**)"
+      "Read(//c/Users/bandu/.claude/**)",
+      "Bash(where pandoc *)",
+      "Bash(where wkhtmltopdf *)",
+      "Bash(where chrome *)",
+      "Bash(npx --no-install md-to-pdf --version)",
+      "Bash(where msedge *)",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "Read(//c/Program Files \\(x86\\)/Microsoft/Edge/Application/**)"
     ],
     "additionalDirectories": [
       "d:\\Project\\bike-fitting-web\\app\\.git",

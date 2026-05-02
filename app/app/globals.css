@@ -44,10 +44,57 @@
   --color-ink:           #1A1A1A;
   --color-ink-secondary: #4A4A4A;
   --color-ink-muted:     #9A9590;
+
+  /* ── Tropis Pagi (route /m) ── */
+  --font-tropis: var(--font-plus-jakarta);
+
+  --color-m-orange-700: #C24E1F;
+  --color-m-orange-600: #E55A2B;
+  --color-m-orange-500: #FF6B35;
+  --color-m-orange-400: #FF8B5E;
+  --color-m-orange-100: #FFF0E6;
+
+  --color-m-teal-600:   #0A8E92;
+  --color-m-teal-500:   #0FB5BA;
+  --color-m-teal-100:   #E0F7F8;
+
+  --color-m-green-500:  #22A06B;
+  --color-m-green-100:  #E3F5EC;
+  --color-m-amber-500:  #E0A52E;
+  --color-m-amber-100:  #FDF4DD;
+  --color-m-red-500:    #D94545;
+  --color-m-red-100:    #FBEAEA;
+
+  --color-m-ink-900:    #0F1620;
+  --color-m-ink-800:    #1F2A37;
+  --color-m-ink-600:    #475569;
+  --color-m-ink-400:    #94A3B8;
+  --color-m-ink-200:    #CBD5E1;
+  --color-m-ink-100:    #E2E8F0;
+  --color-m-ink-50:     #F1F5F9;
+
+  --color-m-cream:      #FFF8F0;
+  --color-m-paper:      #FFFFFF;
 }
 
+/* ── Tropis Pagi helpers ── */
+.m-shell { font-family: var(--font-tropis), 'Plus Jakarta Sans', system-ui, sans-serif; }
+.m-shadow-xs { box-shadow: 0 1px 2px rgba(15,22,32,0.04); }
+.m-shadow-sm { box-shadow: 0 2px 8px rgba(15,22,32,0.06); }
+.m-shadow-md { box-shadow: 0 6px 16px rgba(15,22,32,0.08); }
+.m-shadow-lg { box-shadow: 0 16px 32px rgba(15,22,32,0.10); }
+.m-shadow-cta { box-shadow: 0 2px 8px rgba(255,107,53,0.25); }
+.m-shadow-cta-hover { box-shadow: 0 4px 12px rgba(255,107,53,0.35); }
+.m-no-scrollbar::-webkit-scrollbar { display: none; }
+.m-no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.m-tnum { font-variant-numeric: tabular-nums; }
+
+/* Force light theme inside /m/ shell — prevent browser dark-mode auto-invert */
+.m-shell { color-scheme: light; color: var(--color-m-ink-900); }
+.m-shell input, .m-shell textarea, .m-shell select { color-scheme: light; }
+
 body {
-  background: #0F0F0F;
+  background: #FAFAF8;
   color: #1A1A1A;
 }
 

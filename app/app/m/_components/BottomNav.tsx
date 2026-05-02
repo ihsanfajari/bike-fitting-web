@@ -1,0 +1,45 @@
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { IconChat, IconHome, IconPlus, IconSearch, IconUser } from "./icons";
+
+const items = [
+  { href: "/m", label: "Beranda", icon: IconHome, match: (p: string) => p === "/m" },
+  { href: "/m/search", label: "Cari", icon: IconSearch, match: (p: string) => p.startsWith("/m/search") },
+  { href: "/m/sell", label: "Jual", icon: IconPlus, match: (p: string) => p.startsWith("/m/sell"), accent: true },
+  { href: "/m/chat", label: "Chat", icon: IconChat, match: (p: string) => p.startsWith("/m/chat") },
+  { href: "/m/me", label: "Saya", icon: IconUser, match: (p: string) => p.startsWith("/m/me") || p.startsWith("/m/dashboard") },
+];
+
+export function BottomNav() {
+  const pathname = usePathname() ?? "";
+  return (
+    <nav className="sticky bottom-0 z-30 bg-[var(--color-m-paper)] border-t border-[var(--color-m-ink-100)] safe-area-pb">
+      <div className="grid grid-cols-5 px-2 py-2 gap-1">
+        {items.map(({ href, label, icon: Icon, match, accent }) => {
+          const active = match(pathname);
+          if (accent) {
+            return (
+              <Link key={href} href={href} className="flex flex-col items-center gap-0.5 py-1">
+                <span className="w-11 h-11 rounded-full bg-[var(--color-m-orange-500)] text-white flex items-center justify-center m-shadow-cta">
+                  <Icon size={22} />
+                </span>
+                <span className="text-[10px] font-semibold text-[var(--color-m-ink-600)]">{label}</span>
+              </Link>
+            );
+          }
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`flex flex-col items-center gap-0.5 py-2 rounded-xl transition-colors ${active ? "bg-[var(--color-m-orange-100)] text-[var(--color-m-orange-600)]" : "text-[var(--color-m-ink-400)]"}`}
+            >
+              <Icon size={22} />
+              <span className={`text-[10px] ${active ? "font-bold" : "font-medium"}`}>{label}</span>
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
