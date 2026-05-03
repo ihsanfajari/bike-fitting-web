@@ -3,51 +3,14 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-barlow-condensed);
-  --font-body: var(--font-barlow);
+  --font-tropis: var(--font-plus-jakarta);
 
-  /* Brand */
+  /* Bike fitting tool (landing) — kept for /fitting */
   --color-brand:         #E84C3D;
   --color-brand-dark:    #B83028;
   --color-brand-soft:    #F28070;
-  --color-brand-green:   #1E9E5A;
-  --color-brand-amber:   #C47F00;
-  --color-brand-blue:    #1878D4;
 
-  /* SEPEDAIN Marketplace tokens */
-  --color-sp-red:        #E84C2C;
-  --color-sp-red-dark:   #C43A1F;
-  --color-sp-red-light:  #F0714F;
-  --color-sp-red-tint:   #FDF0ED;
-  --color-sp-black:      #1a1a1a;
-  --color-sp-black-700:  #2d2d2d;
-  --color-sp-black-600:  #444444;
-  --color-sp-black-400:  #777777;
-  --color-sp-black-200:  #b0b0b0;
-  --color-sp-black-100:  #e2e2e2;
-  --color-sp-black-50:   #f3f3f1;
-  --color-sp-white:      #fdfcfb;
-  --color-sp-green:      #2a8a4a;
-  --color-sp-green-tint: #edf7f1;
-  --color-sp-blue:       #2a6aa0;
-  --color-sp-blue-tint:  #edf3f9;
-  --color-sp-amber:      #d08c10;
-  --color-sp-amber-tint: #fdf7e6;
-
-  /* Surface (light theme) */
-  --color-surface:       #FAFAF8;
-  --color-card:          #FFFFFF;
-  --color-elevated:      #F5F2EE;
-  --color-border:        #E0DDD8;
-
-  /* Text */
-  --color-ink:           #1A1A1A;
-  --color-ink-secondary: #4A4A4A;
-  --color-ink-muted:     #9A9590;
-
-  /* ── Tropis Pagi (route /m) ── */
-  --font-tropis: var(--font-plus-jakarta);
-
+  /* ── Tropis Pagi — GowesFit Marketplace design system ── */
   --color-m-orange-700: #C24E1F;
   --color-m-orange-600: #E55A2B;
   --color-m-orange-500: #FF6B35;
@@ -67,7 +30,9 @@
 
   --color-m-ink-900:    #0F1620;
   --color-m-ink-800:    #1F2A37;
+  --color-m-ink-700:    #334155;
   --color-m-ink-600:    #475569;
+  --color-m-ink-500:    #64748B;
   --color-m-ink-400:    #94A3B8;
   --color-m-ink-200:    #CBD5E1;
   --color-m-ink-100:    #E2E8F0;
@@ -89,24 +54,11 @@
 .m-no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .m-tnum { font-variant-numeric: tabular-nums; }
 
-/* Force light theme inside /m/ shell — prevent browser dark-mode auto-invert */
+/* Force light theme inside marketplace shell */
 .m-shell { color-scheme: light; color: var(--color-m-ink-900); }
 .m-shell input, .m-shell textarea, .m-shell select { color-scheme: light; }
 
 body {
   background: #FAFAF8;
   color: #1A1A1A;
-}
-
-/* ── SEPEDAIN typography helpers ── */
-.sp-display { font-family: var(--font-display), 'Barlow Condensed', 'Arial Narrow', sans-serif; }
-.sp-body { font-family: var(--font-body), 'Barlow', system-ui, sans-serif; }
-
-/* Hide scrollbar for horizontally scrolling chips */
-.sp-no-scrollbar::-webkit-scrollbar { display: none; }
-.sp-no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* Diagonal-stripe photo placeholder */
-.sp-photo-placeholder {
-  background: repeating-linear-gradient(45deg, #e0e0e0 0, #e0e0e0 1px, #f4f4f4 0, #f4f4f4 9px);
 }

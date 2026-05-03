@@ -1,97 +1,117 @@
-"use client";
-
 import Link from "next/link";
-import { useState } from "react";
-import { TopBar } from "../_components/TopBar";
+import { PageTopBar } from "../_components/TopBar";
 import { BottomNav } from "../_components/BottomNav";
-import { OrderStatusBadge, PhotoPlaceholder, SectionLabel, Chip } from "../_components/ui";
-import { IconChevronRight } from "../_components/icons";
-import { ORDERS, getListing, ORDER_STATUS_LABEL, type OrderStatus } from "../_lib/mock-data";
-import { formatRupiah } from "../_lib/format";
+import { IconChevronRight, IconClock } from "../_components/icons";
+import { ORDERS, ORDER_STATUS_LABEL, type OrderStatus } from "@/lib/mock/api";
+import { getListing } from "@/lib/mock/data";
+import { formatRupiah } from "@/lib/format";
+import { Badge, EmptyState } from "@/components/ui";
 
-const TABS = [
-  { key: "buyer", label: "Pesanan Saya" },
-  { key: "seller", label: "Pesanan Masuk" },
-] as const;
+const STATUS_TONE: Record<OrderStatus, "amber" | "teal" | "orange" | "green" | "gray" | "red"> = {
+  pending_payment: "amber",
+  paid: "teal",
+  shipped: "orange",
+  delivered: "teal",
+  completed: "green",
+  cancelled: "gray",
+  disputed: "red",
+};
 
-const STATUS_FILTERS: (OrderStatus | "all")[] = ["all", "pending_payment", "paid", "shipped", "completed"];
-
-export default function OrdersPage() {
-  const [tab, setTab] = useState<"buyer" | "seller">("buyer");
-  const [status, setStatus] = useState<OrderStatus | "all">("all");
-
-  const filtered = ORDERS.filter((o) => (tab === "buyer" ? o.buyerId === "me" : o.sellerId === "me")).filter(
-    (o) => status === "all" || o.status === status,
-  );
+export default async function OrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: "buyer" | "seller" }>;
+}) {
+  const { tab = "buyer" } = await searchParams;
+  const orders = ORDERS.filter((o) => (tab === "buyer" ? o.buyerId === "me" : o.sellerId === "me"));
 
   return (
     <>
-      <TopBar title="Pesanan" />
+      <PageTopBar title="Pesanan" backHref="/marketplace/dashboard" />
 
-      {/* Tabs */}
-      <div className="bg-white border-b border-[var(--color-sp-black-100)] flex">
-        {TABS.map((t) => {
-          const active = tab === t.key;
-          return (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`flex-1 sp-display text-[12px] font-bold uppercase tracking-wide py-3 border-b-[3px] transition-colors ${
-                active ? "border-[var(--color-sp-red)] text-[var(--color-sp-red)]" : "border-transparent text-[var(--color-sp-black-400)]"
-              }`}
-            >
-              {t.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Status filter chips */}
-      <div className="bg-white border-b border-[var(--color-sp-black-100)] px-4 py-3">
-        <div className="flex gap-2 overflow-x-auto sp-no-scrollbar">
-          {STATUS_FILTERS.map((s) => (
-            <Chip key={s} active={status === s} onClick={() => setStatus(s)}>
-              {s === "all" ? "Semua" : ORDER_STATUS_LABEL[s]}
-            </Chip>
-          ))}
-        </div>
-      </div>
-
-      <main className="flex-1 px-4 py-4 space-y-3">
-        {filtered.length === 0 ? (
-          <div className="text-center py-16">
-            <SectionLabel className="mb-2">Belum ada pesanan</SectionLabel>
-            <p className="text-[13px] text-[var(--color-sp-black-400)]">
-              {tab === "buyer" ? "Mulai belanja sepeda impianmu" : "Daftarkan barangmu dulu"}
-            </p>
+      <main className="flex-1 pb-6 bg-[var(--color-m-cream)]">
+        <div className="sticky top-14 z-20 bg-[var(--color-m-cream)] border-b border-[var(--color-m-ink-100)]">
+          <div className="flex px-2">
+            {(
+              [
+                { key: "buyer", label: "Saya beli" },
+                { key: "seller", label: "Saya jual" },
+              ] as const
+            ).map(({ key, label }) => {
+              const active = tab === key;
+              return (
+                <Link
+                  key={key}
+                  href={`/marketplace/orders?tab=${key}`}
+                  className={`flex-1 py-3 text-center text-[13px] font-semibold border-b-2 transition-colors ${
+                    active
+                      ? "text-[var(--color-m-orange-600)] border-[var(--color-m-orange-500)]"
+                      : "text-[var(--color-m-ink-500)] border-transparent"
+                  }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </div>
+        </div>
+
+        {orders.length === 0 ? (
+          <EmptyState
+            icon={<span className="text-2xl">📦</span>}
+            title={tab === "buyer" ? "Belum ada pesanan" : "Belum ada pesanan masuk"}
+            description={
+              tab === "buyer"
+                ? "Mulai cari sepeda impianmu — semua transaksi otomatis pakai rekber."
+                : "Listing yang sudah dipublish akan tampil di marketplace. Semoga cepat laku!"
+            }
+            className="mt-8"
+          />
         ) : (
-          filtered.map((o) => {
-            const listing = getListing(o.listingId);
-            return (
-              <Link
-                key={o.id}
-                href={`/marketplace/orders/${o.id}`}
-                className="flex bg-white border border-[var(--color-sp-black-100)] p-3 gap-3 hover:border-[var(--color-sp-black-400)]"
-              >
-                <PhotoPlaceholder className="w-20 h-20 flex-shrink-0" label="foto" />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <OrderStatusBadge status={o.status} />
-                    <span className="text-[10px] text-[var(--color-sp-black-400)]">{o.createdAt.split(" ")[0]}</span>
+          <div className="px-5 pt-4 space-y-3">
+            {orders.map((order) => {
+              const item = getListing(order.listingId);
+              const ctaForSeller = tab === "seller" && order.status === "paid";
+              return (
+                <Link
+                  key={order.id}
+                  href={`/marketplace/orders/${order.id}`}
+                  className="block p-3 bg-[var(--color-m-paper)] rounded-2xl m-shadow-xs hover:m-shadow-sm transition-all"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge tone={STATUS_TONE[order.status]}>{ORDER_STATUS_LABEL[order.status]}</Badge>
+                    <span className="text-[10px] font-mono text-[var(--color-m-ink-400)]">{order.orderNumber}</span>
                   </div>
-                  <div className="text-[12px] font-bold line-clamp-2 mb-1">{listing?.title}</div>
-                  <div className="text-[10px] text-[var(--color-sp-black-400)] mb-1">{o.orderNumber}</div>
-                  <div className="flex items-center justify-between">
-                    <span className="sp-display text-[15px] font-extrabold text-[var(--color-sp-red)]">
-                      {formatRupiah(o.total)}
-                    </span>
-                    <IconChevronRight size={16} className="text-[var(--color-sp-black-400)]" />
+                  <div className="flex gap-3">
+                    <div
+                      className="w-16 h-16 rounded-xl flex-shrink-0"
+                      style={{ background: "linear-gradient(135deg,#FFE5D6,#E0F7F8)" }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[13px] font-bold text-[var(--color-m-ink-900)] truncate leading-snug">
+                        {item?.title ?? "Listing tidak ditemukan"}
+                      </div>
+                      <div className="text-[14px] font-extrabold text-[var(--color-m-orange-600)] m-tnum mt-0.5">
+                        {formatRupiah(order.total)}
+                      </div>
+                      <div className="flex items-center gap-2 mt-1 text-[11px] text-[var(--color-m-ink-500)]">
+                        <IconClock size={11} />
+                        <span>{order.createdAt}</span>
+                      </div>
+                    </div>
+                    <IconChevronRight size={18} className="text-[var(--color-m-ink-400)] flex-shrink-0 self-center" />
                   </div>
-                </div>
-              </Link>
-            );
-          })
+                  {ctaForSeller && (
+                    <div className="mt-3 pt-3 border-t border-dashed border-[var(--color-m-ink-100)]">
+                      <span className="inline-flex items-center gap-1 text-[12px] font-bold text-[var(--color-m-orange-600)]">
+                        🚚 Perlu input resi pengiriman →
+                      </span>
+                    </div>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
         )}
       </main>
 

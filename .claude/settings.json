@@ -36,11 +36,25 @@
       "Bash(Get-ChildItem -Path \"d:\\\\Project\\\\bike-fitting-web\" -Recurse -Depth 3 -Directory)",
       "Bash(Select-Object FullName)",
       "Bash(xargs ls *)",
-      "Bash(git mv *)"
+      "Bash(git mv *)",
+      "Bash(Get-ChildItem app *)",
+      "Bash(Get-Content \"C:\\\\Users\\\\bandu\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Project-bike-fitting-web\\\\0c0467fa-207a-4a7d-8cac-38b9b2d496b3\\\\tasks\\\\bp9a833id.output\" -Wait)",
+      "Bash(Select-String -Pattern \"localhost|error|Error|ready|Ready\")",
+      "Bash(cp web/app/marketplace/_lib/mock-data.ts /tmp/mock-data-backup.ts)",
+      "Read(//tmp/**)",
+      "Bash(rm -rf web/app/marketplace)",
+      "Bash(mv web/app/m web/app/marketplace)",
+      "Bash(cp -r web/app/m web/app/marketplace)",
+      "Bash(rm -rf web/app/m)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(Get-ChildItem -Path \"d:\\\\Project\\\\bike-fitting-web\\\\web\" -Exclude \"node_modules\" -Recurse -Directory)",
+      "Bash(Select-Object -First 20 FullName)",
+      "Bash(xargs grep *)"
     ],
     "additionalDirectories": [
       "d:\\Project\\bike-fitting-web\\app\\.git",
-      "D:\\Project\\Claude Skills\\marketingskills-main\\marketingskills-main\\skills\\__TRACKED_VAR__"
+      "D:\\Project\\Claude Skills\\marketingskills-main\\marketingskills-main\\skills\\__TRACKED_VAR__",
+      "\\tmp"
     ]
   }
 }

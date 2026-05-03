@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "SEPEDAIN — Marketplace Jual Beli Sepeda",
-  description: "Jual beli sepeda dan komponen dengan aman lewat rekber. Khusus untuk komunitas goweser Indonesia.",
+  title: "GowesFit Marketplace — Tropis Pagi",
+  description: "Jual beli sepeda khusus komunitas goweser Indonesia, dengan rekber otomatis.",
 };
 
-export default function MarketplaceLayout({ children }: { children: ReactNode }) {
+export default function MTropisLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen w-full bg-[#0f0f0f] flex justify-center">
-      {/* Mobile-first shell */}
-      <div className="w-full max-w-[480px] bg-[var(--color-sp-black-50)] min-h-screen flex flex-col relative">
+    <div className="min-h-screen w-full bg-[var(--color-m-ink-100)] flex justify-center m-shell">
+      <div className="w-full max-w-[480px] bg-[var(--color-m-cream)] min-h-screen flex flex-col relative">
         {children}
       </div>
     </div>
