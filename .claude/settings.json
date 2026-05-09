@@ -49,7 +49,10 @@
       "Bash(echo \"EXIT=$?\")",
       "Bash(Get-ChildItem -Path \"d:\\\\Project\\\\bike-fitting-web\\\\web\" -Exclude \"node_modules\" -Recurse -Directory)",
       "Bash(Select-Object -First 20 FullName)",
-      "Bash(xargs grep *)"
+      "Bash(xargs grep *)",
+      "Bash(Get-Content \"C:\\\\Users\\\\bandu\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Project-bike-fitting-web\\\\492a423f-2d06-4dce-826d-08b23a71a90b\\\\tasks\\\\bu3coo4ua.output\" -Wait)",
+      "Bash(Select-String -Pattern \"ready|Local:|error|Error|failed\")",
+      "PowerShell(netstat -ano)"
     ],
     "additionalDirectories": [
       "d:\\Project\\bike-fitting-web\\app\\.git",

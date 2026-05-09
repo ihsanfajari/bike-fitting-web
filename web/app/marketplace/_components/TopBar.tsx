@@ -10,13 +10,13 @@ export function HomeTopBar() {
           Gowes<span className="text-[var(--color-m-orange-500)]">Fit</span>
         </Link>
         <div className="flex items-center gap-1">
-          <button aria-label="Wishlist" className="w-10 h-10 flex items-center justify-center text-[var(--color-m-ink-600)] hover:text-[var(--color-m-orange-500)]">
+          <Link href="/marketplace/wishlist" aria-label="Wishlist" className="w-10 h-10 flex items-center justify-center text-[var(--color-m-ink-600)] hover:text-[var(--color-m-orange-500)]">
             <IconHeart size={22} />
-          </button>
-          <button aria-label="Notifikasi" className="w-10 h-10 flex items-center justify-center text-[var(--color-m-ink-600)] hover:text-[var(--color-m-orange-500)] relative">
+          </Link>
+          <Link href="/marketplace/notifications" aria-label="Notifikasi" className="w-10 h-10 flex items-center justify-center text-[var(--color-m-ink-600)] hover:text-[var(--color-m-orange-500)] relative">
             <IconBell size={22} />
             <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[var(--color-m-orange-500)] ring-2 ring-[var(--color-m-paper)]" />
-          </button>
+          </Link>
         </div>
       </div>
       <div className="px-5 pb-3">

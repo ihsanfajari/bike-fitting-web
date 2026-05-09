@@ -68,3 +68,9 @@ export const IconClock = ({ size = 14, className }: IconProps) => (
 export const IconTruck = ({ size = 18, className }: IconProps) => (
   <svg {...base(size)} className={className}><path d="M3 7h11v10H3zM14 11h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
 );
+export const IconSend = ({ size = 18, className }: IconProps) => (
+  <svg {...base(size)} className={className}><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></svg>
+);
+export const IconX = ({ size = 18, className }: IconProps) => (
+  <svg {...base(size)} className={className}><path d="M18 6 6 18M6 6l12 12"/></svg>
+);
