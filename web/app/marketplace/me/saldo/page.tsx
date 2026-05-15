@@ -53,7 +53,7 @@ export default function SaldoPage() {
                 Aktif
               </span>
             </div>
-            <Link href="/marketplace/me/saldo" className="flex items-center gap-3 px-4 py-3.5 text-[var(--color-m-orange-600)]">
+            <Link href="/marketplace/me/saldo/tambah-rekening" className="flex items-center gap-3 px-4 py-3.5 text-[var(--color-m-orange-600)]">
               <span className="text-[13px] font-bold">+ Tambah Rekening</span>
               <IconChevronRight size={16} className="ml-auto text-[var(--color-m-ink-300)]" />
             </Link>

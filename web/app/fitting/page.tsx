@@ -52,6 +52,22 @@ export default function FittingPage() {
       </div>
 
       {mode === "camera" ? <PoseLandmarker /> : <PhotoAnalysis />}
+
+      {/* CTA to Marketplace — muncul setelah user selesai fitting */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-5 pt-2 pointer-events-none">
+        <Link
+          href="/marketplace/recommendation"
+          className="pointer-events-auto flex items-center gap-3 w-full max-w-lg mx-auto px-4 py-3.5 rounded-2xl text-white font-bold text-[13px] shadow-2xl"
+          style={{ background: "linear-gradient(135deg,#1A3A4A,#0F5438)" }}
+        >
+          <span className="text-[18px] flex-shrink-0">🎯</span>
+          <div className="flex-1 min-w-0">
+            <div className="font-bold leading-tight">Lihat sepeda yang cocok di Marketplace</div>
+            <div className="text-[11px] text-white/60 mt-0.5 font-normal">Ukuranmu otomatis terbawa</div>
+          </div>
+          <span className="text-white/60 text-[11px] font-semibold flex-shrink-0">GowesFit →</span>
+        </Link>
+      </div>
     </main>
   );
 }

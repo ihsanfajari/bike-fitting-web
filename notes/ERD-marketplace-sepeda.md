@@ -82,8 +82,13 @@ Pengguna (pembeli & penjual — satu tabel, peran kontekstual).
 | google_oauth_id | VARCHAR(255) | UNIQUE | |
 | rating_avg | DECIMAL(3,2) | DEFAULT 0 | agregat dari reviews |
 | rating_count | INT | DEFAULT 0 | |
+| tx_count | INT | DEFAULT 0 | jumlah transaksi sukses (denormalized, untuk profil & card listing) |
 | last_active_at | TIMESTAMPTZ | | |
 | balance | BIGINT | DEFAULT 0 | saldo penjual (IDR) |
+| is_admin | BOOLEAN | DEFAULT false | akses admin panel (moderasi & monitoring) |
+| account_status | ENUM | DEFAULT 'active' | `active`, `suspended`, `banned` — untuk moderasi admin |
+| suspended_reason | VARCHAR(255) | | alasan suspend/ban, diisi admin |
+| suspended_at | TIMESTAMPTZ | | null = tidak sedang disuspend |
 | created_at | TIMESTAMPTZ | | |
 | updated_at | TIMESTAMPTZ | | |
 | deleted_at | TIMESTAMPTZ | | soft delete |
@@ -191,7 +196,7 @@ Barang yang didaftarkan untuk dijual.
 | frame_size | VARCHAR(20) | | "M", "52", "54cm" |
 | groupset | VARCHAR(100) | | |
 | frame_material | ENUM | | `aluminum`, `carbon`, `steel`, `titanium`, `other` |
-| condition | ENUM | NOT NULL | `new`, `like_new`, `used_mint`, `used_normal`, `used_repair_needed` |
+| condition | ENUM | NOT NULL | `new`, `like_new`, `used_mint`, `used_normal`, `used_repair` |
 | price | BIGINT | NOT NULL | IDR |
 | is_negotiable | BOOLEAN | DEFAULT false | |
 | allow_cod | BOOLEAN | DEFAULT false | |
@@ -649,6 +654,7 @@ Tabel/fitur berikut **tidak** dibuat di MVP, tapi direncanakan post-launch:
 - `shipping_rate_cache` (kalau mau auto-calc ongkir dari API RajaOngkir/Biteship)
 - `search_logs` / analytics
 - `admin_users` tabel terpisah (di MVP, pakai flag di `users.is_admin`)
+- **Fitur rekomendasi berbasis deskripsi** — user mengisi form teks mendeskripsikan kebutuhan, sistem mencocokkan dengan listing aktif. Perlu tabel baru (mis. `recommendation_requests`: id, user_id, input_text, parsed_criteria JSONB, result_listing_ids JSONB, created_at). Post-MVP — UI prototipe ada di `web/app/marketplace/recommendation/`.
 
 ---
 

@@ -105,6 +105,34 @@ export default function MHomepage() {
           </Link>
         </section>
 
+        {/* Bike Recommendation CTA — killer feature */}
+        <section className="px-5 pb-6">
+          <Link
+            href="/marketplace/recommendation"
+            className="relative overflow-hidden block rounded-3xl p-5"
+            style={{ background: "linear-gradient(135deg,#1A3A4A 0%,#0F2030 100%)" }}
+          >
+            <div
+              className="absolute -top-8 -right-8 w-36 h-36 rounded-full opacity-20"
+              style={{ background: "radial-gradient(circle, #4ECDC4, transparent 70%)" }}
+            />
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--color-m-teal-500)]/30 text-[var(--color-m-teal-300)] text-[11px] font-bold mb-3">
+                🎯 Fitur eksklusif GowesFit
+              </div>
+              <div className="text-[18px] font-extrabold text-white leading-tight">
+                Sepeda yang FIT untukmu,<br />bukan yang <span className="line-through opacity-50">cuma kelihatan keren</span>
+              </div>
+              <p className="text-[12px] text-white/70 mt-2 leading-relaxed">
+                Masukkan tinggi & inseam → kami cocokkan dengan sizing chart ratusan listing aktif.
+              </p>
+              <div className="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[var(--color-m-teal-500)] text-white text-[13px] font-bold">
+                Cari Sepeda yang Fit Untukku <IconChevronRight size={14} />
+              </div>
+            </div>
+          </Link>
+        </section>
+
         {/* Hot listings — 2-col grid */}
         <section className="px-5 pb-6">
           <SectionHeader title="🔥 Lagi rame" linkText="Semua" linkHref="/marketplace/search?sort=hot" />

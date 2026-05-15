@@ -58,8 +58,29 @@ export default async function KategoriPage({
           </div>
         </section>
 
+        {/* Fit filter toggle */}
+        {["roadbike", "mtb", "gravel", "folding"].includes(slug) && (
+          <section className="px-5 pt-3 pb-0">
+            <Link
+              href={`/marketplace/recommendation?category=${slug}`}
+              className="flex items-center gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-[#1A3A4A] to-[#0F2030] mb-1"
+            >
+              <span className="text-[18px] flex-shrink-0">🎯</span>
+              <div className="flex-1 min-w-0">
+                <div className="text-[12px] font-bold text-white leading-tight">
+                  Tampilkan {category.name} yang Fit Untukku
+                </div>
+                <div className="text-[10px] text-white/60 mt-0.5">Berdasarkan tinggi & inseam kamu</div>
+              </div>
+              <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-[var(--color-m-teal-500)] text-white flex-shrink-0">
+                Coba
+              </span>
+            </Link>
+          </section>
+        )}
+
         {/* Sort chips */}
-        <section className="px-5 pb-4">
+        <section className="px-5 pb-4 pt-3">
           <div className="flex gap-2 overflow-x-auto m-no-scrollbar -mx-1 px-1 pb-1">
             {SORTS.map((s) => (
               <Link key={s.key} href={`/marketplace/kategori/${slug}?sort=${s.key}`} className="flex-shrink-0">

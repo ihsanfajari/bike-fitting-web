@@ -117,10 +117,10 @@
 
 | ID | Tipe | Item | Effort | Prioritas | Status |
 |----|------|------|--------|-----------|--------|
-| M0-INF-01 | [DEV] | Setup PostgreSQL via Supabase Free Tier (local + staging) | S | 🔴 Blocker | ⬜ Belum |
-| M0-INF-02 | [DEV] | Setup project Next.js 16 App Router untuk marketplace | M | 🔴 Blocker | ⬜ Belum |
-| M0-INF-03 | [DEV] | Setup Prisma ORM + schema awal dari ERD (20 tabel) | L | 🔴 Blocker | ⬜ Belum |
-| M0-INF-04 | [DEV] | Setup environment variables (.env.local, staging, production) | S | 🟠 Tinggi | ⬜ Belum |
+| M0-INF-01 | [DEV] | Setup PostgreSQL via Supabase Free Tier (local + staging) | S | 🔴 Blocker | ✅ Selesai |
+| M0-INF-02 | [DEV] | Setup project Next.js 16 App Router untuk marketplace | M | 🔴 Blocker | ✅ Selesai |
+| M0-INF-03 | [DEV] | Setup Prisma ORM + schema awal dari ERD (20 tabel) | L | 🔴 Blocker | ✅ Selesai |
+| M0-INF-04 | [DEV] | Setup environment variables (.env.local, staging, production) | S | 🟠 Tinggi | 🔄 Jalan |
 | M0-INF-05 | [DEV] | Setup hosting: VPS Hostinger Rp 60k/bulan ATAU Vercel Free Tier | S | 🟠 Tinggi | ⬜ Belum |
 | M0-INF-06 | [DEV] | Setup CI/CD — GitHub Actions auto-deploy | S | 🟠 Tinggi | ⬜ Belum |
 | M0-INF-07 | [DEV] | Setup Sentry untuk error tracking sejak awal | S | 🟡 Menengah | ⬜ Belum |
@@ -131,11 +131,11 @@
 ### Database
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M1-DB-01 | Migrasi tabel: `users` (UUID PK, soft delete, balance, kyc_status) | S | 🔴 Blocker | ⬜ Belum |
-| M1-DB-02 | Migrasi tabel: `otp_verifications` | S | 🔴 Blocker | ⬜ Belum |
-| M1-DB-03 | Migrasi tabel: `addresses` (is_primary, partial unique index) | S | 🔴 Blocker | ⬜ Belum |
-| M1-DB-04 | Migrasi tabel: `bank_accounts` | S | 🔴 Blocker | ⬜ Belum |
-| M1-DB-05 | Seed admin user | S | 🟠 Tinggi | ⬜ Belum |
+| M1-DB-01 | Migrasi tabel: `users` (UUID PK, soft delete, balance, kyc_status) | S | 🔴 Blocker | ✅ Selesai |
+| M1-DB-02 | Migrasi tabel: `otp_verifications` | S | 🔴 Blocker | ✅ Selesai |
+| M1-DB-03 | Migrasi tabel: `addresses` (is_primary, partial unique index) | S | 🔴 Blocker | ✅ Selesai |
+| M1-DB-04 | Migrasi tabel: `bank_accounts` | S | 🔴 Blocker | ✅ Selesai |
+| M1-DB-05 | Seed admin user | S | 🟠 Tinggi | ✅ Selesai |
 | M1-DB-06 | Tambah kolom `body_height_cm`, `inseam_cm`, `arm_reach_cm`, `flexibility_level` di `users` (untuk Bike Recommendation) | S | 🟠 Tinggi | ⬜ Belum |
 
 ### Backend API
@@ -168,11 +168,11 @@
 ### Database
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M2-DB-01 | Migrasi tabel: `categories` (self-referencing, spec_schema JSONB) | S | 🔴 Blocker | ⬜ Belum |
-| M2-DB-02 | Migrasi tabel: `listings` (extra_specs JSONB, soft delete) | M | 🔴 Blocker | ⬜ Belum |
-| M2-DB-03 | Migrasi tabel: `listing_photos` | S | 🔴 Blocker | ⬜ Belum |
+| M2-DB-01 | Migrasi tabel: `categories` (self-referencing, spec_schema JSONB) | S | 🔴 Blocker | ✅ Selesai |
+| M2-DB-02 | Migrasi tabel: `listings` (extra_specs JSONB, soft delete) | M | 🔴 Blocker | ✅ Selesai |
+| M2-DB-03 | Migrasi tabel: `listing_photos` | S | 🔴 Blocker | ✅ Selesai |
 | M2-DB-04 | Setup PostgreSQL Full-Text Search (`tsvector` GENERATED column) | M | 🟠 Tinggi | ⬜ Belum |
-| M2-DB-05 | Seed 7 root category + sub-kategori sesuai PRD | M | 🔴 Blocker | ⬜ Belum |
+| M2-DB-05 | Seed 7 root category + sub-kategori sesuai PRD | M | 🔴 Blocker | ✅ Selesai |
 | M2-DB-06 | Seed `spec_schema` per kategori | M | 🟠 Tinggi | ⬜ Belum |
 | M2-DB-07 | Tambah field `recommended_height_min_cm`, `recommended_height_max_cm`, `recommended_inseam_min_cm`, `recommended_inseam_max_cm` di listings sepeda utuh | S | 🟠 Tinggi | ⬜ Belum |
 | M2-DB-08 | Seed sizing chart per merek/tipe (untuk Bike Recommendation Level 1) | M | 🟠 Tinggi | ⬜ Belum |
@@ -253,8 +253,8 @@
 
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M4-DB-01 | Tabel `conversations` (unique per listing+buyer+seller) | S | 🔴 Blocker | ⬜ Belum |
-| M4-DB-02 | Tabel `messages` (flagged_reason, read_at) | S | 🔴 Blocker | ⬜ Belum |
+| M4-DB-01 | Tabel `conversations` (unique per listing+buyer+seller) | S | 🔴 Blocker | ✅ Selesai |
+| M4-DB-02 | Tabel `messages` (flagged_reason, read_at) | S | 🔴 Blocker | ✅ Selesai |
 | M4-API-01 | `POST /api/conversations` (idempotent) | S | 🔴 Blocker | ⬜ Belum |
 | M4-API-02 | `GET /api/conversations` (inbox) | S | 🔴 Blocker | ⬜ Belum |
 | M4-API-03 | `GET /api/conversations/:id/messages` | S | 🔴 Blocker | ⬜ Belum |
@@ -273,8 +273,8 @@
 
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M5-DB-01 | Tabel `wishlists` (unique user+listing) | S | 🟡 Menengah | ⬜ Belum |
-| M5-DB-02 | Tabel `notifications` (type, data JSONB, read_at) | S | 🟠 Tinggi | ⬜ Belum |
+| M5-DB-01 | Tabel `wishlists` (unique user+listing) | S | 🟡 Menengah | ✅ Selesai |
+| M5-DB-02 | Tabel `notifications` (type, data JSONB, read_at) | S | 🟠 Tinggi | ✅ Selesai |
 | M5-01 | Toggle save/unsave + update wishlist_count | S | 🟡 Menengah | ⬜ Belum |
 | M5-02 | Halaman wishlist saya | S | 🟡 Menengah | ⬜ Belum |
 | M5-03 | Halaman daftar notifikasi + mark all read | S | 🟠 Tinggi | ⬜ Belum |
@@ -286,11 +286,11 @@
 ### Database
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M6-DB-01 | Tabel `orders` (snapshot alamat+harga, state machine) | M | 🔴 Blocker | ⬜ Belum |
-| M6-DB-02 | Tabel `order_status_history` (audit trail) | S | 🔴 Blocker | ⬜ Belum |
-| M6-DB-03 | Tabel `payments` (raw_response JSONB) | M | 🔴 Blocker | ⬜ Belum |
-| M6-DB-04 | Tabel `shipments` | S | 🔴 Blocker | ⬜ Belum |
-| M6-DB-05 | Tabel `payouts` (net_amount setelah fee) | M | 🔴 Blocker | ⬜ Belum |
+| M6-DB-01 | Tabel `orders` (snapshot alamat+harga, state machine) | M | 🔴 Blocker | ✅ Selesai |
+| M6-DB-02 | Tabel `order_status_history` (audit trail) | S | 🔴 Blocker | ✅ Selesai |
+| M6-DB-03 | Tabel `payments` (raw_response JSONB) | M | 🔴 Blocker | ✅ Selesai |
+| M6-DB-04 | Tabel `shipments` | S | 🔴 Blocker | ✅ Selesai |
+| M6-DB-05 | Tabel `payouts` (net_amount setelah fee) | M | 🔴 Blocker | ✅ Selesai |
 
 ### Payment Integration
 | ID | Item | Effort | Prioritas | Status |
@@ -340,10 +340,10 @@
 
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M7-DB-01 | Tabel `reviews` (rating 1–5, seller_reply) | S | 🟠 Tinggi | ⬜ Belum |
-| M7-DB-02 | Tabel `disputes` (reason, status, resolution) | S | 🟠 Tinggi | ⬜ Belum |
-| M7-DB-03 | Tabel `dispute_evidence` | S | 🟠 Tinggi | ⬜ Belum |
-| M7-DB-04 | Tabel `reports` (target_type polymorphic) | S | 🟡 Menengah | ⬜ Belum |
+| M7-DB-01 | Tabel `reviews` (rating 1–5, seller_reply) | S | 🟠 Tinggi | ✅ Selesai |
+| M7-DB-02 | Tabel `disputes` (reason, status, resolution) | S | 🟠 Tinggi | ✅ Selesai |
+| M7-DB-03 | Tabel `dispute_evidence` | S | 🟠 Tinggi | ✅ Selesai |
+| M7-DB-04 | Tabel `reports` (target_type polymorphic) | S | 🟡 Menengah | ✅ Selesai |
 | M7-01 | `POST /api/orders/:id/review` | M | 🟠 Tinggi | ⬜ Belum |
 | M7-02 | Update rating_avg di users saat review masuk | S | 🟠 Tinggi | ⬜ Belum |
 | M7-03 | `POST /api/orders/:id/dispute` | M | 🟠 Tinggi | ⬜ Belum |

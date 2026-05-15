@@ -52,7 +52,22 @@
       "Bash(xargs grep *)",
       "Bash(Get-Content \"C:\\\\Users\\\\bandu\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Project-bike-fitting-web\\\\492a423f-2d06-4dce-826d-08b23a71a90b\\\\tasks\\\\bu3coo4ua.output\" -Wait)",
       "Bash(Select-String -Pattern \"ready|Local:|error|Error|failed\")",
-      "PowerShell(netstat -ano)"
+      "PowerShell(netstat -ano)",
+      "WebFetch(domain:bikeinsights.com)",
+      "WebFetch(domain:www.mosso.com.tw)",
+      "WebFetch(domain:www.polygonbikes.com)",
+      "WebSearch",
+      "WebFetch(domain:iris-docs.midtrans.com)",
+      "WebFetch(domain:docs.midtrans.com)",
+      "Read(//d/d/Project/bike-fitting-web/web/**)",
+      "Bash(npx prisma *)",
+      "Bash(node -e \"const c=require\\('prisma/config'\\); console.log\\(Object.keys\\(c\\)\\);\")",
+      "Bash(sed -n '15,40p' node_modules/@prisma/config/dist/index.d.ts)",
+      "Bash(sed -n '15,40p' node_modules/@prisma/config/dist/*.d.ts)",
+      "Bash(nslookup aws-1-ap-southeast-1.pooler.supabase.com)",
+      "Bash(powershell -Command \"Test-NetConnection aws-1-ap-southeast-1.pooler.supabase.com -Port 5432 -InformationLevel Quiet\")",
+      "Bash(powershell -Command \"Test-NetConnection aws-1-ap-southeast-1.pooler.supabase.com -Port 6543 -InformationLevel Quiet\")",
+      "Bash(DEBUG=\"prisma:*\" npx prisma migrate status)"
     ],
     "additionalDirectories": [
       "d:\\Project\\bike-fitting-web\\app\\.git",

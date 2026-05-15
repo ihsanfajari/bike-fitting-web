@@ -43,6 +43,7 @@ Marketplace khusus untuk jual beli sepeda (baru maupun bekas) beserta aksesoris/
 - Social feed / komunitas / review panjang
 - Integrasi ekspedisi otomatis (manual input resi dulu)
 - Mobile native app (web responsive dulu)
+- **Rekomendasi sepeda berbasis deskripsi** — user isi form teks mendeskripsikan kebutuhan (tipe sepeda, budget, postur, tujuan pakai), sistem mencocokkan & menyarankan listing yang relevan. Direncanakan post-MVP (lihat catatan di ERD §8). UI prototipe boleh dibuat lebih dulu, backend menyusul.
 
 ## 4. Target Pengguna
 
@@ -136,31 +137,63 @@ Marketplace khusus untuk jual beli sepeda (baru maupun bekas) beserta aksesoris/
    - Ringkasan barang
    - Pilih alamat pengiriman
    - Pilih ekspedisi (JNE, J&T, SiCepat, Anteraja, Ninja) — biaya diinput penjual setelah order atau estimasi ongkir dari kota penjual→pembeli (manual/flat di MVP).
-   - Biaya admin/asuransi rekber (misal 1% dari harga, min Rp5.000)
+   - Biaya admin/asuransi rekber (1% dari harga, min Rp5.000)
    - Total pembayaran
 3. Pilih metode pembayaran:
    - **Virtual Account** (BCA, Mandiri, BNI, BRI)
    - **E-wallet** (GoPay, OVO, DANA, ShopeePay)
    - **QRIS**
    - **Kartu kredit/debit** (opsional di launch)
-4. Pembeli bayar → dana masuk ke **escrow marketplace** (bukan langsung ke penjual).
+4. Pembeli bayar → dana masuk ke **rekening Midtrans** (bukan langsung ke penjual maupun GowesFit).
 5. Penjual dapat notif: "Pesanan baru, silakan kirim dalam 2×24 jam".
 6. Penjual input resi & foto bukti pengiriman.
-7. Pembeli konfirmasi barang diterima (atau auto-confirm setelah 3 hari sejak status "terkirim" dari ekspedisi).
-8. Dana cair ke saldo penjual → penjual bisa withdraw ke rekening bank.
+7. Pembeli konfirmasi barang diterima (atau auto-confirm setelah 3 hari sejak status "terkirim").
+8. Backend GowesFit trigger **Midtrans Payouts API** → dana ditransfer ke rekening bank seller yang terdaftar.
 
 **State order:**
 `Menunggu Pembayaran` → `Dibayar / Menunggu Dikirim` → `Dikirim` → `Diterima` → `Selesai`
 Jalur alternatif: `Dibatalkan`, `Sengketa / Disputed`, `Refund`.
 
 **Sengketa (Dispute)**:
-- Pembeli bisa buka dispute dalam 2 hari setelah "Diterima" atau jika barang tidak sampai.
-- Upload bukti (foto, video, chat screenshot).
+- Pembeli bisa buka dispute dalam 3 hari setelah status "Diterima" atau jika barang tidak sampai.
+- Upload bukti (foto, chat screenshot).
 - Tim admin review manual di MVP (belum otomatis).
+- Jika dispute diterima → GowesFit tidak trigger payout ke seller, dana dikembalikan ke pembeli via refund Midtrans.
 
-**Payment Gateway:**
-- MVP: integrasi **Midtrans** atau **Xendit** (pilih satu — rekomendasi Midtrans untuk coverage lokal Indonesia).
-- Payout ke penjual via disbursement API (Midtrans Iris atau Xendit Disbursement).
+**Payment Gateway & Arsitektur Dana — Midtrans**
+
+> Hasil riset dokumentasi Midtrans (Mei 2026):
+
+**Di mana uang tersimpan selama masa tunggu?**
+- Dana dari pembayaran pembeli masuk ke **rekening pool Midtrans**, bukan ke rekening GowesFit maupun seller.
+- Midtrans meng-hold dana selama settlement period: **D+1 pukul 16.00** (settled), baru bisa di-request withdraw setelah **D+3 dari tanggal transaksi**.
+- Holding period ini bersifat otomatis (risk/chargeback protection), **bukan** event-based escrow.
+
+**Implementasi escrow di level aplikasi:**
+- Midtrans **tidak punya produk escrow** yang bisa ditahan berdasarkan business event (misal "tunggu konfirmasi pembeli").
+- Logika escrow sepenuhnya dihandle di backend GowesFit:
+  1. Terima notifikasi `payment_success` dari Midtrans webhook.
+  2. Set status order = `paid` di database, tandai sebagai "dana dalam masa tunggu".
+  3. Saat pembeli klik "Konfirmasi Diterima" (atau auto-confirm D+3), set status = `completed`.
+  4. **Trigger Midtrans Payouts API** untuk transfer ke rekening seller.
+- Selama menunggu konfirmasi pembeli, GowesFit **tidak mentransfer apapun** ke seller — hanya menunggu.
+
+**Midtrans Payouts (formerly Iris Disbursement):**
+- Produk untuk transfer dana ke rekening bank Indonesia.
+- Bank yang didukung: BCA, BNI, BRI, Mandiri, CIMB, Permata, Danamon + bank lain via SKN/RTGS.
+- Dua model: **Aggregator** (Midtrans pegang deposit, onboarding cepat) atau **Facilitator** (GowesFit pakai rekening sendiri sebagai sumber dana).
+- API: register beneficiary (seller), create payout, approve payout, cek status, batch payout.
+- **Rekomendasi MVP**: model Aggregator — lebih cepat onboarding, Midtrans yang urus deposit.
+
+**Implikasi untuk fitur tambah rekening bank (layar #29):**
+- Form tambah rekening seller perlu menyimpan: nama bank, nomor rekening, nama pemilik rekening.
+- Data ini dikirim ke Midtrans Payouts API untuk mendaftarkan seller sebagai **beneficiary**.
+- Verifikasi rekening (nama pemilik match) perlu dilakukan sebelum payout pertama.
+
+**Referensi dokumentasi:**
+- Payment settlement: https://docs.midtrans.com/docs/transaction-status-cycle
+- Payouts API: https://docs.midtrans.com/reference/payout-api-overview
+- Withdrawal timing: https://docs.midtrans.com/docs/when-can-i-withdraw-my-transaction-funds-from-midtrans
 
 ### 5.6 Dashboard Pengguna
 
