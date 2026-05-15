@@ -1,9 +1,19 @@
-// Middleware Next.js — refresh sesi Supabase di setiap request.
-// Tanpa ini, session JWT bisa kadaluwarsa dan user "logout" sendiri.
+// Proxy Next.js 16 — refresh sesi Supabase + gate route yang butuh login.
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
+const PROTECTED_PREFIXES = [
+  "/marketplace/sell",
+  "/marketplace/me",
+  "/marketplace/checkout",
+  "/marketplace/orders",
+  "/marketplace/chat",
+  "/marketplace/wishlist",
+  "/marketplace/notifications",
+  "/marketplace/dashboard",
+];
+
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -25,8 +35,18 @@ export async function middleware(request: NextRequest) {
     },
   );
 
-  // getUser() memvalidasi JWT & refresh session bila perlu.
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const path = request.nextUrl.pathname;
+  const needsAuth = PROTECTED_PREFIXES.some((prefix) => path.startsWith(prefix));
+
+  if (needsAuth && !user) {
+    const signInUrl = new URL("/marketplace/sign-in", request.url);
+    signInUrl.searchParams.set("next", path);
+    return NextResponse.redirect(signInUrl);
+  }
 
   return response;
 }

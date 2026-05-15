@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { BottomNav } from "../_components/BottomNav";
 import { IconBell, IconBox, IconChevronRight, IconHeart, IconStar, IconTrendUp, IconWallet } from "../_components/icons";
+import { getCurrentUser } from "@/lib/auth/getCurrentUser";
+import { signOutAction } from "@/lib/auth/actions";
 
 const MENU_ITEMS = [
   {
@@ -21,7 +24,8 @@ const MENU_ITEMS = [
   {
     group: "Akun",
     items: [
-      { href: "/marketplace/me/edit", icon: "✏️", label: "Edit Profil & Alamat", desc: "Nama, HP, alamat pengiriman" },
+      { href: "/marketplace/me/edit", icon: "✏️", label: "Edit Profil", desc: "Nama, HP, bio, kota" },
+      { href: "/marketplace/me/addresses", icon: "📍", label: "Alamat Pengiriman", desc: "Kelola alamat tersimpan" },
       { href: "/marketplace/notifications", icon: IconBell, label: "Notifikasi", desc: "Pesanan, penawaran, update" },
       { href: "/marketplace/me/settings", icon: "⚙️", label: "Pengaturan", desc: "Privasi, keamanan, hapus akun" },
     ],
@@ -36,31 +40,50 @@ function MenuIcon({ icon }: { icon: React.ComponentType<{ size?: number; classNa
   return <Icon size={20} className="text-[var(--color-m-orange-500)]" />;
 }
 
-export default function MePage() {
+function initialsOf(name: string): string {
+  return name.split(/\s+/).slice(0, 2).map((s) => s[0]?.toUpperCase() ?? "").join("") || "?";
+}
+
+function maskPhone(phone: string | null): string {
+  if (!phone) return "—";
+  if (phone.length < 6) return phone;
+  return phone.slice(0, 5) + "***" + phone.slice(-3);
+}
+
+export default async function MePage() {
+  const user = await getCurrentUser();
+  if (!user) redirect("/marketplace/sign-in");
+
+  const isPhoneVerified = user.phoneVerifiedAt !== null;
+  const joinedYear = user.createdAt.getFullYear();
+
   return (
     <main className="flex-1 flex flex-col bg-[var(--color-m-cream)]">
-      {/* Profile header */}
       <section
         className="px-5 pt-10 pb-6"
         style={{ background: "linear-gradient(180deg,#FFF0E6 0%,#FFF8F0 100%)" }}
       >
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[var(--color-m-orange-400)] to-[var(--color-m-orange-600)] flex items-center justify-center text-white text-[24px] font-extrabold flex-shrink-0">
-            IF
+            {initialsOf(user.fullName)}
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-[18px] font-extrabold text-[var(--color-m-ink-900)] leading-tight">
-              Ihsan Fajari
+              {user.fullName}
             </div>
-            <div className="text-[12px] text-[var(--color-m-ink-500)] mt-0.5">ihsan@example.com · +6281234567890</div>
+            <div className="text-[12px] text-[var(--color-m-ink-500)] mt-0.5 truncate">
+              {user.email} · {maskPhone(user.phone)}
+            </div>
             <div className="flex items-center gap-2 mt-1.5">
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[var(--color-m-green-100)] text-[var(--color-m-green-500)] text-[10px] font-bold">
-                ✓ Terverifikasi
+              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${isPhoneVerified ? "bg-[var(--color-m-green-100)] text-[var(--color-m-green-500)]" : "bg-[var(--color-m-amber-100)] text-[var(--color-m-amber-500)]"}`}>
+                {isPhoneVerified ? "✓ HP Terverifikasi" : "⏳ Menunggu verifikasi"}
               </span>
-              <div className="flex items-center gap-0.5 text-[var(--color-m-amber-500)] text-[12px] font-bold">
-                <IconStar size={12} />
-                4.9
-              </div>
+              {user.ratingCount > 0 && (
+                <div className="flex items-center gap-0.5 text-[var(--color-m-amber-500)] text-[12px] font-bold">
+                  <IconStar size={12} />
+                  {user.ratingAvg.toString()}
+                </div>
+              )}
             </div>
           </div>
           <Link
@@ -71,12 +94,11 @@ export default function MePage() {
           </Link>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-3 gap-2 mt-5">
           {[
-            { label: "Transaksi", value: "28" },
-            { label: "Rating", value: "4.9" },
-            { label: "Bergabung", value: "2024" },
+            { label: "Transaksi", value: user.txCount.toString() },
+            { label: "Rating", value: user.ratingCount > 0 ? user.ratingAvg.toString() : "—" },
+            { label: "Bergabung", value: joinedYear.toString() },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-2xl py-3 text-center">
               <div className="text-[18px] font-extrabold text-[var(--color-m-ink-900)] m-tnum">{stat.value}</div>
@@ -86,7 +108,6 @@ export default function MePage() {
         </div>
       </section>
 
-      {/* Menu groups */}
       <div className="flex-1 px-4 py-4 space-y-4">
         {MENU_ITEMS.map((group) => (
           <div key={group.group}>
@@ -114,10 +135,14 @@ export default function MePage() {
           </div>
         ))}
 
-        {/* Logout */}
-        <button className="w-full py-3.5 rounded-2xl border border-[var(--color-m-ink-100)] bg-[var(--color-m-paper)] text-[14px] font-bold text-red-500 m-shadow-xs">
-          Keluar
-        </button>
+        <form action={signOutAction}>
+          <button
+            type="submit"
+            className="w-full py-3.5 rounded-2xl border border-[var(--color-m-ink-100)] bg-[var(--color-m-paper)] text-[14px] font-bold text-red-500 m-shadow-xs hover:bg-red-50"
+          >
+            Keluar
+          </button>
+        </form>
 
         <p className="text-center text-[11px] text-[var(--color-m-ink-400)] pb-4">
           GowesFit Marketplace v0.1.0

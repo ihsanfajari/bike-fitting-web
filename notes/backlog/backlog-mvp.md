@@ -141,26 +141,26 @@
 ### Backend API
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M1-API-01 | `POST /api/auth/register` — email + password (bcrypt/argon2) | S | 🔴 Blocker | ⬜ Belum |
-| M1-API-02 | `POST /api/auth/login` — JWT/session | S | 🔴 Blocker | ⬜ Belum |
+| M1-API-01 | `POST /api/auth/register` — email + password (bcrypt/argon2) | S | 🔴 Blocker | ✅ Selesai |
+| M1-API-02 | `POST /api/auth/login` — JWT/session | S | 🔴 Blocker | ✅ Selesai |
 | M1-API-03 | `POST /api/auth/google` — Google OAuth via NextAuth.js v5 | M | 🟠 Tinggi | ⬜ Belum |
 | M1-API-04 | `POST /api/auth/otp/send` — Zenziva SMS / WhatsApp | M | 🔴 Blocker | ⬜ Belum |
 | M1-API-05 | `POST /api/auth/otp/verify` — set `phone_verified_at`, rate limit | S | 🔴 Blocker | ⬜ Belum |
-| M1-API-06 | `GET /api/users/me` | S | 🔴 Blocker | ⬜ Belum |
-| M1-API-07 | `PUT /api/users/me` (termasuk body profile untuk recommendation) | S | 🟠 Tinggi | ⬜ Belum |
-| M1-API-08 | `POST/PUT /api/users/me/addresses` | S | 🔴 Blocker | ⬜ Belum |
+| M1-API-06 | `GET /api/users/me` | S | 🔴 Blocker | ✅ Selesai |
+| M1-API-07 | `PUT /api/users/me` (termasuk body profile untuk recommendation) | S | 🟠 Tinggi | ✅ Selesai |
+| M1-API-08 | `POST/PUT /api/users/me/addresses` | S | 🔴 Blocker | ✅ Selesai |
 | M1-API-09 | `POST /api/users/me/bank-accounts` (validasi nama via Midtrans) | M | 🟠 Tinggi | ⬜ Belum |
 | M1-API-10 | Rate limiting login + brute force protection | S | 🟠 Tinggi | ⬜ Belum |
-| M1-API-11 | Middleware auth — proteksi protected routes | S | 🔴 Blocker | ⬜ Belum |
+| M1-API-11 | Middleware auth — proteksi protected routes | S | 🔴 Blocker | ✅ Selesai |
 
 ### Frontend
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M1-FE-01 | Halaman Sign Up (email + Google OAuth) | M | 🔴 Blocker | ⬜ Belum |
-| M1-FE-02 | Halaman Sign In | S | 🔴 Blocker | ⬜ Belum |
-| M1-FE-03 | Halaman Verifikasi OTP | S | 🔴 Blocker | ⬜ Belum |
-| M1-FE-04 | Halaman Edit Profil + body measurements (untuk Bike Recommendation) | M | 🟠 Tinggi | ⬜ Belum |
-| M1-FE-05 | Halaman Manage Alamat | M | 🔴 Blocker | ⬜ Belum |
+| M1-FE-01 | Halaman Sign Up (email + Google OAuth) | M | 🔴 Blocker | ✅ Selesai |
+| M1-FE-02 | Halaman Sign In | S | 🔴 Blocker | ✅ Selesai |
+| M1-FE-03 | Halaman Verifikasi OTP | S | 🔴 Blocker | ✅ Selesai |
+| M1-FE-04 | Halaman Edit Profil + body measurements (untuk Bike Recommendation) | M | 🟠 Tinggi | ✅ Selesai |
+| M1-FE-05 | Halaman Manage Alamat | M | 🔴 Blocker | ✅ Selesai |
 | M1-FE-06 | Optimize signup flow CRO | M | 🟠 Tinggi | ⬜ Belum |
 
 ## B.2 Listing System

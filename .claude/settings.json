@@ -67,7 +67,13 @@
       "Bash(nslookup aws-1-ap-southeast-1.pooler.supabase.com)",
       "Bash(powershell -Command \"Test-NetConnection aws-1-ap-southeast-1.pooler.supabase.com -Port 5432 -InformationLevel Quiet\")",
       "Bash(powershell -Command \"Test-NetConnection aws-1-ap-southeast-1.pooler.supabase.com -Port 6543 -InformationLevel Quiet\")",
-      "Bash(DEBUG=\"prisma:*\" npx prisma migrate status)"
+      "Bash(node -e ' *)",
+      "Bash(taskkill /PID 3048 /F)",
+      "PowerShell(Stop-Process -Id 3048 -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue)",
+      "PowerShell($port3000 = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue; if \\($port3000\\) { Write-Output \"Port 3000 still in use by PID $\\($port3000.OwningProcess\\)\" } else { Write-Output \"Port 3000 free\" })",
+      "Bash(npx tsx *)",
+      "PowerShell($p = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue; if \\($p\\) { Stop-Process -Id $p.OwningProcess -Force; Write-Output \"Dev server \\(PID $\\($p.OwningProcess\\)\\) dimatikan\" } else { Write-Output \"Tidak ada proses di port 3000\" })"
     ],
     "additionalDirectories": [
       "d:\\Project\\bike-fitting-web\\app\\.git",
