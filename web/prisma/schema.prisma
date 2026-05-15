@@ -1,0 +1,711 @@
+// GowesFit Marketplace — Prisma schema
+// Sumber kebenaran: notes/ERD-marketplace-sepeda.md
+// Catatan:
+// - Money disimpan sebagai BigInt (IDR, tanpa desimal). Jangan pakai Float.
+// - PK UUID v4 via gen_random_uuid() (tersedia native di PostgreSQL 13+).
+// - Full-text search (listings.search_vector tsvector + GIN index) belum dimodelkan di sini —
+//   ditambahkan via raw SQL migration saat fitur search dikerjakan.
+// - balance_ledger sengaja ditunda sampai integrasi payment gateway.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum KycStatus {
+  none
+  pending
+  verified
+  rejected
+}
+
+enum AccountStatus {
+  active
+  suspended
+  banned
+}
+
+enum OtpChannel {
+  sms
+  whatsapp
+  email
+}
+
+enum OtpPurpose {
+  phone_verify
+  password_reset
+  login_2fa
+}
+
+enum FrameMaterial {
+  aluminum
+  carbon
+  steel
+  titanium
+  other
+}
+
+enum ListingCondition {
+  new
+  like_new
+  used_mint
+  used_normal
+  used_repair
+}
+
+enum ListingStatus {
+  draft
+  active
+  paused
+  sold
+  removed
+  rejected
+}
+
+enum OrderStatus {
+  pending_payment
+  paid
+  shipped
+  delivered
+  completed
+  cancelled
+  disputed
+  refunded
+}
+
+enum ActorType {
+  buyer
+  seller
+  system
+  admin
+}
+
+enum PaymentProvider {
+  midtrans
+  xendit
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+  expired
+  refunded
+}
+
+enum ShipmentStatus {
+  in_transit
+  delivered
+  lost
+  returned
+}
+
+enum PayoutProvider {
+  midtrans_iris
+  xendit_disbursement
+}
+
+enum PayoutStatus {
+  pending
+  processing
+  completed
+  failed
+}
+
+enum DisputeReason {
+  not_received
+  not_as_described
+  damaged
+  fake
+  other
+}
+
+enum DisputeStatus {
+  open
+  investigating
+  resolved_buyer
+  resolved_seller
+  cancelled
+}
+
+enum ReportTargetType {
+  listing
+  user
+  message
+}
+
+enum ReportReason {
+  fake_product
+  scam
+  inappropriate
+  spam
+  other
+}
+
+enum ReportStatus {
+  open
+  reviewed
+  action_taken
+  dismissed
+}
+
+// ─────────────────────────────────────────────
+// 3.1 users
+// ─────────────────────────────────────────────
+
+model User {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email           String        @unique @db.VarChar(255)
+  phone           String?       @unique @db.VarChar(20)
+  passwordHash    String?       @map("password_hash") @db.VarChar(255)
+  fullName        String        @map("full_name") @db.VarChar(100)
+  avatarUrl       String?       @map("avatar_url")
+  bio             String?       @db.VarChar(500)
+  city            String?       @db.VarChar(100)
+  phoneVerifiedAt DateTime?     @map("phone_verified_at") @db.Timestamptz(6)
+  emailVerifiedAt DateTime?     @map("email_verified_at") @db.Timestamptz(6)
+  kycStatus       KycStatus     @default(none) @map("kyc_status")
+  googleOauthId   String?       @unique @map("google_oauth_id") @db.VarChar(255)
+  ratingAvg       Decimal       @default(0) @map("rating_avg") @db.Decimal(3, 2)
+  ratingCount     Int           @default(0) @map("rating_count")
+  txCount         Int           @default(0) @map("tx_count")
+  lastActiveAt    DateTime?     @map("last_active_at") @db.Timestamptz(6)
+  balance         BigInt        @default(0)
+  isAdmin         Boolean       @default(false) @map("is_admin")
+  accountStatus   AccountStatus @default(active) @map("account_status")
+  suspendedReason String?       @map("suspended_reason") @db.VarChar(255)
+  suspendedAt     DateTime?     @map("suspended_at") @db.Timestamptz(6)
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(6)
+
+  addresses           Address[]
+  bankAccounts        BankAccount[]
+  listings            Listing[]
+  wishlists           Wishlist[]
+  otpVerifications    OtpVerification[]
+  buyerConversations  Conversation[]       @relation("BuyerConversations")
+  sellerConversations Conversation[]       @relation("SellerConversations")
+  messages            Message[]
+  buyerOrders         Order[]              @relation("BuyerOrders")
+  sellerOrders        Order[]              @relation("SellerOrders")
+  orderStatusActions  OrderStatusHistory[]
+  reviewsWritten      Review[]             @relation("ReviewsWritten")
+  reviewsReceived     Review[]             @relation("ReviewsReceived")
+  disputesOpened      Dispute[]            @relation("DisputesOpened")
+  disputesResolved    Dispute[]            @relation("DisputesResolved")
+  disputeEvidence     DisputeEvidence[]
+  reportsFiled        Report[]             @relation("ReportsFiled")
+  reportsReviewed     Report[]             @relation("ReportsReviewed")
+  notifications       Notification[]
+  payouts             Payout[]
+
+  @@index([deletedAt])
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────
+// 3.2 otp_verifications
+// ─────────────────────────────────────────────
+
+model OtpVerification {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String?    @map("user_id") @db.Uuid
+  channel   OtpChannel
+  purpose   OtpPurpose
+  target    String     @db.VarChar(255)
+  codeHash  String     @map("code_hash") @db.VarChar(255)
+  expiresAt DateTime   @map("expires_at") @db.Timestamptz(6)
+  usedAt    DateTime?  @map("used_at") @db.Timestamptz(6)
+  attempts  Int        @default(0) @db.SmallInt
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([target, purpose, expiresAt])
+  @@map("otp_verifications")
+}
+
+// ─────────────────────────────────────────────
+// 3.3 addresses
+// ─────────────────────────────────────────────
+
+model Address {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  label          String?  @db.VarChar(50)
+  recipientName  String   @map("recipient_name") @db.VarChar(100)
+  recipientPhone String   @map("recipient_phone") @db.VarChar(20)
+  province       String   @db.VarChar(100)
+  city           String   @db.VarChar(100)
+  district       String?  @db.VarChar(100)
+  postalCode     String?  @map("postal_code") @db.VarChar(10)
+  fullAddress    String   @map("full_address")
+  isPrimary      Boolean  @default(false) @map("is_primary")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  // Business rule: hanya 1 address is_primary=true per user — enforce di aplikasi
+  // (partial unique index bisa ditambahkan via raw SQL bila diperlukan).
+  @@index([userId])
+  @@map("addresses")
+}
+
+// ─────────────────────────────────────────────
+// 3.4 bank_accounts
+// ─────────────────────────────────────────────
+
+model BankAccount {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String    @map("user_id") @db.Uuid
+  bankCode          String    @map("bank_code") @db.VarChar(10)
+  bankName          String    @map("bank_name") @db.VarChar(50)
+  accountNumber     String    @map("account_number") @db.VarChar(30)
+  accountHolderName String    @map("account_holder_name") @db.VarChar(100)
+  verifiedAt        DateTime? @map("verified_at") @db.Timestamptz(6)
+  isPrimary         Boolean   @default(false) @map("is_primary")
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payouts Payout[]
+
+  @@index([userId])
+  @@map("bank_accounts")
+}
+
+// ─────────────────────────────────────────────
+// 3.5 categories
+// ─────────────────────────────────────────────
+
+model Category {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  parentId   String?  @map("parent_id") @db.Uuid
+  name       String   @db.VarChar(100)
+  slug       String   @unique @db.VarChar(100)
+  iconUrl    String?  @map("icon_url")
+  specSchema Json?    @map("spec_schema")
+  sortOrder  Int      @default(0) @map("sort_order")
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: Restrict)
+  children Category[] @relation("CategoryTree")
+  listings Listing[]
+
+  @@index([parentId])
+  @@index([slug])
+  @@map("categories")
+}
+
+// ─────────────────────────────────────────────
+// 3.6 listings
+// ─────────────────────────────────────────────
+
+model Listing {
+  id            String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sellerId      String           @map("seller_id") @db.Uuid
+  categoryId    String           @map("category_id") @db.Uuid
+  title         String           @db.VarChar(120)
+  slug          String?          @unique @db.VarChar(150)
+  description   String?
+  brand         String?          @db.VarChar(100)
+  model         String?          @db.VarChar(100)
+  year          Int?             @db.SmallInt
+  frameSize     String?          @map("frame_size") @db.VarChar(20)
+  groupset      String?          @db.VarChar(100)
+  frameMaterial FrameMaterial?   @map("frame_material")
+  condition     ListingCondition
+  price         BigInt
+  isNegotiable  Boolean          @default(false) @map("is_negotiable")
+  allowCod      Boolean          @default(false) @map("allow_cod")
+  city          String           @db.VarChar(100)
+  province      String           @db.VarChar(100)
+  extraSpecs    Json?            @map("extra_specs")
+  status        ListingStatus    @default(draft)
+  viewCount     Int              @default(0) @map("view_count")
+  wishlistCount Int              @default(0) @map("wishlist_count")
+  publishedAt   DateTime?        @map("published_at") @db.Timestamptz(6)
+  soldAt        DateTime?        @map("sold_at") @db.Timestamptz(6)
+  createdAt     DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt     DateTime?        @map("deleted_at") @db.Timestamptz(6)
+
+  seller        User           @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  photos        ListingPhoto[]
+  wishlists     Wishlist[]
+  conversations Conversation[]
+  orders        Order[]
+
+  @@index([sellerId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([city, status])
+  @@index([price])
+  @@map("listings")
+}
+
+// ─────────────────────────────────────────────
+// 3.7 listing_photos
+// ─────────────────────────────────────────────
+
+model ListingPhoto {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  listingId    String   @map("listing_id") @db.Uuid
+  url          String
+  thumbnailUrl String?  @map("thumbnail_url")
+  sortOrder    Int      @default(0) @map("sort_order") @db.SmallInt
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId, sortOrder])
+  @@map("listing_photos")
+}
+
+// ─────────────────────────────────────────────
+// 3.8 wishlists
+// ─────────────────────────────────────────────
+
+model Wishlist {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  listingId String   @map("listing_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, listingId])
+  @@map("wishlists")
+}
+
+// ─────────────────────────────────────────────
+// 3.9 conversations
+// ─────────────────────────────────────────────
+
+model Conversation {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  listingId         String    @map("listing_id") @db.Uuid
+  buyerId           String    @map("buyer_id") @db.Uuid
+  sellerId          String    @map("seller_id") @db.Uuid
+  lastMessageAt     DateTime? @map("last_message_at") @db.Timestamptz(6)
+  buyerUnreadCount  Int       @default(0) @map("buyer_unread_count")
+  sellerUnreadCount Int       @default(0) @map("seller_unread_count")
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  listing  Listing   @relation(fields: [listingId], references: [id], onDelete: Restrict)
+  buyer    User      @relation("BuyerConversations", fields: [buyerId], references: [id], onDelete: Restrict)
+  seller   User      @relation("SellerConversations", fields: [sellerId], references: [id], onDelete: Restrict)
+  messages Message[]
+
+  @@unique([listingId, buyerId, sellerId])
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([lastMessageAt])
+  @@map("conversations")
+}
+
+// ─────────────────────────────────────────────
+// 3.10 messages
+// ─────────────────────────────────────────────
+
+model Message {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  conversationId String    @map("conversation_id") @db.Uuid
+  senderId       String    @map("sender_id") @db.Uuid
+  body           String?
+  attachmentUrl  String?   @map("attachment_url")
+  flaggedReason  String?   @map("flagged_reason") @db.VarChar(100)
+  readAt         DateTime? @map("read_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation(fields: [senderId], references: [id], onDelete: Restrict)
+
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}
+
+// ─────────────────────────────────────────────
+// 3.11 orders
+// ─────────────────────────────────────────────
+
+model Order {
+  id                      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderNumber             String      @unique @map("order_number") @db.VarChar(20)
+  listingId               String      @map("listing_id") @db.Uuid
+  buyerId                 String      @map("buyer_id") @db.Uuid
+  sellerId                String      @map("seller_id") @db.Uuid
+  addressId               String      @map("address_id") @db.Uuid
+  shippingAddressSnapshot Json        @map("shipping_address_snapshot")
+  itemPrice               BigInt      @map("item_price")
+  shippingCost            BigInt      @default(0) @map("shipping_cost")
+  shippingCourier         String?     @map("shipping_courier") @db.VarChar(50)
+  shippingService         String?     @map("shipping_service") @db.VarChar(50)
+  adminFee                BigInt      @default(0) @map("admin_fee")
+  insuranceFee            BigInt      @default(0) @map("insurance_fee")
+  totalAmount             BigInt      @map("total_amount")
+  status                  OrderStatus @default(pending_payment)
+  paymentDueAt            DateTime?   @map("payment_due_at") @db.Timestamptz(6)
+  paidAt                  DateTime?   @map("paid_at") @db.Timestamptz(6)
+  shippedAt               DateTime?   @map("shipped_at") @db.Timestamptz(6)
+  deliveredAt             DateTime?   @map("delivered_at") @db.Timestamptz(6)
+  completedAt             DateTime?   @map("completed_at") @db.Timestamptz(6)
+  cancelledAt             DateTime?   @map("cancelled_at") @db.Timestamptz(6)
+  cancellationReason      String?     @map("cancellation_reason") @db.VarChar(255)
+  notesToSeller           String?     @map("notes_to_seller")
+  createdAt               DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt               DateTime?   @map("deleted_at") @db.Timestamptz(6)
+
+  listing       Listing              @relation(fields: [listingId], references: [id], onDelete: Restrict)
+  buyer         User                 @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Restrict)
+  seller        User                 @relation("SellerOrders", fields: [sellerId], references: [id], onDelete: Restrict)
+  address       Address              @relation(fields: [addressId], references: [id], onDelete: Restrict)
+  statusHistory OrderStatusHistory[]
+  payment       Payment?
+  shipment      Shipment?
+  review        Review?
+  dispute       Dispute?
+
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([listingId])
+  @@index([status])
+  @@index([orderNumber])
+  @@map("orders")
+}
+
+// ─────────────────────────────────────────────
+// 3.12 order_status_history
+// ─────────────────────────────────────────────
+
+model OrderStatusHistory {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId    String    @map("order_id") @db.Uuid
+  fromStatus String?   @map("from_status") @db.VarChar(30)
+  toStatus   String    @map("to_status") @db.VarChar(30)
+  actorId    String?   @map("actor_id") @db.Uuid
+  actorType  ActorType @map("actor_type")
+  notes      String?
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([orderId, createdAt])
+  @@map("order_status_history")
+}
+
+// ─────────────────────────────────────────────
+// 3.13 payments
+// ─────────────────────────────────────────────
+
+model Payment {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId           String          @unique @map("order_id") @db.Uuid
+  provider          PaymentProvider
+  providerPaymentId String?         @map("provider_payment_id") @db.VarChar(100)
+  paymentMethod     String?         @map("payment_method") @db.VarChar(50)
+  amount            BigInt
+  status            PaymentStatus   @default(pending)
+  vaNumber          String?         @map("va_number") @db.VarChar(50)
+  qrString          String?         @map("qr_string")
+  expiredAt         DateTime?       @map("expired_at") @db.Timestamptz(6)
+  paidAt            DateTime?       @map("paid_at") @db.Timestamptz(6)
+  rawResponse       Json?           @map("raw_response")
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
+
+  @@index([providerPaymentId])
+  @@index([status])
+  @@map("payments")
+}
+
+// ─────────────────────────────────────────────
+// 3.14 shipments
+// ─────────────────────────────────────────────
+
+model Shipment {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId         String         @unique @map("order_id") @db.Uuid
+  courier         String         @db.VarChar(50)
+  service         String?        @db.VarChar(50)
+  trackingNumber  String         @map("tracking_number") @db.VarChar(100)
+  receiptPhotoUrl String?        @map("receipt_photo_url")
+  shippedAt       DateTime       @map("shipped_at") @db.Timestamptz(6)
+  deliveredAt     DateTime?      @map("delivered_at") @db.Timestamptz(6)
+  status          ShipmentStatus @default(in_transit)
+  trackingHistory Json?          @map("tracking_history")
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
+
+  @@index([trackingNumber])
+  @@map("shipments")
+}
+
+// ─────────────────────────────────────────────
+// 3.15 payouts
+// ─────────────────────────────────────────────
+
+model Payout {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String          @map("user_id") @db.Uuid
+  bankAccountId    String          @map("bank_account_id") @db.Uuid
+  amount           BigInt
+  fee              BigInt          @default(0)
+  netAmount        BigInt          @map("net_amount")
+  provider         PayoutProvider?
+  providerPayoutId String?         @map("provider_payout_id") @db.VarChar(100)
+  status           PayoutStatus    @default(pending)
+  failureReason    String?         @map("failure_reason")
+  processedAt      DateTime?       @map("processed_at") @db.Timestamptz(6)
+  rawResponse      Json?           @map("raw_response")
+  createdAt        DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+  bankAccount BankAccount @relation(fields: [bankAccountId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+  @@index([status])
+  @@map("payouts")
+}
+
+// ─────────────────────────────────────────────
+// 3.16 reviews
+// ─────────────────────────────────────────────
+
+model Review {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId         String    @unique @map("order_id") @db.Uuid
+  reviewerId      String    @map("reviewer_id") @db.Uuid
+  revieweeId      String    @map("reviewee_id") @db.Uuid
+  rating          Int       @db.SmallInt
+  comment         String?
+  sellerReply     String?   @map("seller_reply")
+  sellerRepliedAt DateTime? @map("seller_replied_at") @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  order    Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  reviewer User  @relation("ReviewsWritten", fields: [reviewerId], references: [id], onDelete: Restrict)
+  reviewee User  @relation("ReviewsReceived", fields: [revieweeId], references: [id], onDelete: Restrict)
+
+  @@index([revieweeId])
+  @@index([reviewerId])
+  @@map("reviews")
+}
+
+// ─────────────────────────────────────────────
+// 3.17 disputes
+// ─────────────────────────────────────────────
+
+model Dispute {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId         String        @unique @map("order_id") @db.Uuid
+  openedBy        String        @map("opened_by") @db.Uuid
+  reason          DisputeReason
+  description     String
+  status          DisputeStatus @default(open)
+  resolutionNotes String?       @map("resolution_notes")
+  resolvedBy      String?       @map("resolved_by") @db.Uuid
+  resolvedAt      DateTime?     @map("resolved_at") @db.Timestamptz(6)
+  refundAmount    BigInt?       @map("refund_amount")
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  order    Order             @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  opener   User              @relation("DisputesOpened", fields: [openedBy], references: [id], onDelete: Restrict)
+  resolver User?             @relation("DisputesResolved", fields: [resolvedBy], references: [id], onDelete: SetNull)
+  evidence DisputeEvidence[]
+
+  @@index([status])
+  @@map("disputes")
+}
+
+// ─────────────────────────────────────────────
+// 3.18 dispute_evidence
+// ─────────────────────────────────────────────
+
+model DisputeEvidence {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  disputeId  String   @map("dispute_id") @db.Uuid
+  uploaderId String   @map("uploader_id") @db.Uuid
+  fileUrl    String   @map("file_url")
+  fileType   String?  @map("file_type") @db.VarChar(20)
+  note       String?
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  dispute  Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+  uploader User    @relation(fields: [uploaderId], references: [id], onDelete: Restrict)
+
+  @@index([disputeId])
+  @@map("dispute_evidence")
+}
+
+// ─────────────────────────────────────────────
+// 3.19 reports
+// ─────────────────────────────────────────────
+
+model Report {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reporterId  String           @map("reporter_id") @db.Uuid
+  targetType  ReportTargetType @map("target_type")
+  targetId    String           @map("target_id") @db.Uuid
+  reason      ReportReason
+  description String?
+  status      ReportStatus     @default(open)
+  reviewedBy  String?          @map("reviewed_by") @db.Uuid
+  reviewedAt  DateTime?        @map("reviewed_at") @db.Timestamptz(6)
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // targetId bersifat polymorphic (listing/user/message) — tidak ada FK, validasi di aplikasi.
+  reporter User  @relation("ReportsFiled", fields: [reporterId], references: [id], onDelete: Restrict)
+  reviewer User? @relation("ReportsReviewed", fields: [reviewedBy], references: [id], onDelete: SetNull)
+
+  @@index([targetType, targetId])
+  @@index([status])
+  @@map("reports")
+}
+
+// ─────────────────────────────────────────────
+// 3.20 notifications
+// ─────────────────────────────────────────────
+
+model Notification {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  type      String    @db.VarChar(50)
+  title     String    @db.VarChar(150)
+  body      String?
+  data      Json?
+  readAt    DateTime? @map("read_at") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
+  @@map("notifications")
+}
