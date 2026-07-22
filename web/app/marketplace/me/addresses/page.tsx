@@ -29,7 +29,7 @@ export default async function ManageAddressesPage() {
         {addresses.length === 0 && (
           <section className="px-5 mt-4">
             <div className="text-center py-10 px-4 rounded-2xl bg-[var(--color-m-paper)] m-shadow-xs">
-              <div className="text-[40px] mb-2">📍</div>
+              <div className="flex justify-center mb-3"><IconMapPin size={38} className="text-[var(--color-m-orange-400)]" /></div>
               <div className="text-[14px] font-bold text-[var(--color-m-ink-900)]">Belum ada alamat tersimpan</div>
               <p className="text-[12px] text-[var(--color-m-ink-500)] mt-1.5">
                 Tambahkan alamat pertama kamu — dipakai otomatis saat checkout.

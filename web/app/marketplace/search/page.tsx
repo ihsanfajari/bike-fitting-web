@@ -130,7 +130,7 @@ export default async function SearchPage({
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="text-[48px] mb-3">🔍</div>
+            <div className="flex justify-center mb-3"><IconSearch size={44} className="text-[var(--color-m-orange-400)]" /></div>
             <div className="text-[16px] font-extrabold text-[var(--color-m-ink-900)] mb-1">
               {q ? `Tidak ada hasil untuk "${q}"` : "Mulai pencarian"}
             </div>

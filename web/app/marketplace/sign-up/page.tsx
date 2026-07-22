@@ -10,7 +10,7 @@ export default function SignUpPage() {
       <main className="flex-1 px-5 py-6 bg-[var(--color-m-cream)]">
         <div className="mb-6">
           <h1 className="text-[22px] font-extrabold text-[var(--color-m-ink-900)] leading-tight tracking-tight">
-            Selamat datang di GowesFit 👋
+            Selamat datang di GowesFit
           </h1>
           <p className="mt-1.5 text-[13px] text-[var(--color-m-ink-600)] leading-relaxed">
             Daftar dalam 1 menit, mulai jual atau beli sepeda dengan aman.

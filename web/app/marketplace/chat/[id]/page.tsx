@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CHAT_MESSAGES, CHAT_THREADS, LISTINGS, SELLERS } from "@/lib/mock/data";
 import { formatRupiah } from "@/lib/format";
-import { IconChevronLeft, IconSend } from "../../_components/icons";
+import { IconChevronLeft, IconSend, IconAlertTriangle, IconPaperclip } from "../../_components/icons";
 
 export default async function ChatDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -76,15 +76,15 @@ export default async function ChatDetailPage({ params }: { params: Promise<{ id:
         })}
 
         {/* Safe chat reminder */}
-        <div className="mx-2 p-3 rounded-xl bg-[var(--color-m-amber-100)]/60 text-[11px] text-[var(--color-m-ink-700)] leading-relaxed text-center">
-          ⚠️ Transaksi aman wajib lewat rekber GowesFit. Jangan transfer langsung.
+        <div className="mx-2 p-3 rounded-xl bg-[var(--color-m-amber-100)]/60 text-[11px] text-[var(--color-m-ink-700)] leading-relaxed flex items-center justify-center gap-1.5 text-center">
+          <IconAlertTriangle size={14} className="flex-shrink-0 text-[var(--color-m-amber-500)]" /> Transaksi aman wajib lewat rekber GowesFit. Jangan transfer langsung.
         </div>
       </main>
 
       {/* Input bar */}
       <div className="bg-[var(--color-m-paper)] border-t border-[var(--color-m-ink-100)] px-3 py-3 flex items-end gap-2 sticky bottom-0">
-        <button className="w-10 h-10 rounded-xl bg-[var(--color-m-ink-50)] flex items-center justify-center text-[var(--color-m-ink-600)] flex-shrink-0 text-[20px]">
-          📎
+        <button aria-label="Lampirkan foto" className="w-10 h-10 rounded-xl bg-[var(--color-m-ink-50)] flex items-center justify-center text-[var(--color-m-ink-600)] flex-shrink-0">
+          <IconPaperclip size={20} />
         </button>
         <div className="flex-1 min-h-[40px] max-h-[120px] rounded-2xl border border-[var(--color-m-ink-200)] bg-[var(--color-m-ink-50)] px-4 py-2.5 focus-within:border-[var(--color-m-orange-400)] focus-within:ring-2 focus-within:ring-[var(--color-m-orange-100)]">
           <textarea

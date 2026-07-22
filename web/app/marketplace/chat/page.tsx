@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CHAT_THREADS, LISTINGS, SELLERS } from "@/lib/mock/data";
 import { BottomNav } from "../_components/BottomNav";
 import { PageTopBar } from "../_components/TopBar";
+import { IconChat, IconAlertTriangle } from "../_components/icons";
 
 export default function ChatListPage() {
   return (
@@ -11,7 +12,7 @@ export default function ChatListPage() {
       <main className="flex-1 bg-[var(--color-m-cream)]">
         {CHAT_THREADS.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center px-8">
-            <div className="text-[48px] mb-3">💬</div>
+            <div className="mb-3 text-[var(--color-m-orange-400)]"><IconChat size={44} /></div>
             <div className="text-[16px] font-extrabold text-[var(--color-m-ink-900)] mb-1">Belum ada chat</div>
             <p className="text-[13px] text-[var(--color-m-ink-500)] leading-relaxed">
               Chat dengan penjual langsung dari halaman listing.
@@ -67,9 +68,10 @@ export default function ChatListPage() {
 
         {/* Info safe chat */}
         <div className="px-5 py-5">
-          <div className="p-3.5 rounded-xl bg-[var(--color-m-amber-100)]/60 border border-[var(--color-m-amber-100)]">
+          <div className="p-3.5 rounded-xl bg-[var(--color-m-amber-100)]/60 border border-[var(--color-m-amber-100)] flex gap-2.5">
+            <IconAlertTriangle size={18} className="flex-shrink-0 mt-0.5 text-[var(--color-m-amber-500)]" />
             <p className="text-[12px] text-[var(--color-m-ink-700)] leading-relaxed">
-              ⚠️ <b>Selalu gunakan rekber GowesFit</b> untuk transaksi. Jangan transfer langsung — GowesFit tidak menjamin transaksi di luar platform.
+              <b>Selalu gunakan rekber GowesFit</b> untuk transaksi. Jangan transfer langsung — GowesFit tidak menjamin transaksi di luar platform.
             </p>
           </div>
         </div>

@@ -73,7 +73,19 @@
       "PowerShell(Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue)",
       "PowerShell($port3000 = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue; if \\($port3000\\) { Write-Output \"Port 3000 still in use by PID $\\($port3000.OwningProcess\\)\" } else { Write-Output \"Port 3000 free\" })",
       "Bash(npx tsx *)",
-      "PowerShell($p = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue; if \\($p\\) { Stop-Process -Id $p.OwningProcess -Force; Write-Output \"Dev server \\(PID $\\($p.OwningProcess\\)\\) dimatikan\" } else { Write-Output \"Tidak ada proses di port 3000\" })"
+      "PowerShell($p = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue; if \\($p\\) { Stop-Process -Id $p.OwningProcess -Force; Write-Output \"Dev server \\(PID $\\($p.OwningProcess\\)\\) dimatikan\" } else { Write-Output \"Tidak ada proses di port 3000\" })",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/marketplace)",
+      "PowerShell($p = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue; if \\($p\\) { Stop-Process -Id $p.OwningProcess -Force; Write-Output \"Dev server dimatikan\" } else { Write-Output \"Port 3000 sudah bebas\" })",
+      "PowerShell(npx tsc --noEmit 2>&1)",
+      "Bash(claude mcp *)",
+      "PowerShell(claude mcp add --transport http notion https://mcp.notion.com/mcp)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(ls ~/.claude/ 2>/dev/null; ls ~/.claude.json 2>/dev/null && echo \"claude.json exists\")",
+      "Read(//c/Users/bandu/**)",
+      "WebFetch(domain:www.dreamjobsja.com)",
+      "Bash(curl -sI https://www.dreamjobsja.com/)",
+      "Bash(curl -s https://www.dreamjobsja.com/)"
     ],
     "additionalDirectories": [
       "d:\\Project\\bike-fitting-web\\app\\.git",

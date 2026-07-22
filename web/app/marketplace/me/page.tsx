@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { BottomNav } from "../_components/BottomNav";
-import { IconBell, IconBox, IconChevronRight, IconHeart, IconStar, IconTrendUp, IconWallet } from "../_components/icons";
+import type { ComponentType } from "react";
+import { IconBell, IconBox, IconChevronRight, IconHeart, IconStar, IconTrendUp, IconWallet, IconBag, IconEdit, IconMapPin, IconSettings, IconCheck, IconHourglass } from "../_components/icons";
 import { getCurrentUser } from "@/lib/auth/getCurrentUser";
 import { signOutAction } from "@/lib/auth/actions";
 
@@ -10,7 +11,7 @@ const MENU_ITEMS = [
     group: "Aktivitas",
     items: [
       { href: "/marketplace/me/listings", icon: IconBox, label: "Listing Saya", desc: "Kelola barang yang kamu jual" },
-      { href: "/marketplace/orders?tab=buyer", icon: "🛍️", label: "Pesanan Saya", desc: "Lacak pembelian & konfirmasi" },
+      { href: "/marketplace/orders?tab=buyer", icon: IconBag, label: "Pesanan Saya", desc: "Lacak pembelian & konfirmasi" },
       { href: "/marketplace/wishlist", icon: IconHeart, label: "Wishlist", desc: "Barang yang kamu simpan" },
       { href: "/marketplace/dashboard", icon: IconTrendUp, label: "Dashboard Penjual", desc: "Performa listing & pendapatan" },
     ],
@@ -24,19 +25,15 @@ const MENU_ITEMS = [
   {
     group: "Akun",
     items: [
-      { href: "/marketplace/me/edit", icon: "✏️", label: "Edit Profil", desc: "Nama, HP, bio, kota" },
-      { href: "/marketplace/me/addresses", icon: "📍", label: "Alamat Pengiriman", desc: "Kelola alamat tersimpan" },
+      { href: "/marketplace/me/edit", icon: IconEdit, label: "Edit Profil", desc: "Nama, HP, bio, kota" },
+      { href: "/marketplace/me/addresses", icon: IconMapPin, label: "Alamat Pengiriman", desc: "Kelola alamat tersimpan" },
       { href: "/marketplace/notifications", icon: IconBell, label: "Notifikasi", desc: "Pesanan, penawaran, update" },
-      { href: "/marketplace/me/settings", icon: "⚙️", label: "Pengaturan", desc: "Privasi, keamanan, hapus akun" },
+      { href: "/marketplace/me/settings", icon: IconSettings, label: "Pengaturan", desc: "Privasi, keamanan, hapus akun" },
     ],
   },
 ];
 
-function MenuIcon({ icon }: { icon: React.ComponentType<{ size?: number; className?: string }> | string }) {
-  if (typeof icon === "string") {
-    return <span className="text-[20px] leading-none">{icon}</span>;
-  }
-  const Icon = icon;
+function MenuIcon({ icon: Icon }: { icon: ComponentType<{ size?: number; className?: string }> }) {
   return <Icon size={20} className="text-[var(--color-m-orange-500)]" />;
 }
 
@@ -76,7 +73,7 @@ export default async function MePage() {
             </div>
             <div className="flex items-center gap-2 mt-1.5">
               <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${isPhoneVerified ? "bg-[var(--color-m-green-100)] text-[var(--color-m-green-500)]" : "bg-[var(--color-m-amber-100)] text-[var(--color-m-amber-500)]"}`}>
-                {isPhoneVerified ? "✓ HP Terverifikasi" : "⏳ Menunggu verifikasi"}
+                {isPhoneVerified ? <><IconCheck size={11} /> HP Terverifikasi</> : <><IconHourglass size={11} /> Menunggu verifikasi</>}
               </span>
               {user.ratingCount > 0 && (
                 <div className="flex items-center gap-0.5 text-[var(--color-m-amber-500)] text-[12px] font-bold">
@@ -89,8 +86,9 @@ export default async function MePage() {
           <Link
             href="/marketplace/me/edit"
             className="w-9 h-9 rounded-xl bg-white border border-[var(--color-m-ink-100)] flex items-center justify-center text-[var(--color-m-ink-600)] flex-shrink-0"
+            aria-label="Edit profil"
           >
-            ✏️
+            <IconEdit size={16} />
           </Link>
         </div>
 

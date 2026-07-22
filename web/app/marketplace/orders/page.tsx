@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PageTopBar } from "../_components/TopBar";
 import { BottomNav } from "../_components/BottomNav";
-import { IconChevronRight, IconClock } from "../_components/icons";
+import { IconChevronRight, IconClock, IconBox, IconTruck, IconArrowRight } from "../_components/icons";
 import { ORDERS, ORDER_STATUS_LABEL, type OrderStatus } from "@/lib/mock/api";
 import { getListing } from "@/lib/mock/data";
 import { formatRupiah } from "@/lib/format";
@@ -58,7 +58,7 @@ export default async function OrdersPage({
 
         {orders.length === 0 ? (
           <EmptyState
-            icon={<span className="text-2xl">📦</span>}
+            icon={<IconBox size={30} className="text-[var(--color-m-orange-400)]" />}
             title={tab === "buyer" ? "Belum ada pesanan" : "Belum ada pesanan masuk"}
             description={
               tab === "buyer"
@@ -103,8 +103,8 @@ export default async function OrdersPage({
                   </div>
                   {ctaForSeller && (
                     <div className="mt-3 pt-3 border-t border-dashed border-[var(--color-m-ink-100)]">
-                      <span className="inline-flex items-center gap-1 text-[12px] font-bold text-[var(--color-m-orange-600)]">
-                        🚚 Perlu input resi pengiriman →
+                      <span className="inline-flex items-center gap-1.5 text-[12px] font-bold text-[var(--color-m-orange-600)]">
+                        <IconTruck size={14} /> Perlu input resi pengiriman <IconArrowRight size={13} />
                       </span>
                     </div>
                   )}

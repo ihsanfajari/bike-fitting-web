@@ -486,7 +486,26 @@ Report listing/user (trust & safety).
 
 ---
 
-### 3.20 `notifications`
+### 3.20 `admin_action_logs`
+Audit trail tindakan admin (verify HP, suspend user, remove listing, resolve dispute, dll).
+Wajib dicatat untuk akuntabilitas — siapa-melakukan-apa-kapan.
+
+| Kolom | Tipe | Constraint | Catatan |
+|---|---|---|---|
+| id | UUID | PK | |
+| admin_id | UUID | FK → users.id, NOT NULL | siapa yang melakukan |
+| action | VARCHAR(50) | NOT NULL | `verify_phone`, `suspend_user`, `ban_user`, `unsuspend_user`, `remove_listing`, `pause_listing`, `force_cancel_order`, `resolve_dispute_buyer`, `resolve_dispute_seller`, `dismiss_report`, `take_action_report`, dst |
+| target_type | ENUM | NOT NULL | `user`, `listing`, `order`, `dispute`, `report` |
+| target_id | UUID | NOT NULL | polymorphic, validasi di app |
+| reason | TEXT | | catatan admin (mis. "Foto KTP & WA matching") |
+| metadata | JSONB | | snapshot before/after, atau detail lain |
+| created_at | TIMESTAMPTZ | DEFAULT NOW() | |
+
+**Index:** `admin_id`, `(target_type, target_id)`, `(action, created_at DESC)`
+
+---
+
+### 3.21 `notifications`
 Notifikasi in-app.
 
 | Kolom | Tipe | Constraint | Catatan |

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PageTopBar } from "../../../_components/TopBar";
-import { IconShield } from "../../../_components/icons";
+import { IconShield, IconAlertTriangle } from "../../../_components/icons";
 import { getListing, getOrder } from "@/lib/mock/data";
 import { formatRupiah } from "@/lib/format";
 import { ButtonLink, Field, Textarea } from "@/components/ui";
@@ -29,7 +29,7 @@ export default async function DisputePage({ params }: { params: Promise<{ id: st
         {/* Warning banner */}
         <section className="bg-[var(--color-m-amber-100)] px-5 py-4 border-b border-[var(--color-m-amber-100)]">
           <div className="flex items-start gap-2.5">
-            <span className="text-[22px] leading-none">⚠️</span>
+            <IconAlertTriangle size={22} className="flex-shrink-0 text-[var(--color-m-amber-500)]" />
             <div>
               <div className="text-[13px] font-bold text-[var(--color-m-ink-900)] mb-0.5">
                 Ajukan dispute dalam 3 hari setelah barang sampai

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { LISTINGS } from "@/lib/mock/api";
 import { getListing } from "@/lib/mock/data";
 import { PageTopBar } from "../_components/TopBar";
-import { IconCheck, IconChevronRight, IconShield, IconTruck } from "../_components/icons";
+import { IconCheck, IconChevronRight, IconShield, IconTruck, IconArrowRight } from "../_components/icons";
 import { formatRupiah } from "@/lib/format";
 
 const STEPS = ["Alamat", "Pengiriman", "Bayar"];
@@ -201,9 +201,9 @@ export default async function MCheckoutPage({
         </div>
         <Link
           href={`/marketplace/checkout/payment?listing=${listing.id}`}
-          className="block w-full h-12 rounded-xl bg-[var(--color-m-orange-500)] text-white font-extrabold text-[14px] flex items-center justify-center m-shadow-cta hover:bg-[var(--color-m-orange-600)]"
+          className="w-full h-12 rounded-xl bg-[var(--color-m-orange-500)] text-white font-extrabold text-[14px] flex items-center justify-center gap-2 m-shadow-cta hover:bg-[var(--color-m-orange-600)]"
         >
-          Lanjut ke Pembayaran →
+          Lanjut ke Pembayaran <IconArrowRight size={16} />
         </Link>
       </div>
     </>

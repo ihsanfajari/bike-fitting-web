@@ -2,7 +2,7 @@
 import Link from "next/link";
 import type { Listing } from "@/lib/mock/api";
 import { formatRupiah } from "@/lib/format";
-import { IconHeart, IconMapPin, IconShield } from "../../_components/icons";
+import { IconHeart, IconMapPin, IconShield, IconRuler } from "../../_components/icons";
 
 export type RecommendedListing = Listing & {
   matchScore: number;
@@ -29,7 +29,7 @@ function MatchBadge({ score, level }: { score: number; level: "high" | "mid" }) 
           : "bg-[var(--color-m-amber-100)] text-[var(--color-m-amber-700)]"
       }`}
     >
-      🎯 Match {score}%
+      <IconRuler size={11} /> Match {score}%
     </span>
   );
 }

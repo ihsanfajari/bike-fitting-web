@@ -2,15 +2,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageTopBar } from "../../_components/TopBar";
 import { BottomNav } from "../../_components/BottomNav";
-import { ListingCardGrid } from "../../_components/ListingCard";
-import { CATEGORIES, LISTINGS } from "@/lib/mock/api";
+import { ListingCardGrid, type CardListing } from "../../_components/ListingCard";
+import { CategoryIcon } from "../../_components/CategoryIcon";
+import { IconRuler } from "../../_components/icons";
 import { Chip, EmptyState } from "@/components/ui";
+import { prisma } from "@/lib/prisma";
+import { listActiveListings } from "@/lib/listings/queries";
 
 const SORTS = [
   { key: "latest", label: "Terbaru" },
-  { key: "price_asc", label: "Termurah" },
-  { key: "price_desc", label: "Termahal" },
-  { key: "hot", label: "Paling dilihat" },
+  { key: "cheapest", label: "Termurah" },
+  { key: "expensive", label: "Termahal" },
+  { key: "popular", label: "Paling dilihat" },
 ] as const;
 
 export default async function KategoriPage({
@@ -18,34 +21,39 @@ export default async function KategoriPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ sort?: string }>;
+  searchParams: Promise<{ sort?: "latest" | "cheapest" | "expensive" | "popular" }>;
 }) {
   const { slug } = await params;
   const { sort = "latest" } = await searchParams;
-  const category = CATEGORIES.find((c) => c.slug === slug);
+
+  const category = await prisma.category.findUnique({ where: { slug } });
   if (!category) notFound();
 
-  const listings = LISTINGS.filter((l) => l.category === slug);
-  const sorted = [...listings].sort((a, b) => {
-    if (sort === "price_asc") return a.price - b.price;
-    if (sort === "price_desc") return b.price - a.price;
-    if (sort === "hot") return b.views - a.views;
-    return 0;
-  });
+  const listings = await listActiveListings({ categorySlug: slug, sort, take: 48 });
+
+  const cards: CardListing[] = listings.map((l) => ({
+    id: l.id,
+    slug: l.slug,
+    title: l.title,
+    brand: l.brand,
+    price: l.price,
+    status: l.status,
+    condition: l.condition,
+    city: l.city,
+    photoUrl: l.photos[0]?.url ?? null,
+  }));
+
+  const showFitFilter = ["roadbike", "mtb", "gravel", "folding"].includes(slug);
 
   return (
     <>
       <PageTopBar title={category.name} backHref="/marketplace" />
 
       <main className="flex-1 pb-6 bg-[var(--color-m-cream)]">
-        {/* Hero kategori */}
         <section className="px-5 pt-4 pb-3">
-          <div
-            className="rounded-3xl p-5 flex items-center gap-4"
-            style={{ background: "linear-gradient(135deg,#FFE5D6,#FFF8F0 60%,#E0F7F8)" }}
-          >
-            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[28px] m-shadow-xs">
-              {category.icon}
+          <div className="rounded-3xl p-5 flex items-center gap-4" style={{ background: "linear-gradient(135deg,#FFE5D6,#FFF8F0 60%,#E0F7F8)" }}>
+            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-[var(--color-m-orange-600)] m-shadow-xs">
+              <CategoryIcon slug={slug} size={28} />
             </div>
             <div className="flex-1">
               <div className="text-[18px] font-extrabold text-[var(--color-m-ink-900)] leading-tight">
@@ -58,14 +66,10 @@ export default async function KategoriPage({
           </div>
         </section>
 
-        {/* Fit filter toggle */}
-        {["roadbike", "mtb", "gravel", "folding"].includes(slug) && (
+        {showFitFilter && (
           <section className="px-5 pt-3 pb-0">
-            <Link
-              href={`/marketplace/recommendation?category=${slug}`}
-              className="flex items-center gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-[#1A3A4A] to-[#0F2030] mb-1"
-            >
-              <span className="text-[18px] flex-shrink-0">🎯</span>
+            <Link href={`/marketplace/recommendation?category=${slug}`} className="flex items-center gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-[#1A3A4A] to-[#0F2030] mb-1">
+              <span className="flex-shrink-0 text-[var(--color-m-teal-500)]"><IconRuler size={18} /></span>
               <div className="flex-1 min-w-0">
                 <div className="text-[12px] font-bold text-white leading-tight">
                   Tampilkan {category.name} yang Fit Untukku
@@ -79,7 +83,6 @@ export default async function KategoriPage({
           </section>
         )}
 
-        {/* Sort chips */}
         <section className="px-5 pb-4 pt-3">
           <div className="flex gap-2 overflow-x-auto m-no-scrollbar -mx-1 px-1 pb-1">
             {SORTS.map((s) => (
@@ -92,10 +95,9 @@ export default async function KategoriPage({
           </div>
         </section>
 
-        {/* Listings */}
-        {sorted.length === 0 ? (
+        {cards.length === 0 ? (
           <EmptyState
-            icon={<span className="text-2xl">{category.icon}</span>}
+            icon={<CategoryIcon slug={slug} size={30} className="text-[var(--color-m-orange-400)]" />}
             title="Belum ada listing"
             description="Kategori ini lagi sepi. Coba kategori lain atau pasang notifikasi listing baru."
             className="mt-8"
@@ -103,7 +105,7 @@ export default async function KategoriPage({
         ) : (
           <section className="px-5">
             <div className="grid grid-cols-2 gap-3">
-              {sorted.map((l) => (
+              {cards.map((l) => (
                 <ListingCardGrid key={l.id} listing={l} />
               ))}
             </div>

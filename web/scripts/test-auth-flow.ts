@@ -84,14 +84,14 @@ async function main() {
   });
   if (signInError) fail(`signIn error: ${signInError.message}`);
   if (!signInData.session) fail("signIn: no session");
-  log("✅", `Session diperoleh (access_token: ${signInData.session.access_token.slice(0, 20)}...)`);
+  log("✅", `Session diperoleh (access_token: ${signInData.session!.access_token.slice(0, 20)}...)`);
 
   // ── 3. Hit /marketplace/me dengan cookie
   log("→", "Hit /marketplace/me dengan cookie session...");
   const projectRef = SUPABASE_URL.match(/https:\/\/(.+?)\.supabase\.co/)?.[1] ?? "";
   // @supabase/ssr cookie format: sb-<ref>-auth-token = "base64-" + base64URL(JSON.stringify(session))
   // Chunked jika > 3180 bytes — pakai .0, .1, dst.
-  const cookiePayload = JSON.stringify(signInData.session);
+  const cookiePayload = JSON.stringify(signInData.session!);
   const encodedValue = "base64-" + Buffer.from(cookiePayload).toString("base64url");
   const cookieBaseName = `sb-${projectRef}-auth-token`;
 

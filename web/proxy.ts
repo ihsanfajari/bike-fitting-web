@@ -1,6 +1,7 @@
-// Proxy Next.js 16 — refresh sesi Supabase + gate route yang butuh login.
+// Proxy Next.js 16 — refresh sesi Supabase + gate route yang butuh login/admin.
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { prisma } from "@/lib/prisma";
 
 const PROTECTED_PREFIXES = [
   "/marketplace/sell",
@@ -40,8 +41,25 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
-  const needsAuth = PROTECTED_PREFIXES.some((prefix) => path.startsWith(prefix));
 
+  // Admin routes — butuh user yang is_admin=true
+  if (path.startsWith("/admin")) {
+    if (!user) {
+      const signInUrl = new URL("/marketplace/sign-in", request.url);
+      signInUrl.searchParams.set("next", path);
+      return NextResponse.redirect(signInUrl);
+    }
+    const dbUser = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { isAdmin: true },
+    });
+    if (!dbUser?.isAdmin) {
+      return NextResponse.redirect(new URL("/marketplace", request.url));
+    }
+    return response;
+  }
+
+  const needsAuth = PROTECTED_PREFIXES.some((prefix) => path.startsWith(prefix));
   if (needsAuth && !user) {
     const signInUrl = new URL("/marketplace/sign-in", request.url);
     signInUrl.searchParams.set("next", path);

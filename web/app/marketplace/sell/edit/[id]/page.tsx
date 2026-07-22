@@ -1,7 +1,7 @@
 import { PageTopBar } from "../../../_components/TopBar";
 import { ButtonLink, Field, Input, Select, Textarea } from "@/components/ui";
 import { LISTINGS } from "@/lib/mock/api";
-import { IconShield } from "../../../_components/icons";
+import { IconShield, IconAlertTriangle, IconX } from "../../../_components/icons";
 import { formatRupiah } from "@/lib/format";
 
 const FRAME_SIZES = ["48", "50", "52", "54", "56", "58", "S", "M", "L", "XL", "One Size"];
@@ -31,8 +31,9 @@ export default async function EditListingPage({
       <main className="flex-1 pb-32 bg-[var(--color-m-cream)]">
         {/* Status banner */}
         <section className="bg-[var(--color-m-amber-100)]/70 px-5 py-3 border-b border-[var(--color-m-amber-200)]">
-          <p className="text-[12px] text-[var(--color-m-amber-800)] font-medium leading-relaxed">
-            ⚠️ Listing yang sedang aktif akan <b>otomatis dijeda</b> saat kamu menyimpan perubahan. Aktifkan kembali dari halaman Listing Saya setelah selesai edit.
+          <p className="text-[12px] text-[var(--color-m-amber-800)] font-medium leading-relaxed flex gap-2">
+            <IconAlertTriangle size={16} className="flex-shrink-0 mt-0.5" />
+            <span>Listing yang sedang aktif akan <b>otomatis dijeda</b> saat kamu menyimpan perubahan. Aktifkan kembali dari halaman Listing Saya setelah selesai edit.</span>
           </p>
         </section>
 
@@ -54,8 +55,8 @@ export default async function EditListingPage({
                     COVER
                   </span>
                 )}
-                <button className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-black/40 text-white text-[10px] flex items-center justify-center">
-                  ✕
+                <button aria-label="Hapus foto" className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-black/40 text-white flex items-center justify-center">
+                  <IconX size={11} />
                 </button>
                 <span>Foto {i + 1}</span>
               </div>

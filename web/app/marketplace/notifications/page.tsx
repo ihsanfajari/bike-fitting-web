@@ -1,9 +1,15 @@
+import type { ComponentType } from "react";
 import Link from "next/link";
 import { PageTopBar } from "../_components/TopBar";
+import { IconTruck, IconChat, IconBag, IconCheck, IconStar, IconEye, IconGift } from "../_components/icons";
+
+type IconComp = ComponentType<{ size?: number; className?: string }>;
+type Tone = "teal" | "orange" | "green" | "amber";
 
 type Notification = {
   id: string;
-  icon: string;
+  icon: IconComp;
+  tone: Tone;
   title: string;
   body: string;
   time: string;
@@ -11,10 +17,18 @@ type Notification = {
   unread: boolean;
 };
 
+const TONE_CLASS: Record<Tone, string> = {
+  teal: "bg-[var(--color-m-teal-100)] text-[var(--color-m-teal-600)]",
+  orange: "bg-[var(--color-m-orange-100)] text-[var(--color-m-orange-600)]",
+  green: "bg-[var(--color-m-green-100)] text-[var(--color-m-green-500)]",
+  amber: "bg-[var(--color-m-amber-100)] text-[var(--color-m-amber-500)]",
+};
+
 const NOTIFICATIONS: Notification[] = [
   {
     id: "n1",
-    icon: "📦",
+    icon: IconTruck,
+    tone: "teal",
     title: "Paket dalam perjalanan",
     body: "Trek Domane SL5 2022 sedang dalam pengiriman JNE YES. Resi: JNE9283746592",
     time: "10 menit lalu",
@@ -23,7 +37,8 @@ const NOTIFICATIONS: Notification[] = [
   },
   {
     id: "n2",
-    icon: "💬",
+    icon: IconChat,
+    tone: "orange",
     title: "Pesan baru dari Toko Sepeda Kita",
     body: "\"Nego 30jt gimana kak? Udah include ongkir\"",
     time: "Kemarin 16:45",
@@ -32,7 +47,8 @@ const NOTIFICATIONS: Notification[] = [
   },
   {
     id: "n3",
-    icon: "🛒",
+    icon: IconBag,
+    tone: "orange",
     title: "Pesananmu sedang diproses",
     body: "Penjual sudah menerima pesanan Trek Domane SL5. Menunggu pengiriman dalam 2×24 jam.",
     time: "Kemarin 14:55",
@@ -41,7 +57,8 @@ const NOTIFICATIONS: Notification[] = [
   },
   {
     id: "n4",
-    icon: "✅",
+    icon: IconCheck,
+    tone: "green",
     title: "Pembayaran berhasil",
     body: "Pembayaran ORD-20260424-0001 sebesar Rp22.414.000 via BCA Virtual Account berhasil diterima.",
     time: "Kemarin 14:55",
@@ -50,7 +67,8 @@ const NOTIFICATIONS: Notification[] = [
   },
   {
     id: "n5",
-    icon: "⭐",
+    icon: IconStar,
+    tone: "amber",
     title: "Review baru untuk listing kamu",
     body: "Buyer meninggalkan review bintang 5 untuk Fulcrum Racing 5 DB. Terima kasih!",
     time: "2 hari lalu",
@@ -59,7 +77,8 @@ const NOTIFICATIONS: Notification[] = [
   },
   {
     id: "n6",
-    icon: "👁️",
+    icon: IconEye,
+    tone: "teal",
     title: "Listing kamu semakin populer",
     body: "Specialized Rockhopper Elite sudah dilihat 200+ orang minggu ini. Pertahankan harga kompetitif!",
     time: "3 hari lalu",
@@ -68,7 +87,8 @@ const NOTIFICATIONS: Notification[] = [
   },
   {
     id: "n7",
-    icon: "🎉",
+    icon: IconGift,
+    tone: "green",
     title: "Transaksi selesai",
     body: "Fulcrum Racing 5 DB Wheelset dinyatakan selesai. Dana Rp3.277.000 telah masuk ke saldo kamu.",
     time: "7 hari lalu",
@@ -103,8 +123,8 @@ export default function NotificationsPage() {
                 notif.unread ? "bg-[var(--color-m-orange-100)]/30" : ""
               }`}
             >
-              <div className="w-10 h-10 rounded-full bg-[var(--color-m-ink-50)] flex items-center justify-center text-[20px] flex-shrink-0">
-                {notif.icon}
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${TONE_CLASS[notif.tone]}`}>
+                <notif.icon size={18} />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
@@ -125,7 +145,7 @@ export default function NotificationsPage() {
         </div>
 
         <div className="py-8 text-center text-[12px] text-[var(--color-m-ink-400)]">
-          Itu semua notifikasi kamu 🎉
+          Itu semua notifikasi kamu.
         </div>
       </main>
     </>

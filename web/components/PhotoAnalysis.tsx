@@ -5,83 +5,11 @@ import {
   PoseLandmarker,
   FilesetResolver,
   DrawingUtils,
-  NormalizedLandmark,
 } from "@mediapipe/tasks-vision";
 import { BIKE_STANDARDS, BikeType } from "@/config/bikeFitStandards";
-import { calculateFitResult, FitResult, JointStatus } from "@/lib/bikeFitScoring";
-
-interface JointAngles {
-  knee: number;
-  torso: number;
-  elbow: number;
-}
-
-function calcAngle(a: NormalizedLandmark, b: NormalizedLandmark, c: NormalizedLandmark): number {
-  const ax = a.x - b.x, ay = a.y - b.y;
-  const cx = c.x - b.x, cy = c.y - b.y;
-  const dot = ax * cx + ay * cy;
-  const mag = Math.sqrt(ax * ax + ay * ay) * Math.sqrt(cx * cx + cy * cy);
-  if (mag === 0) return 0;
-  return Math.round(Math.acos(Math.min(1, Math.max(-1, dot / mag))) * (180 / Math.PI));
-}
-
-// Picks the side whose key pose landmarks have higher average visibility.
-// Returns null only if neither side is detectable (avg visibility < 0.2).
-function selectBestSide(lm: NormalizedLandmark[]): "left" | "right" | null {
-  if (lm.length < 29) return null;
-  const leftLm  = [lm[11], lm[13], lm[23], lm[25], lm[27]];
-  const rightLm = [lm[12], lm[14], lm[24], lm[26], lm[28]];
-  const avgL = leftLm.reduce( (s, l) => s + (l.visibility ?? 0), 0) / leftLm.length;
-  const avgR = rightLm.reduce((s, r) => s + (r.visibility ?? 0), 0) / rightLm.length;
-  if (avgL < 0.2 && avgR < 0.2) return null;
-  return avgL >= avgR ? "left" : "right";
-}
-
-function drawAngleLabel(
-  ctx: CanvasRenderingContext2D,
-  lm: NormalizedLandmark,
-  label: string,
-  angle: number,
-  w: number,
-  h: number
-) {
-  const x = lm.x * w;
-  const y = lm.y * h;
-  ctx.font = "bold 18px monospace";
-  ctx.strokeStyle = "#000";
-  ctx.lineWidth = 3;
-  ctx.fillStyle = "#FACC15";
-  const text = `${label}: ${angle}°`;
-  ctx.strokeText(text, x + 10, y);
-  ctx.fillText(text, x + 10, y);
-}
-
-const STATUS_COLOR: Record<JointStatus, string> = {
-  ideal:      "text-green-400",
-  acceptable: "text-yellow-400",
-  low:        "text-red-400",
-  high:       "text-red-400",
-};
-
-const STATUS_LABEL: Record<JointStatus, string> = {
-  ideal:      "Ideal ✅",
-  acceptable: "Perlu penyesuaian ⚠️",
-  low:        "Terlalu kecil ❌",
-  high:       "Terlalu besar ❌",
-};
-
-const JOINT_BG: Record<JointStatus, string> = {
-  ideal:      "bg-green-900 border-green-500",
-  acceptable: "bg-yellow-900 border-yellow-500",
-  low:        "bg-red-900 border-red-500",
-  high:       "bg-red-900 border-red-500",
-};
-
-function scoreColor(score: number) {
-  if (score >= 80) return "text-green-400";
-  if (score >= 50) return "text-yellow-400";
-  return "text-red-400";
-}
+import { calculateFitResult, FitResult } from "@/lib/bikeFitScoring";
+import { selectBestSide, computeJointAngles, drawAngleLabel, JointAngles } from "@/lib/poseAngles";
+import FitResultCard from "@/components/FitResultCard";
 
 export default function PhotoAnalysis() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -176,25 +104,16 @@ export default function PhotoAnalysis() {
         return;
       }
 
-      const kneeAngle  = side === "left" ? calcAngle(lm[23], lm[25], lm[27]) : calcAngle(lm[24], lm[26], lm[28]);
-      const elbowAngle = side === "left" ? calcAngle(lm[11], lm[13], lm[15]) : calcAngle(lm[12], lm[14], lm[16]);
-      const torsoAngle = side === "left" ? calcAngle(lm[11], lm[23], lm[25]) : calcAngle(lm[12], lm[24], lm[26]);
+      const { angles: jointAngles, anchors } = computeJointAngles(lm, side, canvas.width, canvas.height);
 
-      const kneeLm  = side === "left" ? lm[25] : lm[26];
-      const elbowLm = side === "left" ? lm[13] : lm[14];
-      const torsoLm = side === "left" ? lm[23] : lm[24];
+      drawAngleLabel(ctx, anchors.knee,  "Lutut", jointAngles.knee,  canvas.width, canvas.height);
+      drawAngleLabel(ctx, anchors.elbow, "Siku",  jointAngles.elbow, canvas.width, canvas.height);
+      drawAngleLabel(ctx, anchors.torso, "Torso", jointAngles.torso, canvas.width, canvas.height);
 
-      drawAngleLabel(ctx, kneeLm,  "Lutut", kneeAngle,  canvas.width, canvas.height);
-      drawAngleLabel(ctx, elbowLm, "Siku",  elbowAngle, canvas.width, canvas.height);
-      drawAngleLabel(ctx, torsoLm, "Torso", torsoAngle, canvas.width, canvas.height);
-
-      setAngles({ knee: kneeAngle, torso: torsoAngle, elbow: elbowAngle });
+      setAngles(jointAngles);
 
       const standard = BIKE_STANDARDS[bikeType];
-      const fitRes = calculateFitResult(
-        [{ knee: kneeAngle, torso: torsoAngle, elbow: elbowAngle }],
-        standard
-      );
+      const fitRes = calculateFitResult([jointAngles], standard);
       setFitResult(fitRes);
       setProcessing(false);
     };
@@ -235,6 +154,7 @@ export default function PhotoAnalysis() {
         />
         <p className="text-zinc-400 text-sm">Klik untuk upload foto, atau drag & drop</p>
         <p className="text-zinc-600 text-xs mt-1">JPG, PNG, WEBP · Rekomendasi: foto dari samping (lateral view)</p>
+        <p className="text-yellow-600 text-xs mt-1">Penting: ambil foto saat pedal di posisi terbawah (jam 6) — sudut lutut hanya akurat pada posisi ini</p>
       </label>
 
       {/* Canvas preview */}
@@ -283,43 +203,7 @@ export default function PhotoAnalysis() {
       )}
 
       {/* Fit result */}
-      {fitResult && (
-        <div className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-5 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold">Hasil Fitting</h2>
-            <span className={`text-3xl font-bold ${scoreColor(fitResult.totalScore)}`}>
-              {fitResult.totalScore}/100
-            </span>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
-            {(["knee", "torso", "elbow"] as const).map((joint) => {
-              const r = fitResult[joint];
-              const labels = { knee: "Lutut", torso: "Torso", elbow: "Siku" };
-              return (
-                <div key={joint} className={`rounded-lg p-3 border ${JOINT_BG[r.status]}`}>
-                  <p className="text-xs text-zinc-300">{labels[joint]}</p>
-                  <p className="text-xl font-bold text-white">{r.angle}°</p>
-                  <p className={`text-xs mt-1 ${STATUS_COLOR[r.status]}`}>{STATUS_LABEL[r.status]}</p>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="border-t border-zinc-700 pt-4 flex flex-col gap-2">
-            <p className="text-sm text-zinc-400">Diagnosis</p>
-            <p className="font-semibold">{fitResult.diagnosis}</p>
-            <p className="text-sm text-zinc-400 mt-2">Rekomendasi</p>
-            <ul className="flex flex-col gap-1">
-              {fitResult.recommendations.map((r, i) => (
-                <li key={i} className="text-sm flex gap-2">
-                  <span className="text-yellow-400">→</span> {r}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
+      {fitResult && <FitResultCard fitResult={fitResult} />}
 
       <p className="text-gray-500 text-xs">
         Foto dari <strong>samping (lateral view)</strong> menghasilkan analisis paling akurat.

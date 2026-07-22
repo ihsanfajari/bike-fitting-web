@@ -1,5 +1,5 @@
 import { PageTopBar } from "../../../_components/TopBar";
-import { IconShield } from "../../../_components/icons";
+import { IconShield, IconBank, IconSearch } from "../../../_components/icons";
 import { ButtonLink, Field, Input, Select } from "@/components/ui";
 
 // Bank yang didukung Midtrans Payouts (host-to-host + SKN/RTGS)
@@ -18,7 +18,7 @@ export default function AddBankAccountPage() {
         {/* Info banner */}
         <section className="bg-[var(--color-m-paper)] px-5 py-4 border-b border-[var(--color-m-ink-100)]">
           <div className="flex items-start gap-2.5">
-            <span className="text-[20px] leading-none">🏦</span>
+            <IconBank size={20} className="flex-shrink-0 mt-0.5 text-[var(--color-m-teal-600)]" />
             <p className="text-[12px] text-[var(--color-m-ink-600)] leading-relaxed">
               Rekening ini dipakai untuk mencairkan hasil penjualan kamu. Pastikan{" "}
               <b className="text-[var(--color-m-ink-900)]">nama pemilik rekening sama persis</b> dengan yang tertera di
@@ -64,7 +64,7 @@ export default function AddBankAccountPage() {
         {/* Verifikasi note */}
         <section className="bg-[var(--color-m-paper)] px-5 py-5 mt-3">
           <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[var(--color-m-amber-100)]/60 border border-[var(--color-m-amber-100)]">
-            <span className="text-[20px] leading-none">🔎</span>
+            <IconSearch size={20} className="flex-shrink-0 mt-0.5 text-[var(--color-m-amber-500)]" />
             <div className="text-[12px] text-[var(--color-m-ink-700)] leading-relaxed">
               <b>Verifikasi otomatis.</b> Setelah disimpan, sistem akan mengecek kecocokan nomor rekening dan nama
               pemilik ke bank. Proses ini biasanya selesai dalam beberapa detik. Rekening baru bisa dipakai untuk

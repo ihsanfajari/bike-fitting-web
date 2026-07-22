@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageTopBar } from "../../../_components/TopBar";
-import { IconCheck, IconShield } from "../../../_components/icons";
+import { IconCheck, IconShield, IconAlertTriangle } from "../../../_components/icons";
 import { getListing, getOrder } from "@/lib/mock/data";
 import { formatRupiah } from "@/lib/format";
 import { ButtonLink, Field, Textarea } from "@/components/ui";
@@ -70,7 +70,7 @@ export default async function ConfirmReceivedPage({ params }: { params: Promise<
 
         <section className="px-5 py-4">
           <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-[var(--color-m-amber-100)]/60 border border-[var(--color-m-amber-100)]">
-            <span className="text-[20px] leading-none">⚠️</span>
+            <IconAlertTriangle size={20} className="flex-shrink-0 text-[var(--color-m-amber-500)]" />
             <div className="text-[12px] text-[var(--color-m-ink-700)] leading-relaxed">
               <b>Ada masalah dengan barang?</b> Jangan klik konfirmasi. Buka{" "}
               <Link href={`/marketplace/orders/${order.id}/dispute`} className="font-bold text-[var(--color-m-orange-600)] underline">

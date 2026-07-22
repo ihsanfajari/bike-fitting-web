@@ -81,7 +81,7 @@ export default async function ReviewSellerPage({ params }: { params: Promise<{ i
               );
             })}
           </div>
-          <div className="text-[14px] font-extrabold text-[var(--color-m-amber-500)] mt-2">Sempurna! 🎉</div>
+          <div className="text-[14px] font-extrabold text-[var(--color-m-amber-500)] mt-2">Sempurna!</div>
         </section>
 
         {/* Tags */}
@@ -95,13 +95,13 @@ export default async function ReviewSellerPage({ params }: { params: Promise<{ i
               return (
                 <button
                   key={tag}
-                  className={`px-3.5 py-2 rounded-full text-[12px] font-semibold border-[1.5px] transition-all ${
+                  className={`inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-[12px] font-semibold border-[1.5px] transition-all ${
                     selected
                       ? "bg-[var(--color-m-orange-500)] text-white border-[var(--color-m-orange-500)]"
                       : "bg-white text-[var(--color-m-ink-700)] border-[var(--color-m-ink-100)]"
                   }`}
                 >
-                  {selected && "✓ "}
+                  {selected && <IconCheck size={13} />}
                   {tag}
                 </button>
               );

@@ -180,26 +180,26 @@
 ### Backend API
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M2-API-01 | `GET /api/categories` | S | 🔴 Blocker | ⬜ Belum |
-| M2-API-02 | `POST /api/listings` (draft) | M | 🔴 Blocker | ⬜ Belum |
-| M2-API-03 | `PUT /api/listings/:id` (validasi ownership) | S | 🔴 Blocker | ⬜ Belum |
-| M2-API-04 | `POST /api/listings/:id/publish` (wajib phone verified, min 3 foto) | S | 🔴 Blocker | ⬜ Belum |
-| M2-API-05 | `POST /api/listings/:id/pause` | S | 🟠 Tinggi | ⬜ Belum |
-| M2-API-06 | `DELETE /api/listings/:id` (soft delete) | S | 🟠 Tinggi | ⬜ Belum |
-| M2-API-07 | `GET /api/listings` filter + sort + pagination | L | 🔴 Blocker | ⬜ Belum |
-| M2-API-08 | `GET /api/listings/:slug` (atomic view increment) | S | 🔴 Blocker | ⬜ Belum |
+| M2-API-01 | `GET /api/categories` | S | 🔴 Blocker | ✅ Selesai |
+| M2-API-02 | `POST /api/listings` (draft) | M | 🔴 Blocker | ✅ Selesai |
+| M2-API-03 | `PUT /api/listings/:id` (validasi ownership) | S | 🔴 Blocker | ✅ Selesai |
+| M2-API-04 | `POST /api/listings/:id/publish` (wajib phone verified, min 3 foto) | S | 🔴 Blocker | ✅ Selesai |
+| M2-API-05 | `POST /api/listings/:id/pause` | S | 🟠 Tinggi | ✅ Selesai |
+| M2-API-06 | `DELETE /api/listings/:id` (soft delete) | S | 🟠 Tinggi | ✅ Selesai |
+| M2-API-07 | `GET /api/listings` filter + sort + pagination | L | 🔴 Blocker | ✅ Selesai |
+| M2-API-08 | `GET /api/listings/:slug` (atomic view increment) | S | 🔴 Blocker | ✅ Selesai |
 | M2-API-09 | `GET /api/listings/search?q=` (FTS) | M | 🟠 Tinggi | ⬜ Belum |
-| M2-API-10 | Upload foto + client-side compress (browser-image-compression, maks 1200px, quality 80%) + server-side convert ke WebP (sharp) | L | 🔴 Blocker | ⬜ Belum |
+| M2-API-10 | Upload foto + client-side compress (browser-image-compression, maks 1200px, quality 80%) + server-side convert ke WebP (sharp) | L | 🔴 Blocker | ✅ Selesai |
 | M2-API-11 | `GET /api/users/:id/listings` (publik) | S | 🟡 Menengah | ⬜ Belum |
 
 ### Frontend
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M2-FE-01 | Buat Listing Step 1: kategori + foto upload (dengan auto kompresi) | M | 🔴 Blocker | ⬜ Belum |
-| M2-FE-02 | Buat Listing Step 2: spesifikasi (form dinamis dari `spec_schema`) | L | 🔴 Blocker | ⬜ Belum |
-| M2-FE-03 | Buat Listing Step 3: harga, kondisi, lokasi, COD | M | 🔴 Blocker | ⬜ Belum |
-| M2-FE-04 | Preview listing sebelum publish | S | 🟠 Tinggi | ⬜ Belum |
-| M2-FE-05 | Dashboard Listing Saya (status, view count, edit/pause) | M | 🔴 Blocker | ⬜ Belum |
+| M2-FE-01 | Buat Listing Step 1: kategori + foto upload (dengan auto kompresi) | M | 🔴 Blocker | ✅ Selesai |
+| M2-FE-02 | Buat Listing Step 2: spesifikasi (form dinamis dari `spec_schema`) | L | 🔴 Blocker | ✅ Selesai |
+| M2-FE-03 | Buat Listing Step 3: harga, kondisi, lokasi, COD | M | 🔴 Blocker | ✅ Selesai |
+| M2-FE-04 | Preview listing sebelum publish | S | 🟠 Tinggi | ✅ Selesai |
+| M2-FE-05 | Dashboard Listing Saya (status, view count, edit/pause) | M | 🔴 Blocker | ✅ Selesai |
 | M2-FE-06 | Halaman Edit Listing | M | 🟠 Tinggi | ⬜ Belum |
 | M2-FE-07 | Form CRO optimization | M | 🟠 Tinggi | ⬜ Belum |
 | M2-FE-08 | Field "rekomendasi tinggi pengendara" di form listing sepeda utuh (auto-populate dari sizing chart, bisa di-override) | M | 🟠 Tinggi | ⬜ Belum |
@@ -236,14 +236,14 @@
 
 | ID | Item | Effort | Prioritas | Status |
 |----|------|--------|-----------|--------|
-| M3-API-01 | Filter: kategori, harga, kondisi, frame_size, groupset, material, kota, COD | L | 🔴 Blocker | ⬜ Belum |
-| M3-API-02 | Sort: terbaru, termurah, termahal, paling dilihat | S | 🟠 Tinggi | ⬜ Belum |
+| M3-API-01 | Filter: kategori, harga, kondisi, frame_size, groupset, material, kota, COD | L | 🔴 Blocker | 🔄 Jalan (kategori, sort) |
+| M3-API-02 | Sort: terbaru, termurah, termahal, paling dilihat | S | 🟠 Tinggi | ✅ Selesai |
 | M3-API-03 | Cursor-based pagination | M | 🟠 Tinggi | ⬜ Belum |
-| M3-FE-01 | Homepage marketplace: hero + kategori + listing terbaru + populer | L | 🔴 Blocker | ⬜ Belum |
-| M3-FE-02 | Halaman kategori + filter sidebar (mobile drawer) | L | 🔴 Blocker | ⬜ Belum |
+| M3-FE-01 | Homepage marketplace: hero + kategori + listing terbaru + populer | L | 🔴 Blocker | ✅ Selesai |
+| M3-FE-02 | Halaman kategori + filter sidebar (mobile drawer) | L | 🔴 Blocker | 🔄 Jalan (tanpa sidebar) |
 | M3-FE-03 | Halaman hasil pencarian | M | 🔴 Blocker | ⬜ Belum |
-| M3-FE-04 | Listing card (foto, harga, kondisi, kota, badge) | M | 🔴 Blocker | ⬜ Belum |
-| M3-FE-05 | Listing detail page: gallery, specs, info penjual, CTA | L | 🔴 Blocker | ⬜ Belum |
+| M3-FE-04 | Listing card (foto, harga, kondisi, kota, badge) | M | 🔴 Blocker | ✅ Selesai |
+| M3-FE-05 | Listing detail page: gallery, specs, info penjual, CTA | L | 🔴 Blocker | ✅ Selesai |
 | M3-FE-06 | Mask nomor HP seller (full hanya setelah order) — TRUST-01 | M | 🟠 Tinggi | ⬜ Belum |
 | M3-FE-07 | Profil publik penjual + rating + transaksi sukses | M | 🟠 Tinggi | ⬜ Belum |
 | M3-FE-08 | Buyer Protection Messaging — TRUST-02 | S | 🟠 Tinggi | ⬜ Belum |
@@ -388,7 +388,7 @@
 | NFR-08 | Webhook Midtrans verify HMAC SHA512 | Payment | 🔴 Blocker | ⬜ Belum |
 | NFR-09 | SERIALIZABLE transaction untuk saldo | Payment | 🔴 Blocker | ⬜ Belum |
 | NFR-10 | Idempotency webhook | Payment | 🔴 Blocker | ⬜ Belum |
-| NFR-11 | Image compression: client-side (browser-image-compression) + server-side WebP (sharp) | Upload | 🟠 Tinggi | ⬜ Belum |
+| NFR-11 | Image compression: client-side (browser-image-compression) + server-side WebP (sharp) | Upload | 🟠 Tinggi | ✅ Selesai (client-side WebP) |
 | NFR-12 | Backup database otomatis (cron ke S3/B2 jika Supabase Free) | DB | 🟠 Tinggi | ⬜ Belum |
 
 ---
@@ -412,6 +412,51 @@
 - Integrasi GoSend/GrabExpress API native
 - Meilisearch / Algolia (PostgreSQL FTS cukup)
 - Admin dashboard lengkap (pakai internal tool dulu)
+
+---
+
+# BAGIAN F — ADMIN PANEL
+
+> Plan lengkap di [`../admin-panel-plan.md`](../admin-panel-plan.md). Fase A urgent untuk soft launch (verify HP manual), Fase B saat transaksi mulai, Fase C saat data accumulates.
+
+## F.1 Fase A — MVP (Soft Launch)
+
+| ID | Item | Effort | Prioritas | Status |
+|----|------|--------|-----------|--------|
+| ADM-A0 | Tabel `admin_action_logs` (audit trail) | S | 🔴 Blocker | ✅ Selesai |
+| ADM-A1 | Layout admin (desktop sidebar) + proxy gate `is_admin` | S | 🔴 Blocker | ✅ Selesai |
+| ADM-A2 | `/admin` dashboard ringkas (jumlah user, listing aktif, pending verify) | S | 🟠 Tinggi | ✅ Selesai |
+| ADM-A3 | `/admin/users` list + filter (pending verify, suspended, dll) + search | M | 🔴 Blocker | ✅ Selesai |
+| ADM-A4 | `/admin/users/[id]` detail + tombol "Verify HP" | S | 🔴 Blocker | ✅ Selesai |
+| ADM-A5 | Action suspend/unsuspend/ban user (set `account_status`) | S | 🟠 Tinggi | ✅ Selesai |
+| ADM-A6 | `/admin/listings` list semua + filter status | M | 🟠 Tinggi | ✅ Selesai |
+| ADM-A7 | `/admin/listings/[id]` detail + action pause/remove | S | 🟠 Tinggi | ✅ Selesai |
+| ADM-A8 | Auto-flag listing > Rp 20jt untuk manual review (DIFF-05) | S | 🟡 Menengah | ✅ Selesai |
+| ADM-A9 | `/admin/logs` audit log viewer global (filter target type, pagination) | S | 🟡 Menengah | ✅ Selesai |
+| ADM-A10 | Dashboard activity feed (listing terbaru + signup terbaru) | S | 🟡 Menengah | ✅ Selesai |
+| ADM-A11 | `/admin/categories` CRUD kategori + toggle aktif + editor `spec_schema` (JSON) | M | 🟡 Menengah | ✅ Selesai |
+
+## F.2 Fase B — Saat Transaksi Aktif
+
+| ID | Item | Effort | Prioritas | Status |
+|----|------|--------|-----------|--------|
+| ADM-B1 | `/admin/orders` list + filter + search by order_number | M | 🟠 Tinggi | ⬜ Belum |
+| ADM-B2 | `/admin/orders/[id]` detail + intervensi (force cancel, refund) | M | 🟠 Tinggi | ⬜ Belum |
+| ADM-B3 | `/admin/disputes` queue (open → investigating → resolved) | M | 🟠 Tinggi | ⬜ Belum |
+| ADM-B4 | `/admin/disputes/[id]` review bukti + putusan | M | 🟠 Tinggi | ⬜ Belum |
+| ADM-B5 | `/admin/reports` queue + action | M | 🟡 Menengah | ⬜ Belum |
+| ADM-B6 | `/admin/payouts` monitor + retry yang gagal | M | 🟠 Tinggi | ⬜ Belum |
+
+## F.3 Fase C — Analytics & Settings
+
+| ID | Item | Effort | Prioritas | Status |
+|----|------|--------|-----------|--------|
+| ADM-C1 | Analytics dashboard: GMV harian/mingguan/bulanan | L | 🟡 Menengah | ⬜ Belum |
+| ADM-C2 | Funnel seller (signup → verify → first listing → first sale) | L | 🟡 Menengah | ⬜ Belum |
+| ADM-C3 | Top sellers leaderboard | M | 🟢 Rendah | ⬜ Belum |
+| ADM-C4 | Settings: fee structure, banner homepage | L | 🟢 Rendah | ⬜ Belum (kategori + spec_schema editor sudah pindah ke ADM-A11 ✅) |
+
+> Catatan: `M7-10` (Internal admin tool) di B.8 sekarang disuperseed oleh Bagian F ini.
 
 ---
 

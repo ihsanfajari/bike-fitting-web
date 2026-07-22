@@ -27,7 +27,7 @@ export default async function PaymentSuccessPage({
           </svg>
         </div>
         <h1 className="mt-5 text-[24px] font-extrabold text-[var(--color-m-ink-900)] tracking-tight leading-tight">
-          Pembayaran berhasil! 🎉
+          Pembayaran berhasil!
         </h1>
         <p className="mt-2 text-[13px] text-[var(--color-m-ink-600)] leading-relaxed max-w-[320px] mx-auto">
           Dana sudah ditahan rekber. Penjual akan segera mengirim barangmu.

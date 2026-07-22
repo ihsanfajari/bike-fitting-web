@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageTopBar } from "../_components/TopBar";
+import { IconCheck, IconHourglass, IconChat, IconArrowRight } from "../_components/icons";
 
 // Halaman "menunggu verifikasi HP".
 // Untuk soft launch, verifikasi HP dilakukan manual oleh admin via WhatsApp —
@@ -27,24 +28,25 @@ export default function VerifyOtpPage() {
         <div className="mt-6 p-4 rounded-xl bg-[var(--color-m-teal-100)]/60 border border-[var(--color-m-teal-100)]">
           <h2 className="text-[14px] font-bold text-[var(--color-m-ink-900)] mb-2">Selama menunggu verifikasi, kamu bisa:</h2>
           <ul className="space-y-1.5 text-[13px] text-[var(--color-m-ink-700)]">
-            <li className="flex items-start gap-2"><span>✅</span><span>Browse listing & lihat detail sepeda</span></li>
-            <li className="flex items-start gap-2"><span>✅</span><span>Simpan sepeda ke wishlist</span></li>
-            <li className="flex items-start gap-2"><span>⏳</span><span>Buat listing jualan — <i>aktif setelah HP terverifikasi</i></span></li>
-            <li className="flex items-start gap-2"><span>⏳</span><span>Transaksi pembelian — <i>aktif setelah HP terverifikasi</i></span></li>
+            <li className="flex items-start gap-2"><IconCheck size={15} className="flex-shrink-0 mt-0.5 text-[var(--color-m-green-500)]" /><span>Browse listing & lihat detail sepeda</span></li>
+            <li className="flex items-start gap-2"><IconCheck size={15} className="flex-shrink-0 mt-0.5 text-[var(--color-m-green-500)]" /><span>Simpan sepeda ke wishlist</span></li>
+            <li className="flex items-start gap-2"><IconHourglass size={15} className="flex-shrink-0 mt-0.5 text-[var(--color-m-amber-500)]" /><span>Buat listing jualan — <i>aktif setelah HP terverifikasi</i></span></li>
+            <li className="flex items-start gap-2"><IconHourglass size={15} className="flex-shrink-0 mt-0.5 text-[var(--color-m-amber-500)]" /><span>Transaksi pembelian — <i>aktif setelah HP terverifikasi</i></span></li>
           </ul>
         </div>
 
         <div className="mt-6 p-3.5 rounded-xl bg-[var(--color-m-amber-100)]/60 border border-[var(--color-m-amber-100)]">
-          <p className="text-[12px] text-[var(--color-m-ink-700)] leading-relaxed">
-            <b>💬 Belum dihubungi setelah 24 jam?</b> Chat ke admin di WhatsApp <b className="text-[var(--color-m-ink-900)]">0812-XXXX-XXXX</b> dengan menyebutkan email yang kamu daftarkan.
+          <p className="text-[12px] text-[var(--color-m-ink-700)] leading-relaxed flex gap-2">
+            <IconChat size={16} className="flex-shrink-0 mt-0.5 text-[var(--color-m-amber-500)]" />
+            <span><b>Belum dihubungi setelah 24 jam?</b> Chat ke admin di WhatsApp <b className="text-[var(--color-m-ink-900)]">0812-XXXX-XXXX</b> dengan menyebutkan email yang kamu daftarkan.</span>
           </p>
         </div>
 
         <Link
           href="/marketplace"
-          className="mt-6 w-full h-12 rounded-xl bg-[var(--color-m-orange-500)] text-white font-extrabold text-[14px] flex items-center justify-center m-shadow-cta hover:bg-[var(--color-m-orange-600)]"
+          className="mt-6 w-full h-12 rounded-xl bg-[var(--color-m-orange-500)] text-white font-extrabold text-[14px] flex items-center justify-center gap-2 m-shadow-cta hover:bg-[var(--color-m-orange-600)]"
         >
-          Mulai Browse Listing →
+          Mulai Browse Listing <IconArrowRight size={16} />
         </Link>
       </main>
     </>

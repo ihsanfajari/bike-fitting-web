@@ -2,7 +2,7 @@ import Link from "next/link";
 import { PageTopBar } from "../../_components/TopBar";
 import { BottomNav } from "../../_components/BottomNav";
 import { LISTINGS } from "@/lib/mock/api";
-import { IconChevronRight } from "../../_components/icons";
+import { IconChevronRight, IconRuler, IconCheck } from "../../_components/icons";
 import { RecommendedCard } from "../_components/RecommendedCard";
 
 const MOCK_BODY = { height: 175, inseam: 82 };
@@ -27,8 +27,8 @@ export default function RecommendationResultsPage() {
         <section className="bg-[var(--color-m-paper)] px-5 py-4 border-b border-[var(--color-m-ink-100)]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#1A3A4A] flex items-center justify-center text-white text-[16px] flex-shrink-0">
-                🎯
+              <div className="w-10 h-10 rounded-xl bg-[#1A3A4A] flex items-center justify-center text-white flex-shrink-0">
+                <IconRuler size={16} />
               </div>
               <div>
                 <div className="text-[13px] font-bold text-[var(--color-m-ink-900)]">
@@ -97,9 +97,9 @@ export default function RecommendationResultsPage() {
         <section className="mx-5 mb-4 p-4 rounded-2xl bg-[var(--color-m-paper)] border border-[var(--color-m-ink-100)]">
           <div className="text-[12px] font-bold text-[var(--color-m-ink-800)] mb-2">Bagaimana match dihitung?</div>
           <ul className="text-[12px] text-[var(--color-m-ink-600)] space-y-1.5 leading-relaxed">
-            <li className="flex gap-2"><span className="text-[var(--color-m-teal-500)]">✓</span> Inseam kamu vs ukuran frame yang direkomendasikan penjual</li>
-            <li className="flex gap-2"><span className="text-[var(--color-m-teal-500)]">✓</span> Tinggi badan vs sizing chart merek (Trek, Specialized, Polygon, dll)</li>
-            <li className="flex gap-2"><span className="text-[var(--color-m-ink-400)]">~</span> Geometri & tipe sepeda (reach, stack) — Phase 2</li>
+            <li className="flex gap-2"><IconCheck size={15} className="flex-shrink-0 mt-0.5 text-[var(--color-m-teal-500)]" /> Inseam kamu vs ukuran frame yang direkomendasikan penjual</li>
+            <li className="flex gap-2"><IconCheck size={15} className="flex-shrink-0 mt-0.5 text-[var(--color-m-teal-500)]" /> Tinggi badan vs sizing chart merek (Trek, Specialized, Polygon, dll)</li>
+            <li className="flex gap-2"><span className="text-[var(--color-m-ink-400)] flex-shrink-0">~</span> Geometri & tipe sepeda (reach, stack) — Phase 2</li>
           </ul>
         </section>
       </main>

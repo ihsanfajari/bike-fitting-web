@@ -14,6 +14,11 @@ const PhotoAnalysis = dynamic(() => import("@/components/PhotoAnalysis"), {
   loading: () => <LoadingScreen />,
 });
 
+const VideoAnalysis = dynamic(() => import("@/components/VideoAnalysis"), {
+  ssr: false,
+  loading: () => <LoadingScreen />,
+});
+
 function LoadingScreen() {
   return (
     <div className="flex items-center justify-center h-screen bg-black text-white text-sm">
@@ -22,19 +27,27 @@ function LoadingScreen() {
   );
 }
 
-type Mode = "camera" | "photo";
+type Mode = "camera" | "photo" | "video";
+
+const MODE_LABEL: Record<Mode, string> = {
+  camera: "Kamera Real-time",
+  photo: "Upload Foto",
+  video: "Upload Video",
+};
 
 export default function FittingPage() {
   const [mode, setMode] = useState<Mode>("camera");
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    // pb-28: ruang untuk CTA marketplace yang fixed di bawah, agar konten
+    // paling bawah tetap bisa di-scroll keluar dari baliknya
+    <main className="min-h-screen bg-black text-white pb-28">
       <div className="flex items-center justify-between px-6 pt-5 pb-2">
         <Link href="/" className="text-sm font-semibold text-white/60 hover:text-white transition-colors">
           ← GowesFit
         </Link>
         <div className="flex gap-2">
-          {(["camera", "photo"] as Mode[]).map((m) => (
+          {(["camera", "photo", "video"] as Mode[]).map((m) => (
             <button
               key={m}
               onClick={() => setMode(m)}
@@ -44,14 +57,16 @@ export default function FittingPage() {
                   : "bg-transparent text-zinc-400 border-zinc-600 hover:border-zinc-400"
               }`}
             >
-              {m === "camera" ? "Kamera Real-time" : "Upload Foto"}
+              {MODE_LABEL[m]}
             </button>
           ))}
         </div>
         <div className="w-24" />
       </div>
 
-      {mode === "camera" ? <PoseLandmarker /> : <PhotoAnalysis />}
+      {mode === "camera" && <PoseLandmarker />}
+      {mode === "photo" && <PhotoAnalysis />}
+      {mode === "video" && <VideoAnalysis />}
 
       {/* CTA to Marketplace — muncul setelah user selesai fitting */}
       <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-5 pt-2 pointer-events-none">

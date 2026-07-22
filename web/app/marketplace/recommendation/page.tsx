@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { PageTopBar } from "../_components/TopBar";
 import { ButtonLink, Field, Input } from "@/components/ui";
-import { IconShield } from "../_components/icons";
+import { CategoryIcon } from "../_components/CategoryIcon";
+import { IconArrowRight, IconRuler, IconShield } from "../_components/icons";
 
 const FLEXIBILITY = [
   { value: "flexible", label: "Fleksibel", desc: "Bisa bungkuk jauh" },
@@ -10,10 +11,10 @@ const FLEXIBILITY = [
 ];
 
 const BIKE_TYPES = [
-  { slug: "roadbike", icon: "🚴", label: "Roadbike" },
-  { slug: "mtb", icon: "⛰️", label: "MTB" },
-  { slug: "gravel", icon: "🌾", label: "Gravel" },
-  { slug: "folding", icon: "🧳", label: "Folding" },
+  { slug: "roadbike", label: "Roadbike" },
+  { slug: "mtb", label: "MTB" },
+  { slug: "gravel", label: "Gravel" },
+  { slug: "folding", label: "Folding" },
 ];
 
 export default function RecommendationPage() {
@@ -32,7 +33,7 @@ export default function RecommendationPage() {
               className="absolute -top-6 -right-6 w-32 h-32 rounded-full opacity-20"
               style={{ background: "radial-gradient(circle, #4ECDC4, transparent 70%)" }}
             />
-            <div className="text-[28px] mb-2">🎯</div>
+            <div className="mb-3 text-[var(--color-m-teal-300)]"><IconRuler size={26} /></div>
             <h1 className="text-[20px] font-extrabold text-white leading-tight">
               Temukan Sepeda yang<br />
               <span className="text-[var(--color-m-teal-300)]">FIT Untukmu</span>
@@ -70,7 +71,7 @@ export default function RecommendationPage() {
 
           {/* Cara ukur inseam */}
           <div className="p-3.5 rounded-xl bg-[var(--color-m-ink-50)] border border-[var(--color-m-ink-100)]">
-            <div className="text-[12px] font-bold text-[var(--color-m-ink-800)] mb-1">📏 Cara ukur inseam</div>
+            <div className="flex items-center gap-1.5 text-[12px] font-bold text-[var(--color-m-ink-800)] mb-1"><IconRuler size={14} className="text-[var(--color-m-ink-500)]" />Cara ukur inseam</div>
             <p className="text-[12px] text-[var(--color-m-ink-600)] leading-relaxed">
               Berdiri tegak, ukur dari pangkal paha sampai lantai. Atau lihat tag celana jeans: angka kedua setelah tanda &quot;×&quot; (misal 32×34 → inseam ≈ 86 cm).
             </p>
@@ -140,7 +141,7 @@ export default function RecommendationPage() {
                     : "border-[var(--color-m-ink-100)] bg-white"
                 }`}
               >
-                <span className="text-[22px]">{t.icon}</span>
+                <CategoryIcon slug={t.slug} size={22} className={i === 0 ? "text-[var(--color-m-teal-600)]" : "text-[var(--color-m-ink-600)]"} />
                 <span className={`text-[11px] font-semibold ${i === 0 ? "text-[var(--color-m-teal-700)]" : "text-[var(--color-m-ink-700)]"}`}>
                   {t.label}
                 </span>
@@ -167,7 +168,7 @@ export default function RecommendationPage() {
           size="lg"
           className="bg-[#1A3A4A] hover:bg-[#0F2030] text-white"
         >
-          🎯 Cari Sepeda yang Fit Untukku →
+          <span className="inline-flex items-center gap-2">Cari Sepeda yang Fit Untukku <IconArrowRight size={16} /></span>
         </ButtonLink>
         <p className="text-center text-[11px] text-[var(--color-m-ink-400)] mt-2">
           Menyesuaikan dengan {"{"}ratusan{"}"} listing aktif sekarang

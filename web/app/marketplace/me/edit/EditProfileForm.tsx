@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { updateProfileAction, type ProfileFormState } from "@/lib/profile/actions";
 import { Field, Input, Textarea } from "@/components/ui";
+import { IconCheck } from "../../_components/icons";
 
 type Props = {
   initialFullName: string;
@@ -50,8 +51,8 @@ export function EditProfileForm(props: Props) {
         </div>
       )}
       {state?.success && (
-        <div className="mx-5 mt-3 px-3.5 py-2.5 rounded-xl bg-green-50 border border-green-200 text-[13px] text-green-700">
-          ✅ Profil tersimpan
+        <div className="mx-5 mt-3 px-3.5 py-2.5 rounded-xl bg-green-50 border border-green-200 text-[13px] text-green-700 flex items-center gap-1.5">
+          <IconCheck size={15} /> Profil tersimpan
         </div>
       )}
 

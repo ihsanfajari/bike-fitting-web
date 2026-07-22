@@ -141,15 +141,42 @@ function buildRecommendations(
   };
 }
 
+// Saran ringan untuk sendi di zona "acceptable" (kuning) — bukan masalah,
+// tapi jangan biarkan kartu kuning tanpa penjelasan apa pun.
+const ACCEPTABLE_HINTS: Record<"knee" | "torso" | "elbow", { below: string; above: string }> = {
+  knee: {
+    below: "Lutut sedikit kurang lurus dari ideal — jika kayuhan terasa sempit, coba naikkan sadel ±0.5 cm",
+    above: "Lutut sedikit terlalu lurus dari ideal — jika pinggul bergoyang saat mengayuh, coba turunkan sadel ±0.5 cm",
+  },
+  torso: {
+    below: "Torso sedikit lebih agresif (rendah) dari ideal — jika punggung/leher cepat pegal, naikkan handlebar sedikit",
+    above: "Torso sedikit lebih tegak dari ideal — turunkan handlebar sedikit jika ingin posisi lebih aerodinamis",
+  },
+  elbow: {
+    below: "Tekukan siku sedikit lebih dalam dari ideal — periksa apakah reach terasa terlalu dekat",
+    above: "Siku hampir lurus terkunci — jaga tekukan ringan agar getaran jalan tidak diteruskan ke bahu",
+  },
+};
+
+function acceptableHint(
+  joint: "knee" | "torso" | "elbow",
+  result: JointResult,
+  std: JointStandard
+): string | null {
+  if (result.status !== "acceptable") return null;
+  return result.angle < std.ideal[0] ? ACCEPTABLE_HINTS[joint].below : ACCEPTABLE_HINTS[joint].above;
+}
+
 export function calculateFitResult(
   samples: { knee: number; torso: number; elbow: number }[],
   standard: BikeStandard
 ): FitResult {
   const avg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length;
-  const min = (arr: number[]) => Math.min(...arr);
+  const max = (arr: number[]) => Math.max(...arr);
 
-  // Lutut dinilai dari minimum (BDC), torso & siku dari rata-rata
-  const kneeAngle  = Math.round(min(samples.map((s) => s.knee)));
+  // Lutut dinilai pada ekstensi maksimum (kaki paling lurus, pedal di BDC) =
+  // included angle TERBESAR selama kayuhan. Torso & siku dari rata-rata.
+  const kneeAngle  = Math.round(max(samples.map((s) => s.knee)));
   const torsoAngle = Math.round(avg(samples.map((s) => s.torso)));
   const elbowAngle = Math.round(avg(samples.map((s) => s.elbow)));
 
@@ -164,9 +191,29 @@ export function calculateFitResult(
     elbow.score * weights.elbow
   );
 
-  const { diagnosis, recommendations } = buildRecommendations(
+  let { diagnosis, recommendations } = buildRecommendations(
     knee.status, torso.status, elbow.status
   );
+
+  const hints = [
+    acceptableHint("knee",  knee,  standard.knee),
+    acceptableHint("torso", torso, standard.torso),
+    acceptableHint("elbow", elbow, standard.elbow),
+  ].filter((h): h is string => h !== null);
+
+  if (hints.length > 0) {
+    const hasProblem = [knee, torso, elbow].some(
+      (j) => j.status === "low" || j.status === "high"
+    );
+    if (hasProblem) {
+      // Ada masalah utama: saran zona kuning menyusul di belakang rekomendasi inti
+      recommendations = [...recommendations, ...hints];
+    } else {
+      // Semua sendi aman tapi ada yang kuning — jangan klaim "sempurna"
+      diagnosis = "Posisi sudah baik — tersisa penyempurnaan kecil (opsional)";
+      recommendations = hints;
+    }
+  }
 
   return { knee, torso, elbow, totalScore, diagnosis, recommendations };
 }

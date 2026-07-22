@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PageTopBar } from "../../_components/TopBar";
-import { IconChevronRight, IconShield, IconWallet } from "../../_components/icons";
+import { IconChevronRight, IconShield, IconWallet, IconArrowDownCircle, IconArrowUpCircle } from "../../_components/icons";
 import { formatRupiah } from "@/lib/format";
 import { ButtonLink } from "@/components/ui";
 
@@ -68,8 +68,8 @@ export default function SaldoPage() {
           <div className="bg-[var(--color-m-paper)] rounded-2xl overflow-hidden m-shadow-xs divide-y divide-[var(--color-m-ink-100)]">
             {HISTORY.map((h) => (
               <div key={h.id} className="flex items-center gap-3 px-4 py-4">
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[18px] flex-shrink-0 ${h.type === "in" ? "bg-[var(--color-m-green-100)]" : "bg-[var(--color-m-ink-100)]"}`}>
-                  {h.type === "in" ? "⬇️" : "⬆️"}
+                <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${h.type === "in" ? "bg-[var(--color-m-green-100)] text-[var(--color-m-green-500)]" : "bg-[var(--color-m-ink-100)] text-[var(--color-m-ink-600)]"}`}>
+                  {h.type === "in" ? <IconArrowDownCircle size={18} /> : <IconArrowUpCircle size={18} />}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] font-semibold text-[var(--color-m-ink-900)] truncate">{h.label}</div>

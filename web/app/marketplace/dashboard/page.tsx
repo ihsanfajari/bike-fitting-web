@@ -12,6 +12,8 @@ import {
   IconPlus,
   IconTrendUp,
   IconWallet,
+  IconEye,
+  IconLightbulb,
 } from "../_components/icons";
 import { formatRupiah, formatRupiahShort } from "@/lib/format";
 
@@ -63,7 +65,7 @@ export default function MDashboardPage() {
                     <IconWallet size={12} /> Saldo
                   </div>
                   <div className="text-[18px] font-extrabold m-tnum mt-1">{formatRupiah(balance)}</div>
-                  <div className="text-[10px] text-white/70 mt-0.5">Tarik ke rekening →</div>
+                  <div className="flex items-center gap-1 text-[10px] text-white/70 mt-0.5">Tarik ke rekening <IconChevronRight size={11} /></div>
                 </Link>
                 <Link
                   href="/marketplace/orders"
@@ -73,7 +75,7 @@ export default function MDashboardPage() {
                     <IconBox size={12} /> Perlu tindakan
                   </div>
                   <div className="text-[18px] font-extrabold m-tnum mt-1">{pendingActions}</div>
-                  <div className="text-[10px] text-white/70 mt-0.5">Pesanan siap kirim →</div>
+                  <div className="flex items-center gap-1 text-[10px] text-white/70 mt-0.5">Pesanan siap kirim <IconChevronRight size={11} /></div>
                 </Link>
               </div>
             </div>
@@ -178,9 +180,9 @@ export default function MDashboardPage() {
                   <div className="text-[14px] font-extrabold text-[var(--color-m-orange-600)] m-tnum mt-0.5">
                     {formatRupiah(listing.price)}
                   </div>
-                  <div className="flex items-center gap-2 text-[11px] text-[var(--color-m-ink-500)] mt-1">
-                    <span>👁 {listing.views}</span>
-                    <span>♡ {listing.wishlistCount}</span>
+                  <div className="flex items-center gap-2.5 text-[11px] text-[var(--color-m-ink-500)] mt-1">
+                    <span className="inline-flex items-center gap-1"><IconEye size={13} /> {listing.views}</span>
+                    <span className="inline-flex items-center gap-1"><IconHeart size={13} /> {listing.wishlistCount}</span>
                     <span>· {listing.postedAgo}</span>
                   </div>
                 </div>
@@ -193,8 +195,8 @@ export default function MDashboardPage() {
         {/* Tip card */}
         <section className="px-5 pb-6">
           <div className="rounded-2xl p-4 bg-gradient-to-br from-[var(--color-m-teal-100)] to-[var(--color-m-orange-100)] border border-[var(--color-m-teal-100)]">
-            <div className="text-[12px] font-bold text-[var(--color-m-teal-600)] uppercase tracking-wider mb-1">
-              💡 Tips
+            <div className="flex items-center gap-1.5 text-[12px] font-bold text-[var(--color-m-teal-600)] uppercase tracking-wider mb-1">
+              <IconLightbulb size={14} /> Tips
             </div>
             <p className="text-[13px] text-[var(--color-m-ink-800)] leading-relaxed">
               Foto sepeda dari samping dengan cahaya pagi cenderung dapat <b>3× lebih banyak klik</b>. Coba update foto listing yang sudah lama.

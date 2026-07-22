@@ -157,6 +157,14 @@ enum ReportStatus {
   dismissed
 }
 
+enum AdminTargetType {
+  user
+  listing
+  order
+  dispute
+  report
+}
+
 // ─────────────────────────────────────────────
 // 3.1 users
 // ─────────────────────────────────────────────
@@ -207,6 +215,7 @@ model User {
   reportsReviewed     Report[]             @relation("ReportsReviewed")
   notifications       Notification[]
   payouts             Payout[]
+  adminActions        AdminActionLog[]
 
   @@index([deletedAt])
   @@map("users")
@@ -690,7 +699,29 @@ model Report {
 }
 
 // ─────────────────────────────────────────────
-// 3.20 notifications
+// 3.20 admin_action_logs
+// ─────────────────────────────────────────────
+
+model AdminActionLog {
+  id         String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminId    String          @map("admin_id") @db.Uuid
+  action     String          @db.VarChar(50)
+  targetType AdminTargetType @map("target_type")
+  targetId   String          @map("target_id") @db.Uuid
+  reason     String?
+  metadata   Json?
+  createdAt  DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  admin User @relation(fields: [adminId], references: [id], onDelete: Restrict)
+
+  @@index([adminId])
+  @@index([targetType, targetId])
+  @@index([action, createdAt])
+  @@map("admin_action_logs")
+}
+
+// ─────────────────────────────────────────────
+// 3.21 notifications
 // ─────────────────────────────────────────────
 
 model Notification {
